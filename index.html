@@ -1,78 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zindagi with Sachin</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zindagi with Sachin</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f5f4f4;
-            text-align: center;
-        }
+<style>
 
-        h1 {
-            color: #2c3e50;
-            margin-top: 40px;
-            font-size: 48px;
-            font-weight: bold;
-            text-decoration: underline;
-            white-space: nowrap; /* prevents wrapping */
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        p {
-            text-align: justify;
-            margin: 20px auto;
-            width: 80%;
-            font-size: 18px;
-            line-height: 1.6;
-            color: #333;
-        }
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f4f4;
+    color:#333;
+}
 
-        img {
-            width: 300px;
-            max-width: 90%;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
+/* Header */
 
-        embed {
-            width: 600px;
-            height: 500px;
-            margin: 20px 0;
-            border: 1px solid #ccc;
-        }
+header{
+    background:#1f3a5f;
+    color:white;
+    padding:30px;
+    text-align:center;
+}
 
-        h2 {
-            color: #555;
-        }
+header h1{
+    font-size:48px;
+}
 
-        footer {
-            margin-top: 40px;
-            padding: 15px;
-            background: #2c3e50;
-            color: white;
-            font-size: 18px;
-        }
-    </style>
+header p{
+    margin-top:10px;
+    font-size:20px;
+    color:#ddd;
+}
+
+/* Navigation */
+
+nav{
+    background:#2c4d73;
+    text-align:center;
+    padding:15px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin:20px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+nav a:hover{
+    color:gold;
+}
+
+/* Hero Section */
+
+.hero{
+    width:100%;
+    height:420px;
+    background:url("banner.jpg") center/cover;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.hero h2{
+    background:rgba(0,0,0,.6);
+    color:white;
+    padding:20px;
+    font-size:40px;
+    border-radius:10px;
+}
+
+/* Main */
+
+.container{
+    width:85%;
+    margin:auto;
+    padding:40px 0;
+}
+
+/* Blog Card */
+
+.blog{
+    background:white;
+    margin-bottom:40px;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 0 15px rgba(0,0,0,.2);
+}
+
+.blog img{
+    width:100%;
+    height:400px;
+    object-fit:cover;
+}
+
+.blog-content{
+    padding:25px;
+}
+
+.blog-content h2{
+    color:#1f3a5f;
+    margin-bottom:15px;
+}
+
+.blog-content p{
+    text-align:justify;
+    line-height:1.8;
+    font-size:18px;
+}
+
+button{
+    margin-top:20px;
+    padding:12px 25px;
+    background:#1f3a5f;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:17px;
+}
+
+button:hover{
+    background:#0d233d;
+}
+
+/* About */
+
+.about{
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.15);
+    margin-bottom:40px;
+}
+
+.about h2{
+    color:#1f3a5f;
+    margin-bottom:15px;
+}
+
+/* Footer */
+
+footer{
+    background:#1f3a5f;
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}
+
+</style>
+
 </head>
+
 <body>
 
-    <h1>Zindagi with Sachin</h1>
+<header>
 
-    <p><strong>The Dispatcher's Lantern</strong></p>
-    <p>Ravi worked late nights in a small logistics office, where endless paperwork and phone calls blurred together. One evening, when a storm knocked out the power, he lit a lantern and kept coordinating shipments by hand. His calm persistence ensured that medicines reached a hospital on time. The next morning, his manager said, “You didn’t just move goods — you carried hope.” From then on, Ravi realized his work wasn’t just about boxes and bills, but about lives depending on his quiet dedication.</p>
+<h1>Zindagi with Sachin</h1>
 
-    <img src="image_1.jpeg" alt="Family Image">
-    <embed src="Rahul_kumar_jha.pdf" type="application/pdf">
+<p>Sharing My Life Stories, Experiences & Memories</p>
 
-    <h2>Sachin Jha</h2>
+</header>
 
-    <footer>
-        Powered by Sachin Kumar Jha
-    </footer>
+<nav>
+
+<a href="#">Home</a>
+
+<a href="#">Life Stories</a>
+
+<a href="#">Blog</a>
+
+<a href="#">Gallery</a>
+
+<a href="#">About Me</a>
+
+<a href="#">Contact</a>
+
+</nav>
+
+<section class="hero">
+
+<h2>Every Story Has A Meaning</h2>
+
+</section>
+
+<div class="container">
+
+<div class="blog">
+
+<img src="story1.jpg" alt="Story Image">
+
+<div class="blog-content">
+
+<h2>My First Journey</h2>
+
+<p>
+
+Everyone has a story that changes their life. This blog is dedicated to sharing my personal journey, childhood memories, struggles, achievements, and the lessons I learned throughout life.
+
+Each post reflects real experiences that shaped me into who I am today. I hope my stories inspire others to never give up and always believe in themselves.
+
+</p>
+
+<button>Read Full Story</button>
+
+</div>
+
+</div>
+
+<div class="blog">
+
+<img src="story2.jpg" alt="Story Image">
+
+<div class="blog-content">
+
+<h2>Life Lessons</h2>
+
+<p>
+
+Life teaches us through happiness, failures, friendships, family, and unexpected challenges. Here I share moments that taught me valuable lessons and helped me grow stronger.
+
+</p>
+
+<button>Read More</button>
+
+</div>
+
+</div>
+
+<div class="about">
+
+<h2>About Me</h2>
+
+<p>
+
+Hello, I'm <b>Sachin Kumar Jha</b>.
+
+Welcome to <b>Zindagi with Sachin</b>, my personal blogging website where I write about my past life stories, unforgettable memories, life experiences, and motivational moments.
+
+Thank you for visiting my website.
+
+</p>
+
+</div>
+
+</div>
+
+<footer>
+
+<h3>Powered by Sachin Kumar Jha</h3>
+
+<p>© 2026 Zindagi with Sachin | All Rights Reserved</p>
+
+</footer>
 
 </body>
 </html>
