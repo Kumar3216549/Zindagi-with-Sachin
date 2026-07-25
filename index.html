@@ -1,4 +1,13 @@
-*{
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zindagi with Sachin</title>
+
+<style>
+    
+*{<img src="ZINWS.png" class="top-banner">
     margin:0;
     padding:0;
     box-sizing:border-box;
@@ -6,55 +15,39 @@
 
 body{
     font-family:Arial, Helvetica, sans-serif;
-    color:#fff;
-    background:
-        linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.65)),
-        url("AIIMAGE.png");
-    background-size:cover;
-    background-position:center;
-    background-attachment:fixed;
-    background-repeat:no-repeat;
-}
-
-/* Top Banner */
-
-.top-banner{
-    width:100%;
-    display:block;
-    max-height:260px;
-    object-fit:cover;
-    box-shadow:0 5px 25px rgba(0,0,0,.4);
+    background:#f4f4f4;
+    color:#333;
 }
 
 /* Header */
 
-header{
-    background:transparent;
+header{  
+    background:#1f3a5f;
+    color:white;
+    padding:30px;
     text-align:center;
-    padding:20px;
 }
 
 header h1{
-    font-size:50px;
-    color:#fff;
+    font-size:48px;
 }
 
 header p{
-    color:#f1f1f1;
-    font-size:20px;
     margin-top:10px;
+    font-size:20px;
+    color:#ddd;
 }
 
 /* Navigation */
 
 nav{
-    background:rgba(0,0,0,.60);
-    padding:15px;
+    background:#2c4d73;
     text-align:center;
+    padding:15px;
 }
 
 nav a{
-    color:#fff;
+    color:white;
     text-decoration:none;
     margin:20px;
     font-size:18px;
@@ -62,23 +55,26 @@ nav a{
 }
 
 nav a:hover{
-    color:#FFD700;
+    color:gold;
 }
 
-/* Hero */
+/* Hero Section */
 
 .hero{
+    width:100%;
     height:420px;
+    background:url("banner.jpg") center/cover;
     display:flex;
     justify-content:center;
     align-items:center;
 }
 
 .hero h2{
-    background:rgba(0,0,0,.70);
-    padding:20px 40px;
-    border-radius:10px;
+    background:rgba(0,0,0,.6);
+    color:white;
+    padding:20px;
     font-size:40px;
+    border-radius:10px;
 }
 
 /* Main */
@@ -86,33 +82,32 @@ nav a:hover{
 .container{
     width:85%;
     margin:auto;
-    padding:50px 0;
+    padding:40px 0;
 }
 
-/* Blog */
+/* Blog Card */
 
 .blog{
-    background:rgba(255,255,255,.95);
-    color:#333;
-    border-radius:20px;
+    background:white;
+    margin-bottom:40px;
+    border-radius:10px;
     overflow:hidden;
-    margin-bottom:50px;
-    box-shadow:0 15px 40px rgba(0,0,0,.35);
+    box-shadow:0 0 15px rgba(0,0,0,.2);
 }
 
 .blog img{
     width:100%;
-    height:450px;
+    height:400px;
     object-fit:cover;
 }
 
 .blog-content{
-    padding:30px;
+    padding:25px;
 }
 
 .blog-content h2{
     color:#1f3a5f;
-    margin-bottom:20px;
+    margin-bottom:15px;
 }
 
 .blog-content p{
@@ -122,13 +117,14 @@ nav a:hover{
 }
 
 button{
+    margin-top:20px;
     padding:12px 25px;
     background:#1f3a5f;
-    color:#fff;
+    color:white;
     border:none;
     border-radius:5px;
-    margin-top:20px;
     cursor:pointer;
+    font-size:17px;
 }
 
 button:hover{
@@ -138,24 +134,141 @@ button:hover{
 /* About */
 
 .about{
-    background:rgba(255,255,255,.95);
-    color:#333;
+    background:white;
     padding:30px;
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.15);
+    margin-bottom:40px;
 }
 
 .about h2{
     color:#1f3a5f;
-    margin-bottom:20px;
+    margin-bottom:15px;
 }
 
 /* Footer */
 
 footer{
-    background:rgba(0,0,0,.75);
-    color:#fff;
+    background:#1f3a5f;
+    color:white;
     text-align:center;
-    padding:25px;
+    padding:20px;
     margin-top:40px;
 }
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>Zindagi with Sachin</h1>
+
+<p>Sharing My Life Stories, Experiences & Memories</p>
+
+</header>
+
+<nav>
+
+<a href="#">Home</a>
+
+<a href="#">Life Stories</a>
+
+<a href="#">Blog</a>
+
+<a href="#">Gallery</a>
+
+<a href="#">About Me</a>
+
+<a href="#">Contact</a>
+
+</nav>
+
+<section class="hero">
+
+<h2>Every Story Has A Meaning</h2>
+
+</section>
+
+<div class="container">
+
+<div class="blog">
+
+<img src="story1.jpg" alt="Story Image">
+
+<div class="blog-content">
+
+<h2>My First Journey</h2>
+
+<p>
+
+Everyone has a story that changes their life. This blog is dedicated to sharing my personal journey, childhood memories, struggles, achievements, and the lessons I learned throughout life.
+
+Each post reflects real experiences that shaped me into who I am today. I hope my stories inspire others to never give up and always believe in themselves.
+
+</p>
+
+<button>Read Full Story</button>
+
+</div>
+
+</div>
+
+<div class="blog">
+
+<img src="story2.jpg" alt="Story Image">
+
+<div class="blog-content">
+
+<h2>Life Lessons</h2>
+
+<p>
+
+Life teaches us through happiness, failures, friendships, family, and unexpected challenges. Here I share moments that taught me valuable lessons and helped me grow stronger.
+
+</p>
+
+<button>Read More</button>
+
+</div>
+
+</div>
+
+<div class="about">
+
+<h2>About Me</h2>
+
+<p>
+
+Hello, I'm <>Sachin Kumar Jha</>.
+
+Welcome to <b>Zindagi with Sachin</b>, my personal blogging website where I write about my past life stories, unforgettable memories, life experiences, and motivational moments.
+
+Thank you for visiting my website.
+
+</p>
+
+</div>
+
+</div>
+
+<footer>
+
+<h3>Powered by Sachin Kumar Jha</h3>
+
+<p>© 2026 Zindagi with Sachin | All Rights Reserved</p>
+
+</footer>
+
+</body>
+</html>
+
+<img src="AIIMAGE.png" class="feature-image">
+
+
+
+YE IMAGE MUJHE BACKGROUND ME CHAHIYE WITH VISIBILITY FULL HTML KA CODE DO SURU SE ANT TAK
+
+
