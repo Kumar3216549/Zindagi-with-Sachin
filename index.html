@@ -11,7 +11,8 @@
     padding:0;
 }
 
-    
+
+
 body{
     font-family:Arial, Helvetica, sans-serif;
     background:#f4f4f4;
@@ -53,6 +54,73 @@ nav{
     background:#2c4d73;
     text-align:center;
     padding:15px;
+}
+/* Navigation */
+
+nav{
+    background:#2c4d73;
+    display:flex;
+    align-items:center;
+    padding:15px 20px;
+}
+
+.menu-icon{
+    color:white;
+    font-size:32px;
+    cursor:pointer;
+    margin-right:25px;
+    user-select:none;
+}
+
+.menu-icon:hover{
+    color:gold;
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.nav-links a:hover{
+    color:gold;
+}
+
+/* Mobile Menu */
+
+@media(max-width:768px){
+
+    nav{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .menu-icon{
+        display:block;
+    }
+
+    .nav-links{
+        display:none;
+        flex-direction:column;
+        width:100%;
+        margin-top:10px;
+    }
+
+    .nav-links.show{
+        display:flex;
+    }
+
+    .nav-links a{
+        padding:10px 0;
+        width:100%;
+    }
 }
 
 nav a{
@@ -176,6 +244,12 @@ footer{
 
 </head>
 
+<script>
+function toggleMenu() {
+    document.getElementById("navLinks").classList.toggle("show");
+}
+</script>
+
 <body>
 <img src="ZINWS.png" class="top-banner">
     
@@ -187,17 +261,18 @@ footer{
 
 <nav>
 
-<a href="index.html">Home</a>
+    <div class="menu-icon" onclick="toggleMenu()">
+        ☰
+    </div>
 
-<a href="life-stories.html">Life Stories</a>
-
-<a href="blog.html">Blog</a>
-
-<a href="gallery.html">Gallery</a>
-
-<a href="about.html">About Me</a>
-
-<a href="contact.html">Contact</a>
+    <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="life-stories.html">Life Stories</a>
+        <a href="blog.html">Blog</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="about.html">About Me</a>
+        <a href="contact.html">Contact</a>
+    </div>
 
 </nav>
 
