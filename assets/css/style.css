@@ -92,15 +92,16 @@ h1, h2, h3, h4{
 /* ---------- masthead / logo banner ---------- */
 .masthead{
   background: var(--color-bg-alt);
-  text-align: center;
-  padding: 10px 16px;
   border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+  line-height: 0;
 }
 .masthead img{
+  display: block;
   width: 100%;
-  max-width: 640px;
-  height: auto;
-  margin: 0 auto;
+  height: clamp(90px, 16vw, 200px);
+  object-fit: cover;
+  object-position: center;
 }
 
 /* ---------- nav ---------- */
