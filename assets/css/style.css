@@ -89,19 +89,33 @@ h1, h2, h3, h4{
   top: 0;
 }
 
-/* ---------- masthead / logo banner ---------- */
+/* ---------- masthead / logo banner (text, no image) ---------- */
 .masthead{
   background: var(--color-bg-alt);
   border-bottom: 1px solid var(--color-border);
-  overflow: hidden;
-  line-height: 0;
+  padding: 32px 24px;
+  text-align: center;
 }
-.masthead img{
-  display: block;
-  width: 100%;
-  height: clamp(90px, 16vw, 200px);
-  object-fit: cover;
-  object-position: center;
+
+.site-name{
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(22px, 3.2vw, 34px);
+  color: var(--color-navy);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.site-name:hover{ color: var(--color-terracotta); }
+
+.site-name .spark{
+  color: var(--color-gold);
+  font-size: 0.4em;
+  vertical-align: middle;
+  margin: 0 10px;
+  position: relative;
+  top: -0.3em;
 }
 
 /* ---------- nav ---------- */
