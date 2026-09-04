@@ -3,393 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zindagi with Sachin</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    .blog img.rakhi-img {
-        width: 100%;
-        height: 250px;
-        object-fit: cover;
-    }
-}
-
-
-body{
-    font-family:Arial, Helvetica, sans-serif;
-    background:#f4f4f4;
-    color:#333;
-}
-.top-banner{
-    height:auto;
-    display:block;
-    margin:auto;
-    width:100%;
-    /* max-height:50px; */
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    object-position: center;
-}
-/* Header */
-      
-header{  
-    background:#1f3a5f;
-    color:white;
-    padding:30px;
-    text-align:center;
-}
-
-header h1{
-    font-size:48px;
-}
-
-header p{
-    margin-top:10px;
-    font-size:20px;
-    color:#ddd;
-}
-
-/* Navigation */
-
-nav{
-    background:#2c4d73;
-    text-align:center;
-    padding:15px;
-}
-/* Navigation */
-
-nav{
-    background:#2c4d73;
-    display:flex;
-    align-items:center;
-    padding:7px 10px;
-}
-
-.menu-icon{
-    color:white;
-    font-size:32px;
-    cursor:pointer;
-    margin-right:25px;
-    user-select:none;
-}
-
-.menu-icon:hover{
-    color:gold;
-}
-
-.nav-links{
-    display:grid;
-    grid-template-columns:repeat(6,1fr);
-    width:100%;
-    text-align:center;
-}
-
-.nav-links a{
-    color:white;
-    text-decoration:none;
-    font-size:20px;
-    font-weight:bold;
-    padding:15px 0;
-    transition:.3s;
-}
-
-.nav-links a:hover{
-    background:#365b87;
-    color:gold;
-}
-
-/* Mobile Menu */
-
-@media(max-width:768px){
-
-    nav{
-        flex-direction:column;
-        align-items:flex-start;
-    }
-
-    .menu-icon{
-        display:block;
-    }
-
-    .nav-links{
-        display:none;
-        flex-direction:column;
-        width:100%;
-        margin-top:10px;
-    }
-
-    .nav-links.show{
-        display:flex;
-    }
-
-    .nav-links a{
-        padding:10px 0;
-        width:60%;
-    }
-}
-
-nav a{
-    color:white;
-    text-decoration:none;
-    margin:40px;
-    font-size:18px;
-    font-weight:bold;
-}
-
-nav a:hover{
-    color:gold;
-}
-
-/* Hero Section */
-
-.hero{
-    width:100%;
-    height:420px;
-    background:url("banner.jpg") center/cover;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-
-.hero h2{
-    background:rgba(0,0,0,.6);
-    color:white;
-    padding:20px;
-    font-size:40px;
-    border-radius:10px;
-}
-
-/* Main */
-
-.container{
-    width:85%;
-    margin:auto;
-    padding:40px 0;
-}
-
-/* Blog Card */
-
-.blog{
-    background:white;
-    margin-bottom:40px;
-    border-radius:10px;
-    overflow:hidden;
-    box-shadow:0 0 15px rgba(0,0,0,.2);
-}
-
-.blog img{
-    width:100%;
-    height:400px;
-    object-fit:cover;
-}
-
-.blog-content{
-    padding:25px;
-}
-
-.blog-content h2{
-    color:#1f3a5f;
-    margin-bottom:15px;
-}
-
-.blog-content p{
-    text-align:justify;
-    line-height:1.8;
-    font-size:18px;
-}
-
-button{
-    margin-top:20px;
-    padding:12px 25px;
-    background:#1f3a5f;
-    color:white;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    font-size:17px;
-}
-
-button:hover{
-    background:#0d233d;
-}
-
-/* About */
-
-.about{
-    background:white;
-    padding:30px;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,.15);
-    margin-bottom:40px;
-}
-
-.about h2{
-    color:#1f3a5f;
-    margin-bottom:15px;
-}
-
-/* Footer */
-
-footer{
-    background:#1f3a5f;
-    color:white;
-    text-align:center;
-    padding:20px;
-    margin-top:40px;
-}
-.feature-image {
-    width: 100%;
-    max-width: 1000px;   /* Adjust as needed */
-    height: 350px;       /* Banner height */
-    object-fit: contain; /* Shows the complete image */
-    display: block;
-    margin: 20px auto;
-}
-</style>
-
+<title>Zindagi with Sachin | Life Stories, Experiences &amp; Memories</title>
+<meta name="description" content="A personal blog by Sachin Kumar Jha — life stories, experiences, and the moments and lessons that shaped a life, told one chapter at a time.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/img/favicon-192.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
-
-<script>
-function toggleMenu() {
-    document.getElementById("navLinks").classList.toggle("show");
-}
-</script>
-
 <body>
-<img src="ZINWS.png" class="top-banner">
-    
-<header>
-
-<p style="color: #d6ff00;">Sharing My Life Stories, Experiences & Memories Soon</p>
-
-</header>
-
-<nav>
-
-    <div class="menu-icon" onclick="toggleMenu()">
-        ☰
-    </div>
-
+<a class="skip-link" href="#main">Skip to content</a>
+ 
+<div class="masthead">
+  <img src="assets/img/masthead.webp" alt="Zindagi with Sachin — a personal blog of life stories, experiences and memories" width="1600" height="639">
+</div>
+ 
+<nav class="site-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <button class="menu-icon" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">&#9776;</button>
     <div class="nav-links" id="navLinks">
-        <a href="index.html">Home</a>
-        <a href="life-stories.html">Life Stories</a>
-        <a href="blog.html">Blog</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="about.html">About Me</a>
-        <a href="contact.html">Contact</a>
+      <a href="index.html">Home</a>
+      <a href="life-stories.html">Life Stories</a>
+      <a href="blog.html">Blog</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About Me</a>
+      <a href="contact.html">Contact</a>
     </div>
-
+  </div>
 </nav>
-
+ 
+<main id="main">
+ 
 <section class="hero">
-
-<h2>Every Story Has A Meaning</h2>
-
+  <div class="hero-inner">
+    <h1>Every Story Has A Meaning</h1>
+    <p>Welcome — I'm Sachin. This is where I write down the moments, people, and lessons that have shaped my life, so they're never forgotten.</p>
+  </div>
 </section>
-
+ 
 <section class="container">
-
-<div class="blog">
-
-<img src="rakhi_spl.png" alt="My Story" class="rakhi-img"> 
-
-<div class="blog-content">
-
-<h2>My Story</h2>
-
-<p>
-This is where I will share my personal journey, experiences, and memories. Every chapter of life has taught me something valuable, whether through success, failure, friendship, or challenges. This section will become a collection of stories that have shaped my personality and outlook on life. My aim is to preserve these memories while also inspiring anyone who reads them. As this website grows, I will continue adding new stories filled with real emotions, important lessons, and unforgettable moments that define my life's journey.
-</p>
-
-<button onclick="location.href='story.html'">
-Read Full Story
-</button>
-
-</div>
-
-</div>
-
+  <div class="section-head">
+    <span class="eyebrow">Featured</span>
+    <h2>My Story</h2>
+  </div>
+ 
+  <div class="card">
+    <img src="assets/img/family-collage.webp" alt="A collage of personal photos with family and friends across different celebrations" width="800" height="1421" style="object-position: top;">
+    <div class="card-content">
+      <h2>My Story</h2>
+      <p>
+        This is where I share my personal journey, experiences, and memories. Every chapter of life has taught me something valuable — through success, failure, friendship, or challenge. This section is a growing collection of stories that have shaped who I am, written to preserve those memories and, hopefully, to inspire anyone who reads them. As this website grows, I'll keep adding new stories filled with real emotions, honest lessons, and moments that define my life's journey.
+      </p>
+      <a class="btn" href="story.html">Read Full Story</a>
+    </div>
+  </div>
 </section>
-
-<div class="container">
-
-<div class="blog">
-
-<img src="story1.jpg" alt="AIIMAGE.png">
-
-<div class="blog-content">
-
-<h2>My First Journey</h2>
-
-<p>
-
-Everyone has a story that changes their life. This blog is dedicated to sharing my personal journey, childhood memories, struggles, achievements, and the lessons I learned throughout life.
-
-Each post reflects real experiences that shaped me into who I am today. I hope my stories inspire others to never give up and always believe in themselves.
-
-</p>
-
-<button onclick="location.href='story1.html'">
-Read Full Story
-</button>
-</div>
-
-</div>
-
-<div class="blog">
-
-<img src="story2.jpg" alt="AIIMAGE.png">
-
-<div class="blog-content">
-
-<h2>Life Lessons</h2>
-
-<p>
-
-Life teaches us through happiness, failures, friendships, family, and unexpected challenges. Here I share moments that taught me valuable lessons and helped me grow stronger.
-
-</p>
-
-<button onclick="location.href='story2.html'">
-Read More
-</button>
-</div>
-
-</div>
-
-<div class="about">
-
-<h2>About Me</h2>
-
-<p>
-
-Hello, I'm <>Sachin Kumar Jha</>.
-
-Welcome to <b>Zindagi with Sachin</b>, my personal blogging website where I write about my past life stories, unforgettable memories, life experiences, and motivational moments.
-
-Thank you for visiting my website.
-
-</p>
-
-</div>
-
-</div>
-
-<footer>
-
-<img src="AIIMAGE.png" class="feature-image" alt="AI Image">
-    
-    
-<h3>Powered by Sachin Kumar Jha</h3>
-
-<p>© 2026 Zindagi with Sachin | All Rights Reserved</p>
-
+ 
+<section class="container tight">
+  <div class="section-head">
+    <span class="eyebrow">More Chapters</span>
+    <h2>From the Journal</h2>
+    <p>A few more stories from along the way.</p>
+  </div>
+ 
+  <div class="grid">
+ 
+    <div class="card">
+      <div class="card-media--gradient grad-1" role="img" aria-label="An open book, representing a new journey">📖</div>
+      <div class="card-content">
+        <h3>My First Journey</h3>
+        <p>
+          Everyone has a story that changes their life. This one is dedicated to my personal journey — childhood memories, struggles, achievements, and the lessons I learned along the way. I hope it reminds you to never give up and always believe in yourself.
+        </p>
+        <a class="btn ghost" href="story1.html">Read Full Story</a>
+      </div>
+    </div>
+ 
+    <div class="card">
+      <div class="card-media--gradient grad-2" role="img" aria-label="A lightbulb, representing a life lesson">💡</div>
+      <div class="card-content">
+        <h3>Life Lessons</h3>
+        <p>
+          Life teaches us through happiness, failures, friendships, family, and unexpected challenges. Here I share moments that taught me valuable lessons and helped me grow stronger.
+        </p>
+        <a class="btn ghost" href="story2.html">Read More</a>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+<section class="container tight">
+  <div class="about-block">
+    <img src="assets/img/sachin-desk.webp" alt="Sachin at his desk, surrounded by notes and motivational reminders" width="900" height="900">
+    <div>
+      <span class="eyebrow">About Me</span>
+      <h2>Hello, I'm Sachin Kumar Jha</h2>
+      <p>
+        Welcome to <strong>Zindagi with Sachin</strong>, my personal blogging space where I write about my past life stories, unforgettable memories, life experiences, and motivational moments. Thank you for visiting — I hope something here resonates with you.
+      </p>
+      <a class="btn gold" href="about.html">More About Me</a>
+    </div>
+  </div>
+</section>
+ 
+</main>
+ 
+<footer class="site-footer">
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="life-stories.html">Life Stories</a>
+    <a href="blog.html">Blog</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About Me</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <h3>Zindagi with Sachin</h3>
+  <p>&copy; 2026 Sachin Kumar Jha. All rights reserved.</p>
 </footer>
-
+ 
+<script src="assets/js/main.js"></script>
 </body>
 </html>
-
+ 
 
