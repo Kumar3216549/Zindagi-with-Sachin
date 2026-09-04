@@ -3,94 +3,109 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Coming Soon</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:Arial, sans-serif;
-    background:#f4f4f4;
-    text-align:center;
-}
-
-/* Header */
-header{
-    background:#1f3a5f;
-    color:white;
-    padding:15px 20px;
-    display:flex;
-    align-items:center;
-}
-
-/* Hamburger Menu */
-.menu-icon{
-    width:35px;
-    cursor:pointer;
-}
-
-.menu-icon span{
-    display:block;
-    width:100%;
-    height:4px;
-    background:white;
-    margin:6px 0;
-    border-radius:5px;
-}
-
-/* Page Content */
-.container{
-    margin-top:100px;
-}
-
-h1{
-    color:#1f3a5f;
-    margin-bottom:15px;
-}
-
-p{
-    font-size:18px;
-    color:#555;
-    margin-bottom:25px;
-}
-
-a{
-    display:inline-block;
-    text-decoration:none;
-    background:#1f3a5f;
-    color:white;
-    padding:12px 25px;
-    border-radius:5px;
-    transition:0.3s;
-}
-
-a:hover{
-    background:#294d7a;
-}
-</style>
+<title>About Me | Zindagi with Sachin</title>
+<meta name="description" content="Meet Sachin Kumar Jha — the person behind Zindagi with Sachin, a personal blog about life stories, lessons, and memories worth keeping.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/img/favicon-192.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<header>
-    <div class="menu-icon">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-</header>
-
-<div class="container">
-    <h1>Coming Soon</h1>
-    <p>This page is under construction.</p>
-
-    <a href="index.html">Back to Home</a>
+<div class="masthead">
+  <img src="assets/img/masthead.webp" alt="Zindagi with Sachin — a personal blog of life stories, experiences and memories" width="1600" height="639">
 </div>
 
+<nav class="site-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <button class="menu-icon" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">&#9776;</button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="life-stories.html">Life Stories</a>
+      <a href="blog.html">Blog</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About Me</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+<section class="hero small">
+  <div class="hero-inner">
+    <h1>About Me</h1>
+    <p>The person, the purpose, and the reason this journal exists.</p>
+  </div>
+</section>
+
+<section class="container">
+  <div class="about-block">
+    <img src="assets/img/sachin-desk.webp" alt="Sachin at his desk, surrounded by notes and motivational reminders" width="900" height="900">
+    <div>
+      <span class="eyebrow">Hello, I'm</span>
+      <h2>Sachin Kumar Jha</h2>
+      <p>
+        I believe every life is made of small, ordinary moments that quietly turn into the big lessons we carry forward — a conversation with family, a hard day at work, a failure that taught more than any success could. <strong>Zindagi with Sachin</strong> is where I write those moments down before I forget them.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="container tight">
+  <div class="section-head">
+    <span class="eyebrow">Why This Blog</span>
+    <h2>Writing It Down, So It's Never Lost</h2>
+    <p>A few things this space is built around.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-content">
+        <h3>Real Stories</h3>
+        <p>No filters, no exaggeration — just honest accounts of things I've actually lived through, good and bad.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-content">
+        <h3>Lessons Worth Sharing</h3>
+        <p>Discipline, focus, consistency, and getting back up — the things I keep relearning, written down for whoever needs them too.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-content">
+        <h3>Family &amp; Memories</h3>
+        <p>Celebrations, people, and the small moments with the ones I love — preserved here so they stay close.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container tight center">
+  <span class="eyebrow">Let's Connect</span>
+  <h2>Have a story of your own, or just want to say hello?</h2>
+  <a class="btn gold" href="contact.html">Get in Touch</a>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="life-stories.html">Life Stories</a>
+    <a href="blog.html">Blog</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About Me</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <h3>Zindagi with Sachin</h3>
+  <p>&copy; 2026 Sachin Kumar Jha. All rights reserved.</p>
+</footer>
+
+<script src="assets/js/main.js"></script>
 </body>
 </html>

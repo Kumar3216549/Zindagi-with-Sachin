@@ -1,38 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Coming Soon</title>
-<style>
-body{
-font-family:Arial;
-text-align:center;
-padding:80px;
-background:#f4f4f4;
-}
-
-h1{
-color:#1f3a5f;
-}
-
-a{
-display:inline-block;
-margin-top:20px;
-text-decoration:none;
-padding:12px 25px;
-background:#1f3a5f;
-color:white;
-border-radius:5px;
-}
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | Zindagi with Sachin</title>
+<meta name="description" content="Get in touch with Sachin Kumar Jha — questions, feedback, or a story of your own to share.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/img/favicon-192.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<h1>Coming Soon</h1>
+<div class="masthead">
+  <img src="assets/img/masthead.webp" alt="Zindagi with Sachin — a personal blog of life stories, experiences and memories" width="1600" height="639">
+</div>
 
-<p>This page is under construction.</p>
+<nav class="site-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <button class="menu-icon" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">&#9776;</button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="life-stories.html">Life Stories</a>
+      <a href="blog.html">Blog</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About Me</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
 
-<a href="index.html">Back to Home</a>
+<main id="main">
 
+<section class="hero small">
+  <div class="hero-inner">
+    <h1>Get in Touch</h1>
+    <p>Questions, feedback, or a story you'd like to share — I'd love to hear from you.</p>
+  </div>
+</section>
+
+<section class="container">
+
+  <!--
+    NOTE FOR SACHIN: This is a static site (no server), so this form can't send
+    email on its own yet. Two easy ways to make it work:
+      1) Fastest: replace YOUR-EMAIL@example.com below with your real address —
+         the "Email Me Directly" button will already work as-is.
+      2) To make the form itself submit: sign up for a free service like
+         Formspree or EmailJS, and point the <form action="..."> at the URL
+         they give you. No code changes needed beyond that one attribute.
+  -->
+  <form class="form-card" action="https://formspree.io/f/YOUR-FORM-ID" method="POST">
+    <div class="form-row">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+    <div class="form-row">
+      <label for="email">Your Email</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div class="form-row">
+      <label for="message">Message</label>
+      <textarea id="message" name="message" required></textarea>
+    </div>
+    <button type="submit" class="btn gold">Send Message</button>
+  </form>
+
+  <div class="contact-methods">
+    <a href="mailto:YOUR-EMAIL@example.com">✉ Email Me Directly</a>
+    <a href="index.html">🏠 Back to Home</a>
+  </div>
+
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="life-stories.html">Life Stories</a>
+    <a href="blog.html">Blog</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About Me</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <h3>Zindagi with Sachin</h3>
+  <p>&copy; 2026 Sachin Kumar Jha. All rights reserved.</p>
+</footer>
+
+<script src="assets/js/main.js"></script>
 </body>
 </html>

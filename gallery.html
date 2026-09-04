@@ -1,38 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Coming Soon</title>
-<style>
-body{
-font-family:Arial;
-text-align:center;
-padding:80px;
-background:#f4f4f4;
-}
-
-h1{
-color:#1f3a5f;
-}
-
-a{
-display:inline-block;
-margin-top:20px;
-text-decoration:none;
-padding:12px 25px;
-background:#1f3a5f;
-color:white;
-border-radius:5px;
-}
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery | Zindagi with Sachin</title>
+<meta name="description" content="A photo gallery of moments, family, and memories from Zindagi with Sachin.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/img/favicon-192.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<h1>Coming Soon</h1>
+<div class="masthead">
+  <img src="assets/img/masthead.webp" alt="Zindagi with Sachin — a personal blog of life stories, experiences and memories" width="1600" height="639">
+</div>
 
-<p>This page is under construction.</p>
+<nav class="site-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <button class="menu-icon" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">&#9776;</button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="life-stories.html">Life Stories</a>
+      <a href="blog.html">Blog</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About Me</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
 
-<a href="index.html">Back to Home</a>
+<main id="main">
 
+<section class="hero small">
+  <div class="hero-inner">
+    <h1>Gallery</h1>
+    <p>A few snapshots from along the way — more to be added as the memories keep coming.</p>
+  </div>
+</section>
+
+<section class="container">
+  <div class="gallery-grid">
+
+    <figure class="gallery-item">
+      <img src="assets/img/family-collage.webp" alt="A collage of personal photos with family and friends across different celebrations" width="800" height="1421" style="object-position: top;">
+      <figcaption class="gallery-caption">Family &amp; celebrations — moments worth keeping close.</figcaption>
+    </figure>
+
+    <figure class="gallery-item">
+      <img src="assets/img/sachin-desk.webp" alt="Sachin at his desk, surrounded by notes and motivational reminders" width="900" height="900">
+      <figcaption class="gallery-caption">Discipline, focus, consistency — the everyday grind.</figcaption>
+    </figure>
+
+    <div class="gallery-item">
+      <div class="card-media--gradient grad-3" role="img" aria-label="A camera, representing more photos to come" style="height: 320px; font-size: 56px;">📷</div>
+      <div class="gallery-caption">More memories coming soon — new photos are added as new stories go up.</div>
+    </div>
+
+  </div>
+
+  <p class="center mt-lg" style="color: var(--color-text-muted);">More photos coming soon as new stories are added.</p>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="life-stories.html">Life Stories</a>
+    <a href="blog.html">Blog</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About Me</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <h3>Zindagi with Sachin</h3>
+  <p>&copy; 2026 Sachin Kumar Jha. All rights reserved.</p>
+</footer>
+
+<script src="assets/js/main.js"></script>
 </body>
 </html>
