@@ -3,33 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact | Zindagi with Sachin</title>
+<title data-en="Contact | Zindagi with Sachin" data-hi="संपर्क करें | ज़िंदगी विद सचिन">Contact | Zindagi with Sachin</title>
 <meta name="description" content="Get in touch with Sachin Kumar Jha — questions, feedback, or a story of your own to share.">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/img/favicon-192.png">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Nunito+Sans:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main" data-en="Skip to content" data-hi="मुख्य सामग्री पर जाएं">Skip to content</a>
 
 <div class="masthead">
   <a href="index.html" class="site-name"><span class="spark">&#10022;</span>Zindagi with Sachin<span class="spark">&#10022;</span></a>
+  <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch to Hindi / हिंदी में बदलें">EN | हिं</button>
 </div>
 
 <nav class="site-nav" aria-label="Primary">
   <div class="nav-inner">
     <button class="menu-icon" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">&#9776;</button>
     <div class="nav-links" id="navLinks">
-      <a href="index.html">Home</a>
-      <a href="life-stories.html">Life Stories</a>
-      <a href="blog.html">Blog</a>
-      <a href="gallery.html">Gallery</a>
-      <a href="about.html">About Me</a>
-      <a href="contact.html">Contact</a>
+      <a href="index.html" data-en="Home" data-hi="होम">Home</a>
+      <a href="life-stories.html" data-en="Life Stories" data-hi="जीवन की कहानियाँ">Life Stories</a>
+      <a href="blog.html" data-en="Blog" data-hi="ब्लॉग">Blog</a>
+      <a href="gallery.html" data-en="Gallery" data-hi="गैलरी">Gallery</a>
+      <a href="about.html" data-en="About Me" data-hi="मेरे बारे में">About Me</a>
+      <a href="contact.html" data-en="Contact" data-hi="संपर्क करें">Contact</a>
     </div>
   </div>
 </nav>
@@ -38,8 +39,8 @@
 
 <section class="hero small">
   <div class="hero-inner">
-    <h1>Get in Touch</h1>
-    <p>Questions, feedback, or a story you'd like to share — I'd love to hear from you.</p>
+    <h1 data-en="Get in Touch" data-hi="संपर्क करें">Get in Touch</h1>
+    <p data-en="Questions, feedback, or a story you'd like to share — I'd love to hear from you." data-hi="सवाल, प्रतिक्रिया, या कोई कहानी जो आप साझा करना चाहें — मुझे आपसे सुनकर खुशी होगी।">Questions, feedback, or a story you'd like to share — I'd love to hear from you.</p>
   </div>
 </section>
 
@@ -51,28 +52,28 @@
       1) Fastest: replace YOUR-EMAIL@example.com below with your real address —
          the "Email Me Directly" button will already work as-is.
       2) To make the form itself submit: sign up for a free service like
-         Formspree or EmailJS, and point the form action at the URL
+         Formspree or EmailJS, and point the <form action="..."> at the URL
          they give you. No code changes needed beyond that one attribute.
   -->
   <form class="form-card" action="https://formspree.io/f/YOUR-FORM-ID" method="POST">
     <div class="form-row">
-      <label for="name">Your Name</label>
+      <label for="name" data-en="Your Name" data-hi="आपका नाम">Your Name</label>
       <input type="text" id="name" name="name" required>
     </div>
     <div class="form-row">
-      <label for="email">Your Email</label>
+      <label for="email" data-en="Your Email" data-hi="आपका ईमेल">Your Email</label>
       <input type="email" id="email" name="email" required>
     </div>
     <div class="form-row">
-      <label for="message">Message</label>
+      <label for="message" data-en="Message" data-hi="संदेश">Message</label>
       <textarea id="message" name="message" required></textarea>
     </div>
-    <button type="submit" class="btn gold">Send Message</button>
+    <button type="submit" class="btn gold" data-en="Send Message" data-hi="संदेश भेजें">Send Message</button>
   </form>
 
   <div class="contact-methods">
-    <a href="mailto:YOUR-EMAIL@example.com">✉ Email Me Directly</a>
-    <a href="index.html">🏠 Back to Home</a>
+    <a href="mailto:YOUR-EMAIL@example.com" data-en="✉ Email Me Directly" data-hi="✉ सीधे ईमेल करें">✉ Email Me Directly</a>
+    <a href="index.html" data-en="🏠 Back to Home" data-hi="🏠 होम पर वापस जाएं">🏠 Back to Home</a>
   </div>
 
 </section>
@@ -81,15 +82,15 @@
 
 <footer class="site-footer">
   <div class="footer-links">
-    <a href="index.html">Home</a>
-    <a href="life-stories.html">Life Stories</a>
-    <a href="blog.html">Blog</a>
-    <a href="gallery.html">Gallery</a>
-    <a href="about.html">About Me</a>
-    <a href="contact.html">Contact</a>
+    <a href="index.html" data-en="Home" data-hi="होम">Home</a>
+    <a href="life-stories.html" data-en="Life Stories" data-hi="जीवन की कहानियाँ">Life Stories</a>
+    <a href="blog.html" data-en="Blog" data-hi="ब्लॉग">Blog</a>
+    <a href="gallery.html" data-en="Gallery" data-hi="गैलरी">Gallery</a>
+    <a href="about.html" data-en="About Me" data-hi="मेरे बारे में">About Me</a>
+    <a href="contact.html" data-en="Contact" data-hi="संपर्क करें">Contact</a>
   </div>
   <h3>Zindagi with Sachin</h3>
-  <p>&copy; 2026 Sachin Kumar Jha. All rights reserved.</p>
+  <p data-en="&copy; 2026 Sachin Kumar Jha. All rights reserved." data-hi="© 2026 सचिन कुमार झा. सर्वाधिकार सुरक्षित.">&copy; 2026 Sachin Kumar Jha. All rights reserved.</p>
 </footer>
 
 <script src="assets/js/main.js"></script>
