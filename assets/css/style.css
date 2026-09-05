@@ -19,8 +19,8 @@
   --color-border:     #E6D9BE;
 
   /* type */
-  --font-heading: "Playfair Display", Georgia, "Times New Roman", serif;
-  --font-body: "Nunito Sans", Arial, Helvetica, sans-serif;
+  --font-heading: "Playfair Display", "Noto Sans Devanagari", Georgia, "Times New Roman", serif;
+  --font-body: "Nunito Sans", "Noto Sans Devanagari", Arial, Helvetica, sans-serif;
 
   /* layout */
   --max-width: 1080px;
@@ -95,6 +95,41 @@ h1, h2, h3, h4{
   border-bottom: 1px solid var(--color-border);
   padding: 32px 24px;
   text-align: center;
+  position: relative;
+}
+
+.lang-toggle{
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-navy);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .2s, color .2s, border-color .2s;
+}
+
+.lang-toggle:hover,
+.lang-toggle:focus-visible{
+  background: var(--color-navy);
+  color: #fff;
+  border-color: var(--color-navy);
+}
+
+@media (max-width: 560px){
+  .lang-toggle{
+    position: static;
+    transform: none;
+    display: inline-block;
+    margin-top: 14px;
+  }
 }
 
 .site-name{
