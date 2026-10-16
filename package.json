@@ -1,0 +1,8 @@
+{
+  "name": "zindagi-with-sachin",
+  "private": true,
+  "description": "Static site. The build step only refreshes posts/index.json from content/posts.",
+  "scripts": {
+    "build": "node scripts/build-posts.js"
+  }
+}
