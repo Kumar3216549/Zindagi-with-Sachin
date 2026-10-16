@@ -592,3 +592,19 @@ footer.site-footer p{
     object-fit: contain;
   }
 }
+
+/* ---------- life stories: grouped story cards ---------- */
+/* auto-fill keeps a single card at normal column width instead of stretching full width */
+.story-grid{
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.story-grid .card img{
+  object-position: center top;
+}
+
+@media (min-width: 701px){
+  .story-grid .card img{
+    height: 340px;
+  }
+}
