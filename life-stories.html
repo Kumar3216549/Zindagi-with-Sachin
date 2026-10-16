@@ -46,7 +46,15 @@
 
 <section class="container">
 
+  <!-- ===== Category filter (works with assets/js/main.js) ===== -->
+  <div class="story-filter" role="group" aria-label="Filter stories by category">
+    <button type="button" data-filter="all" class="active" aria-pressed="true"><span data-en="All Stories" data-hi="सभी कहानियाँ">All Stories</span><span class="count"></span></button>
+    <button type="button" data-filter="mera-safar" aria-pressed="false"><span data-en="My Journey" data-hi="मेरा सफ़र">My Journey</span><span class="count"></span></button>
+    <button type="button" data-filter="zindagi-ke-sabak" aria-pressed="false"><span data-en="Zindagi ke Sabak" data-hi="ज़िंदगी के सबक">Zindagi ke Sabak</span><span class="count"></span></button>
+  </div>
+
   <!-- ===== Group 1: My Journey ===== -->
+  <div class="story-group" data-cat="mera-safar">
   <div class="section-head" id="mera-safar" style="margin-bottom: 28px;">
     <span class="eyebrow" data-en="Category" data-hi="श्रेणी">Category</span>
     <h2 data-en="My Journey" data-hi="मेरा सफ़र">My Journey</h2>
@@ -64,9 +72,11 @@
     </div>
 
   </div>
+  </div>
 
   <!-- ===== Group 2: Zindagi ke Sabak ===== -->
-  <div class="section-head" id="zindagi-ke-sabak" style="margin: 64px auto 28px;">
+  <div class="story-group" data-cat="zindagi-ke-sabak" style="margin-top: 64px;">
+  <div class="section-head" id="zindagi-ke-sabak" style="margin-bottom: 28px;">
     <span class="eyebrow" data-en="Category" data-hi="श्रेणी">Category</span>
     <h2 data-en="Zindagi ke Sabak" data-hi="ज़िंदगी के सबक">Zindagi ke Sabak</h2>
     <p data-en="Lessons life taught me — from the people who hold everything together." data-hi="ज़िंदगी ने जो सबक सिखाए — उन लोगों से जो सब कुछ थामे रखते हैं।">Lessons life taught me — from the people who hold everything together.</p>
@@ -91,6 +101,7 @@
       </div>
     </div>
 
+  </div>
   </div>
 
   <p class="center mt-lg" style="color: var(--color-text-muted);" data-en="More stories are on the way — check back soon, or follow along on the &lt;a href=&quot;blog.html&quot; style=&quot;color: var(--color-terracotta); font-weight:700;&quot;&gt;blog&lt;/a&gt;." data-hi="और कहानियाँ जल्द आ रही हैं — फिर से देखें, या &lt;a href=&quot;blog.html&quot; style=&quot;color: var(--color-terracotta); font-weight:700;&quot;&gt;ब्लॉग&lt;/a&gt; पर साथ बने रहें।">More stories are on the way — check back soon, or follow along on the <a href="blog.html" style="color: var(--color-terracotta); font-weight:700;">blog</a>.</p>
