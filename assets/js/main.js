@@ -165,3 +165,16 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 });
+
+// ---- Writer's desk link in the footer ----
+document.addEventListener('DOMContentLoaded', function () {
+  var footer = document.querySelector('.site-footer');
+  if (!footer || footer.querySelector('.footer-write')) return;
+  var a = document.createElement('a');
+  a.className = 'footer-write';
+  a.href = 'write.html';
+  a.setAttribute('data-en', '✍️ Writer’s desk');
+  a.setAttribute('data-hi', '✍️ लेखन डेस्क');
+  a.textContent = document.documentElement.getAttribute('lang') === 'hi' ? '✍️ लेखन डेस्क' : '✍️ Writer’s desk';
+  footer.appendChild(a);
+});
