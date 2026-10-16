@@ -19,8 +19,8 @@
   --color-border:     #E6D9BE;
 
   /* type */
-  --font-heading: "Playfair Display", "Noto Sans Devanagari", Georgia, "Times New Roman", serif;
-  --font-body: "Nunito Sans", "Noto Sans Devanagari", Arial, Helvetica, sans-serif;
+  --font-heading: "Merriweather", "Mukta", Georgia, "Times New Roman", serif;
+  --font-body: "Merriweather", "Mukta", Georgia, "Times New Roman", serif;
 
   /* layout */
   --max-width: 1080px;
