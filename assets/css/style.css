@@ -584,3 +584,11 @@ footer.site-footer p{
 /* ---------- utility ---------- */
 .center{ text-align: center; }
 .mt-lg{ margin-top: 40px; }
+
+/* ---------- mobile: show full card images (no side cropping) ---------- */
+@media (max-width: 700px){
+  .card img{
+    height: auto;
+    object-fit: contain;
+  }
+}
