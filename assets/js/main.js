@@ -59,3 +59,109 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+
+// ---- Motion & interaction ----
+document.documentElement.classList.add('js');
+
+document.addEventListener('DOMContentLoaded', function () {
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Scroll reveal: section heads, cards, about blocks, story paragraphs
+  var revealEls = document.querySelectorAll('.section-head, .card, .about-block, .story-body > *, .tag, .story-hero-img');
+  revealEls.forEach(function (el) {
+    el.classList.add('reveal');
+    // stagger cards that sit in the same grid
+    var parent = el.parentElement;
+    if (parent && parent.classList.contains('grid')) {
+      var idx = Array.prototype.indexOf.call(parent.children, el);
+      el.style.setProperty('--reveal-delay', (idx * 0.12) + 's');
+    }
+  });
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+  }
+
+  // Life Stories: category filter
+  var filter = document.querySelector('.story-filter');
+  if (filter) {
+    var groups = document.querySelectorAll('.story-group');
+    var buttons = filter.querySelectorAll('button');
+    // story counts
+    buttons.forEach(function (btn) {
+      var cat = btn.getAttribute('data-filter');
+      var n = 0;
+      groups.forEach(function (g) {
+        if (cat === 'all' || g.getAttribute('data-cat') === cat) { n += g.querySelectorAll('.card').length; }
+      });
+      var badge = btn.querySelector('.count');
+      if (badge) { badge.textContent = n; }
+    });
+    function show(cat, push) {
+      buttons.forEach(function (b) {
+        var on = b.getAttribute('data-filter') === cat;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      groups.forEach(function (g) {
+        var visible = cat === 'all' || g.getAttribute('data-cat') === cat;
+        g.classList.toggle('is-hidden', !visible);
+        if (visible) {
+          g.classList.add('is-entering');
+          g.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('is-visible'); });
+          requestAnimationFrame(function () { requestAnimationFrame(function () { g.classList.remove('is-entering'); }); });
+        }
+      });
+      if (push && history.replaceState) {
+        history.replaceState(null, '', cat === 'all' ? location.pathname : '#' + cat);
+      }
+    }
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () { show(btn.getAttribute('data-filter'), true); });
+    });
+    var hash = location.hash.replace('#', '');
+    var known = Array.prototype.some.call(buttons, function (b) { return b.getAttribute('data-filter') === hash; });
+    show(known ? hash : 'all', false);
+  }
+
+  // Story pages: reading progress bar
+  var storyBody = document.querySelector('.story-body');
+  var bar = null;
+  if (storyBody) {
+    bar = document.createElement('div');
+    bar.className = 'read-progress';
+    bar.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(bar);
+  }
+
+  // Back-to-top button
+  var topBtn = document.createElement('button');
+  topBtn.className = 'to-top';
+  topBtn.type = 'button';
+  topBtn.setAttribute('aria-label', 'Back to top');
+  topBtn.innerHTML = '&uarr;';
+  document.body.appendChild(topBtn);
+  topBtn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+  });
+
+  function onScroll() {
+    var y = window.scrollY || window.pageYOffset;
+    topBtn.classList.toggle('show', y > 500);
+    if (bar) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? Math.min(100, (y / max) * 100) : 0) + '%';
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+});
