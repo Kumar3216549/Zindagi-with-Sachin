@@ -44,7 +44,18 @@
   </div>
 </section>
 
-<section class="container center">
+<!-- ===== Posts from the Writer's Desk (filled in by assets/js/posts.js) ===== -->
+<section class="container" id="blogPosts" hidden>
+  <div class="story-filter" role="group" aria-label="Filter posts by category">
+    <button type="button" data-filter="all" class="active" aria-pressed="true"><span data-en="All" data-hi="सभी">All</span><span class="count"></span></button>
+    <button type="button" data-filter="blog" aria-pressed="false"><span data-en="Blog" data-hi="ब्लॉग">Blog</span><span class="count"></span></button>
+    <button type="button" data-filter="zindagi-ke-sabak" aria-pressed="false"><span data-en="Zindagi ke Sabak" data-hi="ज़िंदगी के सबक">Zindagi ke Sabak</span><span class="count"></span></button>
+    <button type="button" data-filter="mera-safar" aria-pressed="false"><span data-en="My Journey" data-hi="मेरा सफ़र">My Journey</span><span class="count"></span></button>
+  </div>
+  <div class="grid story-grid"></div>
+</section>
+
+<section class="container center" id="blogEmpty">
   <span class="eyebrow" data-en="Coming Soon" data-hi="जल्द आ रहा है">Coming Soon</span>
   <h2 data-en="The First Posts Are Being Written" data-hi="पहली पोस्ट लिखी जा रही हैं">The First Posts Are Being Written</h2>
   <p style="max-width: 560px; margin: 16px auto 0; color: var(--color-text-muted); font-size: 17px;" data-en="This page will soon hold shorter, more frequent posts — quick thoughts, small wins, and everyday reflections that don't need a full story of their own. Here's what to expect:" data-hi="यह पेज जल्द ही छोटी और अधिक बार आने वाली पोस्ट से भरेगा — त्वरित विचार, छोटी जीत, और रोज़मर्रा के खयाल जिन्हें पूरी कहानी की ज़रूरत नहीं। यहाँ बताया गया है कि क्या उम्मीद करें:">
@@ -78,5 +89,7 @@
 </footer>
 
 <script src="assets/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+<script src="assets/js/posts.js"></script>
 </body>
 </html>
