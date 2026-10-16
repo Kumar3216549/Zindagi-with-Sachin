@@ -58,3 +58,15 @@ const posts = files.map(parse).filter(p => !p.draft)
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, JSON.stringify(posts, null, 2));
 console.log('posts/index.json: ' + posts.length + ' post(s)');
+
+// Vercel serves the "public" folder after a build, so copy the site there.
+const ROOT = path.join(__dirname, '..');
+const PUBLIC = path.join(ROOT, 'public');
+const SKIP = new Set(['public', 'node_modules', '.git', '.github', '.vercel', 'scripts']);
+fs.rmSync(PUBLIC, { recursive: true, force: true });
+fs.mkdirSync(PUBLIC);
+for (const name of fs.readdirSync(ROOT)) {
+  if (SKIP.has(name)) continue;
+  fs.cpSync(path.join(ROOT, name), path.join(PUBLIC, name), { recursive: true });
+}
+console.log('Copied site to public/');
