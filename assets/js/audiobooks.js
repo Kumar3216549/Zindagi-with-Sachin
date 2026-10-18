@@ -115,7 +115,7 @@ function yamlLite(src) {
       slug: slug, title: meta.title || slug, title_hi: meta.title_hi || '', author: meta.author || '', narrator: meta.narrator || '',
       language: meta.language || '', category: meta.category || '',
       subcategory: meta.subcategory ? String(meta.subcategory).trim() : '', subcategory_hi: meta.subcategory_hi ? String(meta.subcategory_hi).trim() : '', cover: clean(meta.cover), date: meta.date ? String(meta.date) : '',
-      description: meta.description || '', description_hi: meta.description_hi || '', chapters: ch, draft: !!meta.draft
+      description: meta.description || '', description_hi: meta.description_hi || '', youtube: meta.youtube || '', chapters: ch, draft: !!meta.draft
     };
   }
   function fetchText(url) { return fetch(url, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); }); }
@@ -291,6 +291,7 @@ function yamlLite(src) {
             bi('h1', b.title, b.title_hi) +
             (b.author ? '<p class="ab-by">' + bi('span', 'Written by ', 'लेखक: ') + esc(b.author) + (b.narrator && b.narrator !== b.author ? ' · ' + bi('span', 'Voice: ', 'आवाज़: ') + esc(b.narrator) : '') + '</p>' : '') +
             (b.description ? bi('p', b.description, b.description_hi, 'class="ab-desc"') : '') +
+            (/^https?:\/\/(www\.|m\.)?(youtube\.com|youtu\.be)\//.test(b.youtube || '') ? '<a class="ab-yt" href="' + esc(b.youtube) + '" target="_blank" rel="noopener">' + bi('span', '▶ Also on YouTube', '▶ यूट्यूब पर भी देखें') + '</a>' : '') +
           '</div>' +
         '</div>' +
         '<div class="ab-player" role="region" aria-label="Audio player">' +
