@@ -11,7 +11,8 @@
     'mera-safar': { en: 'My Journey', hi: 'मेरा सफ़र', icon: '🧭' },
     'kahani': { en: 'Stories', hi: 'कहानियाँ', icon: '📖' },
     'anya-sroton-ke-chuninda-gyan': { en: 'Anya Sroton ke Chuninda Gyan', hi: 'अन्य स्रोतों के चुनिंदा ज्ञान', icon: '💡' },
-    'kavita': { en: 'Mahan Kavita (Poems)', hi: 'महान कविताएँ', icon: '🎙️' }
+    'kavita': { en: 'Mahan Kavita (Poems)', hi: 'महान कविताएँ', icon: '🎙️' },
+    'sva-rachit': { en: 'My Own Poems', hi: 'स्व-रचित', icon: '✍️' }
   };
   var state = { cat: '' };
   var data = null;
