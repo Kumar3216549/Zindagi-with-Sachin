@@ -76,6 +76,7 @@ function parseBook(file) {
     title: meta.title || file, title_hi: meta.title_hi || '',
     author: meta.author || '', narrator: meta.narrator || '',
     language: meta.language || '', category: meta.category || '',
+    subcategory: meta.subcategory ? String(meta.subcategory).trim() : '', subcategory_hi: meta.subcategory_hi ? String(meta.subcategory_hi).trim() : '',
     cover: clean(meta.cover), date: meta.date ? String(meta.date) : '',
     description: meta.description || '', description_hi: meta.description_hi || '',
     chapters, draft: !!meta.draft
