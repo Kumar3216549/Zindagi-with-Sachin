@@ -55,6 +55,9 @@ content:
         type: image
         options:
           media: images
+      - name: youtube
+        label: YouTube video link (optional) — paste it and the video shows inside the story
+        type: string
       - name: excerpt
         label: Short summary (shown on the card)
         type: text
@@ -148,6 +151,9 @@ content:
       - name: description_hi
         label: इस ऑडियोबुक के बारे में (हिंदी) — optional
         type: text
+      - name: youtube
+        label: YouTube link (optional) — if this is also on YouTube
+        type: string
       - name: chapters
         label: Chapters / अध्याय — add one for each audio file
         type: object
@@ -172,3 +178,59 @@ content:
         label: Hide this audiobook (draft)
         type: boolean
         default: false
+
+  - name: youtube
+    label: YouTube playlists / यूट्यूब प्लेलिस्ट
+    type: file
+    path: content/youtube.json
+    format: json
+    fields:
+      - name: channel_url
+        label: My YouTube channel link
+        type: string
+        default: https://www.youtube.com/@sachinjha8890
+      - name: channel_id
+        label: Channel ID (don't change)
+        type: string
+      - name: playlists
+        label: Playlists shown on the Videos page — one per category
+        type: object
+        list: true
+        fields:
+          - name: title
+            label: Name (English)
+            type: string
+            required: true
+          - name: title_hi
+            label: नाम (हिंदी)
+            type: string
+          - name: category
+            label: Category / श्रेणी
+            type: select
+            default: kavita
+            options:
+              values:
+                - value: science
+                  label: Science / विज्ञान
+                - value: commerce-finance
+                  label: Commerce & Finance / वाणिज्य और वित्त
+                - value: humanities
+                  label: Humanities / मानविकी
+                - value: zindagi-ke-sabak
+                  label: Zindagi ke Sabak / ज़िंदगी के सबक
+                - value: mera-safar
+                  label: My Journey / मेरा सफ़र
+                - value: kahani
+                  label: Stories / कहानियाँ
+                - value: anya-sroton-ke-chuninda-gyan
+                  label: Anya Sroton ke Chuninda Gyan / अन्य स्रोतों के चुनिंदा ज्ञान
+                - value: kavita
+                  label: Mahan Kavita (Poems) / महान कविताएँ
+          - name: link
+            label: Playlist link (copy it from YouTube → Share)
+            type: string
+            required: true
+          - name: hide
+            label: Hide on the website
+            type: boolean
+            default: false
