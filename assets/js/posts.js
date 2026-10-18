@@ -73,6 +73,7 @@
       slug: slug, title: meta.title || slug, title_hi: meta.title_hi || '',
       category: meta.category || 'blog', date: meta.date ? String(meta.date) : '',
       cover: meta.cover || '', excerpt: meta.excerpt || '', excerpt_hi: meta.excerpt_hi || '',
+      youtube: meta.youtube || '',
       draft: !!meta.draft
     };
   }
@@ -199,6 +200,14 @@
     }
   }
 
+  // YouTube link (watch, youtu.be, shorts or embed) -> embedded player
+  function ytEmbed(link) {
+    var m = String(link || '').match(/(?:youtu\.be\/|v=|\/shorts\/|\/embed\/|\/live\/)([\w-]{11})/);
+    if (!m) return '';
+    return '<div class="yt-embed"><iframe src="https://www.youtube-nocookie.com/embed/' + m[1] + '?rel=0" title="YouTube video" loading="lazy" ' +
+      'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>';
+  }
+
   // ---------- single post page ----------
   function renderPost() {
     var root = document.getElementById('postRoot');
@@ -226,7 +235,8 @@
           bi('span', cat.en, cat.hi, 'class="eyebrow"') +
           bi('h1', p.title, p.title_hi) +
           (p.date ? '<p class="post-date" style="margin-bottom:24px">' + esc(fmtDate(p.date)) + '</p>' : '') +
-          (p.cover ? '<img class="story-hero-img" src="' + esc(imgPath(p.cover)) + '" alt="' + esc(p.title) + '">' : '');
+          (p.cover && !p.youtube ? '<img class="story-hero-img" src="' + esc(imgPath(p.cover)) + '" alt="' + esc(p.title) + '">' : '') +
+          ytEmbed(p.youtube);
         var body = root.querySelector('.story-body');
         body.innerHTML = bodyHtml;
         body.querySelectorAll('img').forEach(function (img) {
