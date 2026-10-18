@@ -524,6 +524,14 @@ blockquote.pull{
   line-height: 1.85;
   margin-bottom: 20px;
 }
+/* stories read like a book: both edges straight */
+.story-body p,
+.story-body li{
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
 
 .story-hero-img{
   width: 100%;
