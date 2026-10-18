@@ -197,3 +197,68 @@ document.addEventListener('DOMContentLoaded', function () {
     if (blog && blog.nextSibling) box.insertBefore(a, blog.nextSibling); else box.appendChild(a);
   });
 });
+
+// ---- Videos link in the menu and footer, YouTube link in the footer ----
+var ZWS_YT = 'https://www.youtube.com/@sachinjha8890';
+document.addEventListener('DOMContentLoaded', function () {
+  var hi = document.documentElement.getAttribute('lang') === 'hi';
+  var here = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-links, .footer-links').forEach(function (box) {
+    if (box.querySelector('a[href="videos.html"]')) return;
+    var after = box.querySelector('a[href="audiobooks.html"]') || box.querySelector('a[href="blog.html"]');
+    var a = document.createElement('a');
+    a.href = 'videos.html';
+    a.setAttribute('data-en', '▶ Videos');
+    a.setAttribute('data-hi', '▶ वीडियो');
+    a.textContent = hi ? '▶ वीडियो' : '▶ Videos';
+    if (box.classList.contains('nav-links') && here === 'videos.html') { a.classList.add('active'); a.setAttribute('aria-current', 'page'); }
+    if (after && after.nextSibling) box.insertBefore(a, after.nextSibling); else box.appendChild(a);
+  });
+  var foot = document.querySelector('.footer-links');
+  if (foot && !foot.querySelector('.footer-yt')) {
+    var y = document.createElement('a');
+    y.href = ZWS_YT; y.target = '_blank'; y.rel = 'noopener'; y.className = 'footer-yt';
+    y.textContent = 'YouTube ↗';
+    foot.appendChild(y);
+  }
+});
+
+// ---- Share bar under every story, post, audiobook and on the Videos page ----
+document.addEventListener('DOMContentLoaded', function () {
+  var anchor = document.querySelector('.story-body') || document.getElementById('abPlayer') || document.getElementById('vdContent');
+  if (!anchor || document.querySelector('.share-bar')) return;
+  var hi = function () { return document.documentElement.getAttribute('lang') === 'hi'; };
+  function L(en, h) { return '<span data-en="' + en + '" data-hi="' + h + '">' + (hi() ? h : en) + '</span>'; }
+  var bar = document.createElement('div');
+  bar.className = 'share-bar';
+  bar.innerHTML = '<span class="share-label">' + L('Share:', 'शेयर करें:') + '</span>' +
+    '<a class="sh-wa" data-net="wa" href="#" target="_blank" rel="noopener">WhatsApp</a>' +
+    '<a class="sh-fb" data-net="fb" href="#" target="_blank" rel="noopener">Facebook</a>' +
+    '<a class="sh-x" data-net="x" href="#" target="_blank" rel="noopener">X</a>' +
+    '<a class="sh-tg" data-net="tg" href="#" target="_blank" rel="noopener">Telegram</a>' +
+    '<button type="button" class="sh-copy">' + L('🔗 Copy link', '🔗 लिंक कॉपी करें') + '</button>' +
+    (navigator.share ? '<button type="button" class="sh-native">' + L('📤 More…', '📤 और…') + '</button>' : '') +
+    '<a class="sh-yt" href="' + ZWS_YT + '?sub_confirmation=1" target="_blank" rel="noopener">' + L('▶ Subscribe on YouTube', '▶ यूट्यूब पर सब्सक्राइब') + '</a>';
+  anchor.parentNode.insertBefore(bar, anchor.nextSibling);
+  function info() { return { url: location.href.split('#')[0] + (location.hash.indexOf('cat=') > -1 ? location.hash : ''), title: document.title.split(' | ')[0] }; }
+  bar.addEventListener('click', function (e) {
+    var a = e.target.closest('a[data-net]');
+    var d = info(), u = encodeURIComponent(d.url), t = encodeURIComponent(d.title);
+    if (a) {
+      var net = a.getAttribute('data-net');
+      a.href = net === 'wa' ? 'https://wa.me/?text=' + t + '%20' + u
+        : net === 'fb' ? 'https://www.facebook.com/sharer/sharer.php?u=' + u
+        : net === 'x' ? 'https://twitter.com/intent/tweet?url=' + u + '&text=' + t
+        : 'https://t.me/share/url?url=' + u + '&text=' + t;
+      return;
+    }
+    var c = e.target.closest('.sh-copy');
+    if (c) {
+      var done = function () { c.classList.add('copied'); c.firstChild.textContent = hi() ? '✓ कॉपी हो गया' : '✓ Copied'; setTimeout(function () { c.classList.remove('copied'); c.firstChild.textContent = hi() ? '🔗 लिंक कॉपी करें' : '🔗 Copy link'; }, 1800); };
+      if (navigator.clipboard) navigator.clipboard.writeText(d.url).then(done, function () { prompt('Copy this link:', d.url); });
+      else prompt('Copy this link:', d.url);
+      return;
+    }
+    if (e.target.closest('.sh-native')) navigator.share({ title: d.title, url: d.url }).catch(function () {});
+  });
+});
