@@ -241,6 +241,32 @@
           "short": false
         }
       ]
+    },
+    {
+      "id": "PLdPDrsI1OkZ_t-Tk9Y9NDzFGYHEJVILFS",
+      "title": "Sva-rachit (My Own Poems)",
+      "title_hi": "स्व-रचित (सचिन झा)",
+      "category": "sva-rachit",
+      "videos": [
+        {
+          "id": "F3kloiMAZvI",
+          "title": "स्व- रचित।। बच्चपन का मौसम।। सचिन झा",
+          "published": "2020-10-13",
+          "short": false
+        },
+        {
+          "id": "5RJDYvMrTUA",
+          "title": "स्व रचित।। बेटी का बचाव।। सचिन झा",
+          "published": "2020-10-10",
+          "short": false
+        },
+        {
+          "id": "635hNNWBdKI",
+          "title": "कॉरोना कल आज और कल।। असली कोरॉना का सच्चाई यही है।।",
+          "published": "2020-04-13",
+          "short": false
+        }
+      ]
     }
   ]
 }
