@@ -59,6 +59,35 @@ fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, JSON.stringify(posts, null, 2));
 console.log('posts/index.json: ' + posts.length + ' post(s)');
 
+// ---------- Audiobooks: content/audiobooks/*.md -> audiobooks/index.json ----------
+const yamlLite = require('./yaml-lite.js');
+const AB_SRC = path.join(__dirname, '..', 'content', 'audiobooks');
+const AB_OUT = path.join(__dirname, '..', 'audiobooks', 'index.json');
+const clean = (p) => (p ? String(p).trim().replace(/^\/+/, '') : '');
+function parseBook(file) {
+  const raw = fs.readFileSync(path.join(AB_SRC, file), 'utf8');
+  const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  const meta = m ? yamlLite(m[1]) : {};
+  const chapters = (Array.isArray(meta.chapters) ? meta.chapters : [])
+    .map((c) => ({ title: (c && c.title) || '', title_hi: (c && c.title_hi) || '', src: clean((c && (c.audio_url || c.audio)) || '') }))
+    .filter((c) => c.src);
+  return {
+    slug: file.replace(/\.md$/, ''),
+    title: meta.title || file, title_hi: meta.title_hi || '',
+    author: meta.author || '', narrator: meta.narrator || '',
+    language: meta.language || '', category: meta.category || '',
+    cover: clean(meta.cover), date: meta.date ? String(meta.date) : '',
+    description: meta.description || '', description_hi: meta.description_hi || '',
+    chapters, draft: !!meta.draft
+  };
+}
+const abFiles = fs.existsSync(AB_SRC) ? fs.readdirSync(AB_SRC).filter((f) => f.endsWith('.md')) : [];
+const books = abFiles.map(parseBook).filter((b) => !b.draft && b.chapters.length)
+  .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+fs.mkdirSync(path.dirname(AB_OUT), { recursive: true });
+fs.writeFileSync(AB_OUT, JSON.stringify(books, null, 2));
+console.log('audiobooks/index.json: ' + books.length + ' audiobook(s)');
+
 // Vercel serves the "public" folder after a build, so copy the site there.
 const ROOT = path.join(__dirname, '..');
 const PUBLIC = path.join(ROOT, 'public');
