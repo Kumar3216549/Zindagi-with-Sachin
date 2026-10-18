@@ -79,6 +79,7 @@ function parseBook(file) {
     subcategory: meta.subcategory ? String(meta.subcategory).trim() : '', subcategory_hi: meta.subcategory_hi ? String(meta.subcategory_hi).trim() : '',
     cover: clean(meta.cover), date: meta.date ? String(meta.date) : '',
     description: meta.description || '', description_hi: meta.description_hi || '',
+    youtube: meta.youtube || '',
     chapters, draft: !!meta.draft
   };
 }
