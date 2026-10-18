@@ -1,0 +1,27 @@
+# Once a day, look for new videos in the YouTube playlists and save them to youtube/index.json.
+# A change is committed only when there are new videos; that commit makes Vercel publish the site again.
+# You can also run it by hand: GitHub → Actions → "Refresh YouTube videos" → Run workflow.
+name: Refresh YouTube videos
+on:
+  schedule:
+    - cron: '17 21 * * *'   # every day at 02:47 India time
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/build-youtube.js
+      - name: Save if there are new videos
+        run: |
+          if git diff --quiet -- youtube/index.json; then echo "No new videos"; exit 0; fi
+          git config user.name "youtube-sync"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add youtube/index.json
+          git commit -m "Refresh YouTube videos"
+          git push
