@@ -5,12 +5,10 @@
   var BRANCH = 'main';
   // Main categories (same list as in .pages.yml). Subcategories are free text typed in the Writer's Desk.
   var CATS = {
-    'science': { en: 'Science', hi: 'विज्ञान', icon: '🔬' },
-    'humanities': { en: 'Humanities', hi: 'मानविकी', icon: '📜' },
-    'commerce': { en: 'Commerce', hi: 'वाणिज्य', icon: '📊' },
-    'zindagi-ke-sabak': { en: 'Zindagi ke Sabak', hi: 'ज़िंदगी के सबक' },
-    'mera-safar': { en: 'My Journey', hi: 'मेरा सफ़र' },
-    'kahani': { en: 'Stories', hi: 'कहानियाँ' }
+    'zindagi-ke-sabak': { en: 'Zindagi ke Sabak', hi: 'ज़िंदगी के सबक', icon: '🌱' },
+    'mera-safar': { en: 'My Journey', hi: 'मेरा सफ़र', icon: '🧭' },
+    'kahani': { en: 'Stories', hi: 'कहानियाँ', icon: '📖' },
+    'anya-sroton-ke-chuninda-gyan': { en: 'Anya Sroton ke Chuninda Gyan', hi: 'अन्य स्रोतों के चुनिंदा ज्ञान', icon: '💡' }
   };
   var LANGS = { hindi: { en: 'Hindi', hi: 'हिंदी' }, english: { en: 'English', hi: 'अंग्रेज़ी' } };
 
@@ -204,11 +202,11 @@ function yamlLite(src) {
   function renderFilters(books) {
     var top = document.getElementById('abFilter'), subBox = document.getElementById('abSubFilter');
     if (!top) return;
-    // count books per category; show every main category that has books (plus Science/Humanities/Commerce always)
+    // count books per category; every main category is always shown
     var counts = {};
     books.forEach(function (b) { counts[b.category] = (counts[b.category] || 0) + 1; });
     if (state.cat && !CATS[state.cat] && !counts[state.cat]) state.cat = '';
-    var keys = Object.keys(CATS).filter(function (k) { return counts[k] || k === 'science' || k === 'humanities' || k === 'commerce'; });
+    var keys = Object.keys(CATS);
     top.innerHTML = chip('', 'All', 'सभी', books.length, !state.cat, 'data-cat') +
       keys.map(function (k) { var c = CATS[k]; return chip(k, (c.icon ? c.icon + ' ' : '') + c.en, (c.icon ? c.icon + ' ' : '') + c.hi, counts[k] || 0, state.cat === k, 'data-cat'); }).join('');
     top.hidden = false;
