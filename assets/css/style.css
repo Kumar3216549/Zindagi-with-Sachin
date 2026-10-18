@@ -768,3 +768,103 @@ footer.site-footer p{
 .desk-steps strong{ color: var(--color-navy); }
 .footer-write{ display: inline-block; margin-top: 10px; font-size: 14px; color: #C9972C; text-decoration: none; }
 .footer-write:hover{ text-decoration: underline; }
+
+
+/* ---------- audiobooks ---------- */
+.ab-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
+.ab-card{
+  display: block; text-decoration: none; color: inherit;
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-card);
+  transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease;
+}
+.ab-card:hover{ transform: translateY(-6px); box-shadow: 0 18px 40px rgba(27,44,70,.18); }
+.ab-card-cover{ position: relative; aspect-ratio: 1 / 1; overflow: hidden; background: var(--color-navy); }
+.ab-card-img{ width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.ab-card:hover .ab-card-img{ transform: scale(1.06); }
+.ab-cover-blank{ display: grid; place-items: center; font-size: 56px; background: linear-gradient(135deg, var(--color-navy), #3C5A85); color: #fff; }
+.ab-play{
+  position: absolute; right: 12px; bottom: 12px; width: 48px; height: 48px; border-radius: 50%;
+  display: grid; place-items: center; padding-left: 3px;
+  background: var(--color-terracotta); color: #fff; font-size: 18px;
+  box-shadow: 0 8px 18px rgba(0,0,0,.25);
+  transform: scale(.9); transition: transform .25s ease;
+}
+.ab-card:hover .ab-play{ transform: scale(1.05); }
+.ab-card-body{ padding: 16px 18px 18px; }
+.ab-card-body h3{ margin: 0 0 4px; font-size: 19px; }
+.ab-by{ color: var(--color-text-muted); font-size: 14.5px; margin: 0 0 6px; }
+.ab-count{ font-size: 14px; color: var(--color-text-muted); margin: 0; }
+.ab-continue{ color: var(--color-terracotta); font-weight: 700; }
+
+.ab-hero{ display: grid; grid-template-columns: 240px 1fr; gap: 28px; align-items: center; margin: 8px 0 24px; }
+.ab-hero-img, .ab-hero-cover .ab-cover-blank{ width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 18px; box-shadow: 0 16px 36px rgba(27,44,70,.22); display: block; }
+.ab-hero-cover .ab-cover-blank{ display: grid; }
+.ab-hero-info h1{ margin: 4px 0 8px; }
+.ab-desc{ margin-top: 10px; }
+.ab-page.is-playing .ab-hero-img{ animation: abPulse 3s ease-in-out infinite; }
+@keyframes abPulse{ 50%{ box-shadow: 0 16px 44px rgba(181,84,46,.38); } }
+
+.ab-player{
+  background: linear-gradient(160deg, var(--color-navy), var(--color-navy-dark));
+  color: #fff; border-radius: 20px; padding: 22px 22px 18px; margin-bottom: 28px;
+  box-shadow: var(--shadow-soft);
+}
+.ab-now{ margin: 0 0 12px; font-size: 15px; color: rgba(255,255,255,.75); }
+.ab-now b{ color: #fff; }
+.ab-resume{ margin: 0 0 10px; font-size: 13.5px; color: #E7B95C; }
+.ab-seek{ width: 100%; accent-color: #E7B95C; height: 28px; cursor: pointer; }
+.ab-times{ display: flex; justify-content: space-between; font-size: 13px; color: rgba(255,255,255,.7); margin-top: -2px; }
+.ab-controls{ display: flex; justify-content: center; align-items: center; gap: 12px; margin: 12px 0 14px; }
+.ab-btn{
+  min-width: 48px; height: 48px; padding: 0 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.08); color: #fff; font: 700 15px/1 var(--font-body); cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+.ab-btn:hover{ background: rgba(255,255,255,.18); }
+.ab-btn:active{ transform: scale(.94); }
+.ab-btn-main{ width: 68px; height: 68px; font-size: 22px; background: var(--color-terracotta); border-color: transparent; }
+.ab-btn-main:hover{ background: #C9673E; }
+.ab-extra{ display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; font-size: 14px; color: rgba(255,255,255,.8); }
+.ab-select{ margin-left: 6px; padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: #fff; font: inherit; }
+.ab-select option{ color: #10192B; }
+.ab-err{ margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,.1); color: #FFD7C2; font-size: 14px; }
+
+.ab-ch-head{ margin: 0 0 12px; }
+.ab-chapters{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.ab-chapters button{
+  width: 100%; display: flex; align-items: center; gap: 14px; text-align: left; cursor: pointer;
+  padding: 12px 14px; border-radius: 14px; border: 1px solid var(--color-border);
+  background: var(--color-surface); color: inherit; font: inherit; transition: border-color .2s, background .2s;
+}
+.ab-chapters button:hover{ border-color: var(--color-terracotta); }
+.ab-chapters button.active{ background: rgba(181,84,46,.08); border-color: var(--color-terracotta); }
+.ab-ch-no{ width: 32px; height: 32px; flex: 0 0 32px; border-radius: 50%; display: grid; place-items: center; background: var(--color-navy); color: #fff; font-weight: 800; font-size: 14px; }
+.ab-chapters button.active .ab-ch-no{ background: var(--color-terracotta); }
+.ab-ch-title{ flex: 1; font-weight: 700; }
+.ab-ch-dur{ color: var(--color-text-muted); font-size: 14px; }
+
+.ab-home-card{ max-width: 760px; margin: 0 auto; }
+.ab-home-link{
+  display: flex; align-items: center; gap: 20px; text-decoration: none; color: #fff;
+  background: linear-gradient(135deg, var(--color-navy), #3C5A85); border-radius: 20px; padding: 16px;
+  box-shadow: var(--shadow-soft); transition: transform .3s ease;
+}
+.ab-home-link:hover{ transform: translateY(-4px); }
+.ab-home-img, .ab-home-link .ab-cover-blank{ width: 110px; height: 110px; flex: 0 0 110px; border-radius: 14px; object-fit: cover; }
+.ab-home-text{ display: flex; flex-direction: column; gap: 4px; }
+.ab-home-text .eyebrow{ color: #E7B95C; margin: 0; }
+.ab-home-text strong{ font-size: 21px; font-family: var(--font-heading); }
+.ab-home-cta{ font-weight: 700; color: #E7B95C; }
+
+@media (max-width: 640px){
+  .ab-hero{ grid-template-columns: 1fr; text-align: center; }
+  .ab-hero-cover{ max-width: 240px; margin: 0 auto; }
+  .ab-controls{ gap: 8px; }
+  .ab-btn{ min-width: 44px; height: 44px; font-size: 14px; }
+  .ab-btn-main{ width: 62px; height: 62px; }
+  .ab-grid{ grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .ab-card-body{ padding: 12px; }
+  .ab-card-body h3{ font-size: 16px; }
+  .ab-home-img, .ab-home-link .ab-cover-blank{ width: 84px; height: 84px; flex-basis: 84px; }
+}
