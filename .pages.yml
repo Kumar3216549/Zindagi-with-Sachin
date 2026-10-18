@@ -115,26 +115,22 @@ content:
       - name: category
         label: Category / श्रेणी
         type: select
-        default: science
+        default: zindagi-ke-sabak
         options:
           values:
-            - value: science
-              label: Science / विज्ञान
-            - value: humanities
-              label: Humanities / मानविकी
-            - value: commerce
-              label: Commerce / वाणिज्य
             - value: zindagi-ke-sabak
               label: Zindagi ke Sabak / ज़िंदगी के सबक
             - value: mera-safar
               label: My Journey / मेरा सफ़र
             - value: kahani
               label: Stories / कहानियाँ
+            - value: anya-sroton-ke-chuninda-gyan
+              label: Anya Sroton ke Chuninda Gyan / अन्य स्रोतों के चुनिंदा ज्ञान
       - name: subcategory
-        label: Subcategory — type any name, e.g. Physics, History, Accounts (a new one appears on the site automatically)
+        label: Subcategory (optional) — type any name; a new one appears on the site automatically
         type: string
       - name: subcategory_hi
-        label: उप-श्रेणी (हिंदी) — optional, e.g. भौतिकी
+        label: उप-श्रेणी (हिंदी) — optional
         type: string
       - name: date
         label: Date
