@@ -3,7 +3,11 @@
 (function () {
   var REPO = 'Kumar3216549/Zindagi-with-Sachin';
   var BRANCH = 'main';
+  // Main categories (same list as in .pages.yml). Subcategories are free text typed in the Writer's Desk.
   var CATS = {
+    'science': { en: 'Science', hi: 'विज्ञान', icon: '🔬' },
+    'humanities': { en: 'Humanities', hi: 'मानविकी', icon: '📜' },
+    'commerce': { en: 'Commerce', hi: 'वाणिज्य', icon: '📊' },
     'zindagi-ke-sabak': { en: 'Zindagi ke Sabak', hi: 'ज़िंदगी के सबक' },
     'mera-safar': { en: 'My Journey', hi: 'मेरा सफ़र' },
     'kahani': { en: 'Stories', hi: 'कहानियाँ' }
@@ -107,7 +111,8 @@ function yamlLite(src) {
     }).filter(function (c) { return c.src; });
     return {
       slug: slug, title: meta.title || slug, title_hi: meta.title_hi || '', author: meta.author || '', narrator: meta.narrator || '',
-      language: meta.language || '', category: meta.category || '', cover: clean(meta.cover), date: meta.date ? String(meta.date) : '',
+      language: meta.language || '', category: meta.category || '',
+      subcategory: meta.subcategory ? String(meta.subcategory).trim() : '', subcategory_hi: meta.subcategory_hi ? String(meta.subcategory_hi).trim() : '', cover: clean(meta.cover), date: meta.date ? String(meta.date) : '',
       description: meta.description || '', description_hi: meta.description_hi || '', chapters: ch, draft: !!meta.draft
     };
   }
@@ -157,19 +162,90 @@ function yamlLite(src) {
     var listen = Number(localStorage.getItem('zws-ab-last-t') || 0);
     if (!books.length) { grid.innerHTML = ''; if (empty) empty.hidden = false; return; }
     if (empty) empty.hidden = true;
-    grid.innerHTML = books.map(function (b, i) {
+    renderFilters(books);
+    var hiName = {};
+    books.forEach(function (b) { if (b.subcategory_hi) hiName[subKey(b)] = b.subcategory_hi; });
+    var view = books.filter(function (b) {
+      return (!state.cat || b.category === state.cat) && (!state.sub || subKey(b) === state.sub);
+    });
+    grid.innerHTML = view.map(function (b, i) {
       var cat = CATS[b.category], lg = LANGS[b.language];
       var saved = null; try { saved = JSON.parse(localStorage.getItem('zws-ab-' + b.slug) || 'null'); } catch (e) {}
       return '<a class="ab-card post-enter" style="animation-delay:' + (i * 0.07) + 's" href="audiobook.html?b=' + encodeURIComponent(b.slug) + '">' +
         '<div class="ab-card-cover">' + cover(b, 'ab-card-img') + '<span class="ab-play" aria-hidden="true">▶</span></div>' +
         '<div class="ab-card-body">' +
-          '<div class="post-meta">' + (cat ? bi('span', cat.en, cat.hi, 'class="post-chip"') : '') + (lg ? bi('span', lg.en, lg.hi, 'class="post-date"') : '') + '</div>' +
+          '<div class="post-meta">' + (cat ? bi('span', cat.en, cat.hi, 'class="post-chip"') : '') + (b.subcategory ? bi('span', b.subcategory, b.subcategory_hi || hiName[subKey(b)], 'class="post-chip ab-sub-chip"') : '') + (lg ? bi('span', lg.en, lg.hi, 'class="post-date"') : '') + '</div>' +
           bi('h3', b.title, b.title_hi) +
           (b.author ? '<p class="ab-by">' + bi('span', 'by ', '') + esc(b.author) + '</p>' : '') +
           '<p class="ab-count">' + bi('span', b.chapters.length + (b.chapters.length === 1 ? ' part' : ' chapters'), b.chapters.length + (b.chapters.length === 1 ? ' भाग' : ' अध्याय')) +
           (saved && saved.c != null ? ' · ' + bi('span', 'Continue from chapter ' + (saved.c + 1), 'अध्याय ' + (saved.c + 1) + ' से जारी रखें', 'class="ab-continue"') : '') + '</p>' +
         '</div></a>';
-    }).join('');
+    }).join('') || bi('p', 'No audiobooks here yet — coming soon.', 'यहाँ अभी कोई ऑडियोबुक नहीं है — जल्द आ रही है।', 'class="center ab-none"');
+  }
+
+  /* ---------- category + subcategory filter ---------- */
+  var state = { cat: '', sub: '' };
+  var allBooks = [];
+  function subKey(b) { return String(b.subcategory || '').toLowerCase().replace(/\s+/g, '-'); }
+  function readHash() {
+    var p = new URLSearchParams(location.hash.slice(1));
+    state.cat = p.get('cat') || ''; state.sub = p.get('sub') || '';
+  }
+  function writeHash() {
+    var p = [];
+    if (state.cat) p.push('cat=' + encodeURIComponent(state.cat));
+    if (state.sub) p.push('sub=' + encodeURIComponent(state.sub));
+    history.replaceState(null, '', location.pathname + location.search + (p.length ? '#' + p.join('&') : ''));
+  }
+  function chip(key, en, hi, n, on, attr) {
+    return '<button type="button" ' + attr + '="' + esc(key) + '" class="' + (on ? 'active' : '') + '" aria-pressed="' + on + '">' +
+      bi('span', en, hi) + '<span class="count">' + n + '</span></button>';
+  }
+  function renderFilters(books) {
+    var top = document.getElementById('abFilter'), subBox = document.getElementById('abSubFilter');
+    if (!top) return;
+    // count books per category; show every main category that has books (plus Science/Humanities/Commerce always)
+    var counts = {};
+    books.forEach(function (b) { counts[b.category] = (counts[b.category] || 0) + 1; });
+    if (state.cat && !CATS[state.cat] && !counts[state.cat]) state.cat = '';
+    var keys = Object.keys(CATS).filter(function (k) { return counts[k] || k === 'science' || k === 'humanities' || k === 'commerce'; });
+    top.innerHTML = chip('', 'All', 'सभी', books.length, !state.cat, 'data-cat') +
+      keys.map(function (k) { var c = CATS[k]; return chip(k, (c.icon ? c.icon + ' ' : '') + c.en, (c.icon ? c.icon + ' ' : '') + c.hi, counts[k] || 0, state.cat === k, 'data-cat'); }).join('');
+    top.hidden = false;
+    // subcategories found in the chosen category (built automatically from what was typed in the Writer's Desk)
+    var subs = {}, order = [];
+    books.forEach(function (b) {
+      if (!b.subcategory || (state.cat && b.category !== state.cat)) return;
+      var k = subKey(b);
+      var nice = b.subcategory.charAt(0).toUpperCase() + b.subcategory.slice(1);
+      if (!subs[k]) { subs[k] = { en: nice, hi: b.subcategory_hi || nice, n: 0 }; order.push(k); }
+      subs[k].n++;
+      if (b.subcategory_hi && subs[k].hi === subs[k].en) subs[k].hi = b.subcategory_hi;
+    });
+    if (state.sub && !subs[state.sub]) state.sub = '';
+    order.sort(function (a, b) { return subs[a].en.localeCompare(subs[b].en); });
+    if (subBox) {
+      if (order.length) {
+        var total = order.reduce(function (s, k) { return s + subs[k].n; }, 0);
+        subBox.innerHTML = chip('', 'All topics', 'सभी विषय', total, !state.sub, 'data-sub') +
+          order.map(function (k) { return chip(k, subs[k].en, subs[k].hi, subs[k].n, state.sub === k, 'data-sub'); }).join('');
+        subBox.hidden = false;
+      } else { subBox.innerHTML = ''; subBox.hidden = true; }
+    }
+  }
+  function bindFilters() {
+    var top = document.getElementById('abFilter'), subBox = document.getElementById('abSubFilter');
+    if (!top) return;
+    top.addEventListener('click', function (e) {
+      var btn = e.target.closest('button'); if (!btn) return;
+      state.cat = btn.getAttribute('data-cat') || ''; state.sub = '';
+      writeHash(); renderList(allBooks);
+    });
+    if (subBox) subBox.addEventListener('click', function (e) {
+      var btn = e.target.closest('button'); if (!btn) return;
+      state.sub = btn.getAttribute('data-sub') || '';
+      writeHash(); renderList(allBooks);
+    });
   }
 
   /* ---------- player page ---------- */
@@ -209,7 +285,7 @@ function yamlLite(src) {
         '<div class="ab-hero post-enter">' +
           '<div class="ab-hero-cover">' + cover(b, 'ab-hero-img') + '</div>' +
           '<div class="ab-hero-info">' +
-            (cat ? bi('span', cat.en, cat.hi, 'class="eyebrow"') : bi('span', 'Audiobook', 'ऑडियोबुक', 'class="eyebrow"')) +
+            (cat ? bi('span', cat.en + (b.subcategory ? ' · ' + b.subcategory : ''), cat.hi + (b.subcategory ? ' · ' + (b.subcategory_hi || b.subcategory) : ''), 'class="eyebrow"') : bi('span', 'Audiobook', 'ऑडियोबुक', 'class="eyebrow"')) +
             bi('h1', b.title, b.title_hi) +
             (b.author ? '<p class="ab-by">' + bi('span', 'Written by ', 'लेखक: ') + esc(b.author) + (b.narrator && b.narrator !== b.author ? ' · ' + bi('span', 'Voice: ', 'आवाज़: ') + esc(b.narrator) : '') + '</p>' : '') +
             (b.description ? bi('p', b.description, b.description_hi, 'class="ab-desc"') : '') +
@@ -350,6 +426,7 @@ function yamlLite(src) {
 
   document.addEventListener('DOMContentLoaded', function () {
     renderPlayer();
-    if (document.getElementById('abGrid') || document.getElementById('abHome')) loadBooks().then(function (books) { renderList(books); renderHome(books); });
+    readHash(); bindFilters();
+    if (document.getElementById('abGrid') || document.getElementById('abHome')) loadBooks().then(function (books) { allBooks = books; renderList(books); renderHome(books); });
   });
 })();
