@@ -12,7 +12,7 @@
     'zindagi-ke-sabak': { en: 'Zindagi ke Sabak', hi: 'ज़िंदगी के सबक', icon: '🌱' },
     'mera-safar': { en: 'My Journey', hi: 'मेरा सफ़र', icon: '🧭' },
     'kahani': { en: 'Stories', hi: 'कहानियाँ', icon: '📖' },
-    'anya-sroton-ke-chuninda-gyan': { en: 'Anya Sroton ke Chuninda Gyan', hi: 'अन्य स्रोतों के चुनिंदा ज्ञान', icon: '💡' }
+    'anya-sroton-ke-chuninda-gyan': { en: 'Selected Wisdom from Other Sources', hi: 'अन्य स्रोतों के चुनिंदा ज्ञान', icon: '💡' }
   };
   var LANGS = { hindi: { en: 'Hindi', hi: 'हिंदी' }, english: { en: 'English', hi: 'अंग्रेज़ी' } };
 
