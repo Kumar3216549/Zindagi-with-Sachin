@@ -178,3 +178,22 @@ document.addEventListener('DOMContentLoaded', function () {
   a.textContent = document.documentElement.getAttribute('lang') === 'hi' ? '✍️ लेखन डेस्क' : '✍️ Writer’s desk';
   footer.appendChild(a);
 });
+
+// ---- Audiobooks link in the menu and footer (added once here, so every page gets it) ----
+document.addEventListener('DOMContentLoaded', function () {
+  var hi = document.documentElement.getAttribute('lang') === 'hi';
+  var here = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-links, .footer-links').forEach(function (box) {
+    if (box.querySelector('a[href="audiobooks.html"]')) return;
+    var blog = box.querySelector('a[href="blog.html"]');
+    var a = document.createElement('a');
+    a.href = 'audiobooks.html';
+    a.setAttribute('data-en', '🎧 Audiobooks');
+    a.setAttribute('data-hi', '🎧 ऑडियोबुक');
+    a.textContent = hi ? '🎧 ऑडियोबुक' : '🎧 Audiobooks';
+    if (box.classList.contains('nav-links') && (here === 'audiobooks.html' || here === 'audiobook.html')) {
+      a.classList.add('active'); a.setAttribute('aria-current', 'page');
+    }
+    if (blog && blog.nextSibling) box.insertBefore(a, blog.nextSibling); else box.appendChild(a);
+  });
+});
