@@ -118,6 +118,12 @@ content:
         default: zindagi-ke-sabak
         options:
           values:
+            - value: science
+              label: Science / विज्ञान (non-academic)
+            - value: commerce-finance
+              label: Commerce & Finance / वाणिज्य और वित्त (non-academic)
+            - value: humanities
+              label: Humanities / मानविकी (non-academic)
             - value: zindagi-ke-sabak
               label: Zindagi ke Sabak / ज़िंदगी के सबक
             - value: mera-safar
