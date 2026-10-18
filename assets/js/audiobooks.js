@@ -3,8 +3,12 @@
 (function () {
   var REPO = 'Kumar3216549/Zindagi-with-Sachin';
   var BRANCH = 'main';
-  // Main categories (same list as in .pages.yml). Subcategories are free text typed in the Writer's Desk.
+  // Main categories (same list as in .pages.yml) — general-reading books, not academic textbooks.
+  // Subcategories are free text typed in the Writer's Desk.
   var CATS = {
+    'science': { en: 'Science', hi: 'विज्ञान', icon: '🔬' },
+    'commerce-finance': { en: 'Commerce & Finance', hi: 'वाणिज्य और वित्त', icon: '💰' },
+    'humanities': { en: 'Humanities', hi: 'मानविकी', icon: '📜' },
     'zindagi-ke-sabak': { en: 'Zindagi ke Sabak', hi: 'ज़िंदगी के सबक', icon: '🌱' },
     'mera-safar': { en: 'My Journey', hi: 'मेरा सफ़र', icon: '🧭' },
     'kahani': { en: 'Stories', hi: 'कहानियाँ', icon: '📖' },
