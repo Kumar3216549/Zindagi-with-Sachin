@@ -1,8 +1,8 @@
 {
   "name": "zindagi-with-sachin",
   "private": true,
-  "description": "Static site. The build step only refreshes posts/index.json from content/posts.",
+  "description": "Static site. The build step refreshes youtube/index.json, posts/index.json and audiobooks/index.json.",
   "scripts": {
-    "build": "node scripts/build-posts.js"
+    "build": "node scripts/build-youtube.js && node scripts/build-posts.js"
   }
 }
