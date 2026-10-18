@@ -1,0 +1,14 @@
+{
+  "channel_url": "https://www.youtube.com/@sachinjha8890",
+  "channel_id": "UCkXUU2ufb_2EMQ3VynZqv6Q",
+  "playlists": [
+    { "title": "Science", "title_hi": "विज्ञान", "category": "science", "link": "https://www.youtube.com/playlist?list=PLA05vGGnO4T0" },
+    { "title": "Commerce & Finance", "title_hi": "वाणिज्य और वित्त", "category": "commerce-finance", "link": "https://www.youtube.com/playlist?list=PLdiZoLB2zOes" },
+    { "title": "Humanities", "title_hi": "मानविकी", "category": "humanities", "link": "https://www.youtube.com/playlist?list=PLA12onm-vjXQ" },
+    { "title": "Zindagi ke Sabak", "title_hi": "ज़िंदगी के सबक", "category": "zindagi-ke-sabak", "link": "https://www.youtube.com/playlist?list=PLS4rTva81Oas" },
+    { "title": "My Journey", "title_hi": "मेरा सफ़र", "category": "mera-safar", "link": "https://www.youtube.com/playlist?list=PLdMWx4NeNQCM" },
+    { "title": "Stories", "title_hi": "कहानियाँ", "category": "kahani", "link": "https://www.youtube.com/playlist?list=PLJov-Muw81o4" },
+    { "title": "Anya Sroton ke Chuninda Gyan", "title_hi": "अन्य स्रोतों के चुनिंदा ज्ञान", "category": "anya-sroton-ke-chuninda-gyan", "link": "https://www.youtube.com/playlist?list=PLVAK8bU7GNU0" },
+    { "title": "Mahan Kavita (Poems, Hindi)", "title_hi": "महान कविताएँ", "category": "kavita", "link": "https://www.youtube.com/playlist?list=PLdLjfj59uUiU" }
+  ]
+}
