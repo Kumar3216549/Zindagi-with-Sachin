@@ -163,7 +163,7 @@ nav.site-nav{
   margin: 0 auto;
   display: flex;
   align-items: center;
-  padding: 6px 20px;
+  padding: 0 20px;
 }
 
 .menu-icon{
@@ -190,9 +190,9 @@ nav.site-nav{
   text-align: center;
   color: #EFE6D2;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
-  padding: 16px 10px;
+  padding: 11px 10px;
   transition: background .2s, color .2s;
   white-space: nowrap;
 }
@@ -227,7 +227,7 @@ nav.site-nav{
 /* ---------- hero ---------- */
 .hero{
   position: relative;
-  padding: 90px 24px;
+  padding: 46px 24px;
   text-align: center;
   color: #fff;
   background:
@@ -247,18 +247,18 @@ nav.site-nav{
 .hero h1,
 .hero h2{
   color: #fff;
-  font-size: clamp(30px, 5vw, 46px);
-  margin-bottom: 16px;
+  font-size: clamp(26px, 4vw, 38px);
+  margin-bottom: 10px;
 }
 
 .hero p{
-  font-size: 18px;
+  font-size: 16.5px;
   color: #E9E1CF;
   max-width: 560px;
   margin: 0 auto;
 }
 
-.hero.small{ padding: 60px 24px; }
+.hero.small{ padding: 34px 24px; }
 
 /* ---------- layout helpers ---------- */
 .container{
