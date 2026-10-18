@@ -1,9 +1,16 @@
 # Pages CMS configuration — the "writing desk" for Zindagi with Sachin.
 # Open https://app.pagescms.org, sign in with GitHub, pick this repo.
 media:
-  input: assets/img/uploads
-  output: assets/img/uploads
-  extensions: [jpg, jpeg, png, webp, gif]
+  - name: images
+    label: Photos / फोटो
+    input: assets/img/uploads
+    output: assets/img/uploads
+    extensions: [jpg, jpeg, png, webp, gif]
+  - name: audio
+    label: Audio / ऑडियो
+    input: assets/audio
+    output: assets/audio
+    extensions: [mp3, m4a, aac, ogg, oga, opus, wav]
 
 content:
   - name: posts
@@ -46,6 +53,8 @@ content:
       - name: cover
         label: Cover photo / मुख्य फोटो
         type: image
+        options:
+          media: images
       - name: excerpt
         label: Short summary (shown on the card)
         type: text
@@ -59,3 +68,93 @@ content:
       - name: body
         label: Your story / आपकी कहानी
         type: rich-text
+
+  - name: audiobooks
+    label: Audiobooks / ऑडियोबुक
+    type: collection
+    path: content/audiobooks
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [title, language, date]
+      primary: title
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Title (English)
+        type: string
+        required: true
+      - name: title_hi
+        label: शीर्षक (हिंदी) — optional
+        type: string
+      - name: cover
+        label: Thumbnail / cover image (square works best)
+        type: image
+        options:
+          media: images
+      - name: author
+        label: Written by
+        type: string
+        default: Sachin Kumar Jha
+      - name: narrator
+        label: Voice / narrated by
+        type: string
+        default: Sachin Kumar Jha
+      - name: language
+        label: Language / भाषा
+        type: select
+        default: hindi
+        options:
+          values:
+            - value: hindi
+              label: Hindi / हिंदी
+            - value: english
+              label: English
+      - name: category
+        label: Category / श्रेणी
+        type: select
+        default: zindagi-ke-sabak
+        options:
+          values:
+            - value: zindagi-ke-sabak
+              label: Zindagi ke Sabak / ज़िंदगी के सबक
+            - value: mera-safar
+              label: My Journey / मेरा सफ़र
+            - value: kahani
+              label: Stories / कहानियाँ
+      - name: date
+        label: Date
+        type: date
+        required: true
+      - name: description
+        label: About this audiobook (English)
+        type: text
+      - name: description_hi
+        label: इस ऑडियोबुक के बारे में (हिंदी) — optional
+        type: text
+      - name: chapters
+        label: Chapters / अध्याय — add one for each audio file
+        type: object
+        list: true
+        fields:
+          - name: title
+            label: Chapter title
+            type: string
+            required: true
+          - name: title_hi
+            label: अध्याय का शीर्षक (हिंदी) — optional
+            type: string
+          - name: audio
+            label: Upload audio (MP3/M4A)
+            type: file
+            options:
+              media: audio
+          - name: audio_url
+            label: …or paste an audio link (for big files hosted elsewhere)
+            type: string
+      - name: draft
+        label: Hide this audiobook (draft)
+        type: boolean
+        default: false
