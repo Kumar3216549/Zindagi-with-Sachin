@@ -226,6 +226,8 @@ content:
                   label: Anya Sroton ke Chuninda Gyan / अन्य स्रोतों के चुनिंदा ज्ञान
                 - value: kavita
                   label: Mahan Kavita (Poems) / महान कविताएँ
+                - value: sva-rachit
+                  label: My Own Poems / स्व-रचित
           - name: link
             label: Playlist link (copy it from YouTube → Share)
             type: string
