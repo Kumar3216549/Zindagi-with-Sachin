@@ -86,7 +86,7 @@
   function renderFilter() {
     var top = document.getElementById('vdFilter');
     if (!top) return;
-    var total = (data.latest || []).length;
+    var total = data.playlists.length;
     var html = '<button type="button" data-cat="" class="' + (!state.cat ? 'active' : '') + '" aria-pressed="' + !state.cat + '">' + bi('span', 'All', 'सभी') + '<span class="count">' + total + '</span></button>';
     Object.keys(CATS).forEach(function (k) {
       var c = CATS[k];
@@ -97,25 +97,24 @@
     top.innerHTML = html;
     top.hidden = false;
   }
+  // one card per YouTube playlist (used on the Videos page and on the home page)
+  function playlistCard(p, asLink) {
+    var c = CATS[p.category] || { en: p.title, hi: p.title_hi, icon: '▶' };
+    var first = p.videos && p.videos[0];
+    var n = p.videos ? p.videos.length : null;
+    var inner = '<span class="vd-pl-img">' + (first ? '<img src="https://i.ytimg.com/vi/' + encodeURIComponent(first.id) + '/mqdefault.jpg" alt="" loading="lazy"><span class="vd-play" aria-hidden="true">▶</span>' : '<span class="vd-pl-icon">' + c.icon + '</span>') + '</span>' +
+      '<span class="vd-pl-text">' + bi('strong', p.title || c.en, p.title_hi || c.hi) +
+      (n === null ? '' : n ? bi('span', '▶ Playlist · ' + n + (n === 1 ? ' video' : ' videos'), '▶ प्लेलिस्ट · ' + n + ' वीडियो', 'class="vd-pl-n"') : bi('span', 'Coming soon', 'जल्द आ रहा है', 'class="vd-pl-n"')) +
+      '</span>';
+    return asLink
+      ? '<a class="vd-pl" href="videos.html#cat=' + encodeURIComponent(p.category) + '">' + inner + '</a>'
+      : '<button type="button" class="vd-pl" data-cat="' + esc(p.category) + '">' + inner + '</button>';
+  }
   function renderAll(box) {
-    var html = '';
-    var latest = data.latest || [];
-    if (latest.length) {
-      html += '<div class="vd-section">' + bi('h2', 'Latest videos', 'नए वीडियो') +
-        '<div class="vd-grid">' + latest.slice(0, 12).map(function (v, i) { return videoCard(v, '', i); }).join('') + '</div></div>';
-    }
-    html += '<div class="vd-section">' + bi('h2', 'Playlists', 'प्लेलिस्ट') + '<div class="vd-pl-grid">' +
-      data.playlists.map(function (p) {
-        var c = CATS[p.category] || { en: p.title, hi: p.title_hi, icon: '▶' };
-        var first = p.videos && p.videos[0];
-        var n = p.videos ? p.videos.length : null;
-        return '<button type="button" class="vd-pl" data-cat="' + esc(p.category) + '">' +
-          '<span class="vd-pl-img">' + (first ? '<img src="https://i.ytimg.com/vi/' + encodeURIComponent(first.id) + '/mqdefault.jpg" alt="" loading="lazy">' : '<span class="vd-pl-icon">' + c.icon + '</span>') + '</span>' +
-          '<span class="vd-pl-text">' + bi('strong', p.title || c.en, p.title_hi || c.hi) +
-          (n === null ? '' : n ? bi('span', n + (n === 1 ? ' video' : ' videos'), n + ' वीडियो', 'class="vd-pl-n"') : bi('span', 'Coming soon', 'जल्द आ रहा है', 'class="vd-pl-n"')) +
-          '</span></button>';
-      }).join('') + '</div></div>';
-    box.innerHTML = html;
+    // playlists first, empty ("coming soon") ones after
+    var lists = data.playlists.slice().sort(function (a, b) { return (b.videos && b.videos.length ? 1 : 0) - (a.videos && a.videos.length ? 1 : 0); });
+    box.innerHTML = '<div class="vd-section">' + bi('h2', 'Playlists from YouTube', 'यूट्यूब प्लेलिस्ट') +
+      '<div class="vd-pl-grid">' + lists.map(function (p) { return playlistCard(p, false); }).join('') + '</div></div>';
   }
   function renderCat(box) {
     var lists = data.playlists.filter(function (p) { return p.category === state.cat; });
@@ -131,7 +130,6 @@
           '<a class="btn" href="' + esc(channelUrl() + '?sub_confirmation=1') + '" target="_blank" rel="noopener">' + bi('span', '▶ Subscribe', '▶ सब्सक्राइब करें') + '</a></div>';
       } else {
         if (!firstWithVideos) firstWithVideos = p;
-        if (p.videos) html += '<div class="vd-grid">' + p.videos.map(function (v, i) { return videoCard(v, p.id, i); }).join('') + '</div>';
       }
       html += '</div>';
     });
@@ -159,15 +157,11 @@
   function renderHome() {
     var box = document.getElementById('ytHome');
     if (!box || !data) return;
-    var vids = (data.latest || []).filter(function (v) { return !v.short; }).slice(0, 3);
-    if (!vids.length) return;
-    box.innerHTML = '<div class="section-head center">' + bi('span', 'On YouTube', 'यूट्यूब पर', 'class="eyebrow"') + bi('h2', 'Latest videos', 'नए वीडियो') + '</div>' +
-      '<div class="vd-grid vd-grid-3">' + vids.map(function (v, i) {
-        return '<a class="vd-card post-enter" style="animation-delay:' + (i * 0.06) + 's" href="videos.html#v=' + encodeURIComponent(v.id) + '">' +
-          '<span class="vd-thumb"><img src="https://i.ytimg.com/vi/' + encodeURIComponent(v.id) + '/mqdefault.jpg" alt="" loading="lazy"><span class="vd-play" aria-hidden="true">▶</span></span>' +
-          '<span class="vd-title">' + esc(v.title) + '</span></a>';
-      }).join('') + '</div>' +
-      '<p class="center" style="margin-top:22px"><a class="btn" href="videos.html">' + bi('span', 'All videos', 'सभी वीडियो') + '</a></p>';
+    var lists = data.playlists.filter(function (p) { return p.videos && p.videos.length; });
+    if (!lists.length) return;
+    box.innerHTML = '<div class="section-head center">' + bi('span', 'On YouTube', 'यूट्यूब पर', 'class="eyebrow"') + bi('h2', 'Playlists', 'प्लेलिस्ट') + '</div>' +
+      '<div class="vd-pl-grid vd-pl-home">' + lists.map(function (p) { return playlistCard(p, true); }).join('') + '</div>' +
+      '<p class="center" style="margin-top:22px"><a class="btn" href="videos.html">' + bi('span', 'All playlists', 'सभी प्लेलिस्ट') + '</a></p>';
     box.hidden = false;
   }
 
