@@ -11,6 +11,7 @@
     'mera-safar': { en: 'My Journey', hi: 'मेरा सफ़र', icon: '🧭' },
     'kahani': { en: 'Stories', hi: 'कहानियाँ', icon: '📖' },
     'anya-sroton-ke-chuninda-gyan': { en: 'Selected Wisdom from Other Sources', hi: 'अन्य स्रोतों के चुनिंदा ज्ञान', icon: '💡' },
+    'political-views': { en: 'Political Views', hi: 'राजनीतिक विचार', icon: '🗳️' },
     'kavita': { en: 'Mahan Kavita (Poems)', hi: 'महान कविताएँ', icon: '🎙️' },
     'sva-rachit': { en: 'My Own Poems', hi: 'स्व-रचित', icon: '✍️' }
   };
