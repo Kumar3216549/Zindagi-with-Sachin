@@ -977,3 +977,9 @@ footer.site-footer p{
 @media (min-width: 900px){
   body{ zoom: 0.9; }
 }
+
+/* ---------- playlists-only Videos page ---------- */
+.vd-pl{ text-decoration: none; }
+.vd-pl-img{ position: relative; }
+.vd-pl-img .vd-play{ width: 36px; height: 26px; font-size: 12px; }
+.vd-pl-home{ max-width: 760px; margin: 0 auto; }
