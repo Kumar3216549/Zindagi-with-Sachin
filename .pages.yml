@@ -224,6 +224,8 @@ content:
                   label: Stories / कहानियाँ
                 - value: anya-sroton-ke-chuninda-gyan
                   label: Selected Wisdom from Other Sources / अन्य स्रोतों के चुनिंदा ज्ञान
+                - value: political-views
+                  label: Political Views / राजनीतिक विचार
                 - value: kavita
                   label: Mahan Kavita (Poems) / महान कविताएँ
                 - value: sva-rachit
