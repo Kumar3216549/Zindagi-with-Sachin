@@ -179,6 +179,65 @@ content:
         type: boolean
         default: false
 
+  - name: chapters
+    label: Audiobook chapters (scripts) / ऑडियोबुक अध्याय
+    type: collection
+    path: chapters
+    filename: "chapter-{fields.chapter}.md"
+    exclude: [README.md]
+    view:
+      fields: [chapter, title, book]
+      primary: title
+      sort: [chapter, title]
+      default:
+        sort: chapter
+        order: asc
+    fields:
+      - name: title
+        label: Chapter title (English)
+        type: string
+        required: true
+      - name: title_hi
+        label: अध्याय का शीर्षक (हिंदी) — optional
+        type: string
+      - name: chapter
+        label: Chapter number
+        type: number
+        required: true
+      - name: book
+        label: Book title
+        type: string
+        default: Zindagi with Sachin
+      - name: author
+        label: Written by
+        type: string
+        default: Sachin Kumar Jha
+      - name: narrator
+        label: Voice / narrated by
+        type: string
+        default: Sachin Kumar Jha
+      - name: language
+        label: Language / भाषा
+        type: select
+        default: hindi
+        options:
+          values:
+            - value: hindi
+              label: Hindi / हिंदी
+            - value: english
+              label: English
+      - name: description
+        label: Short description (used for the final MP3 and listings)
+        type: text
+      - name: cover
+        label: Cover image (optional, square)
+        type: image
+        options:
+          media: images
+      - name: body
+        label: Script — the text you will read
+        type: text
+
   - name: youtube
     label: YouTube playlists / यूट्यूब प्लेलिस्ट
     type: file
