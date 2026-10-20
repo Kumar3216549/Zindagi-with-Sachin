@@ -1008,3 +1008,12 @@ footer.site-footer p{
 .jc-4 figcaption{ background: #9C27B0; } .jc-5 figcaption{ background: #0288D1; }
 .jc-6 figcaption{ background: #E91E63; } .jc-7 figcaption{ background: var(--color-navy); }
 @media (max-width: 640px){ .journey-grid{ grid-template-columns: repeat(2, 1fr); gap: 14px; } }
+
+/* ---------- contact details card ---------- */
+.contact-card{ margin-bottom: 36px; }
+.contact-list{ list-style: none; margin: 14px 0 0; padding: 0; }
+.contact-list li{ display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--color-border); }
+.contact-list li:last-child{ border-bottom: 0; }
+.contact-list span{ width: 30px; height: 30px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--color-gold-light); color: var(--color-navy); font-weight: 700; }
+.contact-list a{ color: var(--color-navy); text-decoration: none; font-weight: 600; word-break: break-word; }
+.contact-list a:hover{ text-decoration: underline; }
