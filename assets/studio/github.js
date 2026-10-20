@@ -156,6 +156,7 @@ export function parseChapter(path, text) {
     language: meta.language || 'hindi',
     cover: meta.cover || '',
     description: meta.description || '',
+    category: meta.category || '',
     body: body.trim(),
   };
 }

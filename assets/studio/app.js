@@ -10,6 +10,7 @@ import { ChapterRecorder } from './recorder.js';
 import { Project } from './project.js';
 import { LIBRARY, processVoice, renderMix } from './mixer.js';
 import { encodeMp3, tagMp3, loadCover, download } from './export.js';
+import * as yt from './youtube.js';
 import {
   SR, decodeToMono, encodeWav, computePeaks, detectSilences, acxCheck, integratedLoudness,
   peakDb, formatTime, parseTime,
@@ -73,12 +74,12 @@ async function refreshGhPill() {
 
 $('#ghPill').onclick = () => {
   $('#tokenInput').value = ''; $('#tokenMsg').textContent = gh.isConnected() ? 'A token is saved. Paste a new one to replace it.' : '';
-  try { $('#uploadApi').value = localStorage.getItem('zws.studio.uploadApi') || ''; } catch (_) {}
+  try { $('#uploadApi').value = localStorage.getItem('zws.studio.uploadApi') || ''; $('#googleClientId').value = localStorage.getItem('zws.studio.googleClientId') || ''; } catch (_) {}
   $('#dlgSettings').showModal();
 };
 $('#tokenSave').onclick = async () => {
   const t = $('#tokenInput').value.trim();
-  try { localStorage.setItem('zws.studio.uploadApi', $('#uploadApi').value.trim()); } catch (_) {}
+  try { localStorage.setItem('zws.studio.uploadApi', $('#uploadApi').value.trim()); localStorage.setItem('zws.studio.googleClientId', $('#googleClientId').value.trim()); } catch (_) {}
   if (!t) { if (gh.isConnected()) $('#dlgSettings').close(); else $('#tokenMsg').textContent = 'Paste the token first.'; return; }
   const old = gh.getToken();
   gh.setToken(t);
@@ -771,6 +772,133 @@ async function sendToApi(blob, c) {
   if (!res.ok) throw new Error('Server answered ' + res.status);
   toast('Uploaded to your API.');
 }
+
+
+// ---------------------------------------------------------------- YouTube
+const YT = { photo: null, photoName: '', playlists: [], video: null, thumb: null, ext: 'mp4' };
+const DEFAULT_YT_PHOTO = 'assets/img/hero/sachin-books.webp';
+function googleClientId() { try { return localStorage.getItem('zws.studio.googleClientId') || ''; } catch (_) { return ''; } }
+
+async function loadPlaylists() {
+  if (YT.playlists.length) return YT.playlists;
+  try {
+    const j = await (await fetch('content/youtube.json', { cache: 'no-store' })).json();
+    YT.playlists = (j.playlists || []).map((p) => ({ ...p, id: (/[?&]list=([^&]+)/.exec(p.link) || [])[1] || '' }));
+  } catch (_) { YT.playlists = []; }
+  return YT.playlists;
+}
+
+function ytFillText() {
+  const c = S.current;
+  const pl = YT.playlists.find((p) => p.id === $('#ytPlaylist').value) || null;
+  const tx = yt.youtubeText(c, pl, $('#expDesc').value.trim());
+  $('#ytTitle').value = tx.title; $('#ytDesc').value = tx.description; $('#ytTags').value = tx.tags.join(', ');
+  $('#ytTitleCount').textContent = '(' + tx.title.length + '/100)';
+}
+function ytText() {
+  return { title: $('#ytTitle').value.trim().slice(0, 100), description: $('#ytDesc').value.trim().slice(0, 4900),
+    tags: $('#ytTags').value.split(',').map((s) => s.trim()).filter(Boolean) };
+}
+function ytInfo() {
+  const c = S.current, hindi = c.language !== 'english';
+  return { displayTitle: (hindi && c.titleHi) ? c.titleHi : c.title, number: c.number, book: c.book, narrator: c.narrator, language: c.language };
+}
+async function ytPreviewThumb() {
+  const img = await yt.loadImage(YT.photo || DEFAULT_YT_PHOTO);
+  YT.thumb = await yt.makeThumbnail(img, ytInfo());
+  const el = $('#ytThumbPreview'); if (el.src) URL.revokeObjectURL(el.src);
+  el.src = URL.createObjectURL(YT.thumb);
+}
+
+$('#btnYT').onclick = () => guard(async () => {
+  if (!S.current) return toast('Pick a chapter first.');
+  if (!S.project || !S.project.duration) return toast('Record this chapter first.');
+  const pls = await loadPlaylists();
+  const sel = $('#ytPlaylist');
+  sel.innerHTML = '<option value="">— no playlist —</option>' + pls.map((p) => `<option value="${esc(p.id)}">${esc(p.title)} / ${esc(p.title_hi || '')}</option>`).join('');
+  const d = currentDraft();
+  const want = (d && d.youtube && d.youtube.playlist) || (pls.find((p) => p.category === S.current.category) || {}).id || '';
+  sel.value = want;
+  YT.video = null; $('#ytFiles').classList.add('hidden'); $('#ytProgress').classList.add('hidden'); $('#ytStep').textContent = '';
+  ytFillText();
+  const cid = googleClientId();
+  $('#ytUpload').disabled = true;
+  $('#ytDirectInfo').innerHTML = cid ? 'Make the video first, then upload.' : 'For one-click upload, add your Google Client ID in Settings (GitHub button, top right). Steps are in the <a href="studio-guide.html#youtube" target="_blank">guide</a>.';
+  if (cid) yt.loadGoogle().catch(() => {});
+  if (d && d.youtube && d.youtube.url) $('#ytDirectInfo').innerHTML += `<br>Last upload: <a href="${esc(d.youtube.url)}" target="_blank" rel="noopener">${esc(d.youtube.url)}</a>`;
+  $('#dlgYT').showModal();
+  await ytPreviewThumb();
+  if (!yt.videoSupport()) $('#ytStep').textContent = 'This browser cannot make videos — please use Google Chrome or Microsoft Edge.';
+}, 'YouTube');
+
+$('#ytPlaylist').onchange = () => { ytFillText(); const d = currentDraft(); if (d) { d.youtube = { ...(d.youtube || {}), playlist: $('#ytPlaylist').value }; db.putDraft(d); } };
+$('#ytTitle').oninput = () => ($('#ytTitleCount').textContent = '(' + $('#ytTitle').value.length + '/100)');
+$('#ytPhotoBtn').onclick = () => $('#ytPhotoFile').click();
+$('#ytPhotoFile').onchange = () => guard(async () => {
+  const f = $('#ytPhotoFile').files[0]; $('#ytPhotoFile').value = ''; if (!f) return;
+  YT.photo = f; $('#ytPhotoName').textContent = f.name; YT.video = null; $('#ytFiles').classList.add('hidden');
+  await ytPreviewThumb();
+}, 'Photo');
+async function copy(text, what) { try { await navigator.clipboard.writeText(text); toast(what + ' copied.'); } catch (_) { toast('Could not copy — select and copy by hand.', true); } }
+$('#ytCopyTitle').onclick = () => copy($('#ytTitle').value, 'Title');
+$('#ytCopyDesc').onclick = () => copy($('#ytDesc').value, 'Description');
+$('#ytCopyTags').onclick = () => copy($('#ytTags').value, 'Tags');
+
+function ytProgress(frac, text) {
+  $('#ytProgress').classList.remove('hidden'); $('#ytProgress i').style.width = Math.round(frac * 100) + '%';
+  if (text) $('#ytStep').textContent = text;
+}
+
+$('#ytMake').onclick = () => guard(async () => {
+  if (!yt.videoSupport()) return toast('Please use Google Chrome or Microsoft Edge to make the video.', true);
+  $('#ytMake').disabled = true;
+  try {
+    ytProgress(0.02, 'Mixing the final audio…');
+    const { mixed } = await buildMix(false); busy(false);
+    const img = await yt.loadImage(YT.photo || DEFAULT_YT_PHOTO);
+    if (!YT.thumb) await ytPreviewThumb();
+    const t0 = performance.now();
+    const res = await yt.makeVideo(mixed, img, ytInfo(), (f) => {
+      const el = (performance.now() - t0) / 1000, left = f > 0.03 ? el / f - el : 0;
+      ytProgress(0.05 + f * 0.95, 'Making video… ' + Math.round(f * 100) + '%' + (left > 3 ? ' · about ' + formatTime(left) + ' left' : ''));
+    });
+    YT.video = res.blob; YT.ext = res.ext;
+    ytProgress(1, `Ready: ${formatTime(mixed.length / SR)} video, ${(res.blob.size / 1048576).toFixed(1)} MB (${res.ext.toUpperCase()}).`);
+    $('#ytFiles').classList.remove('hidden');
+    if (googleClientId()) { $('#ytUpload').disabled = false; $('#ytDirectInfo').textContent = 'Ready to upload. You will be asked to sign in with Google the first time.'; }
+    const d = currentDraft(); if (d) { d.youtube = { ...(d.youtube || {}), madeAt: Date.now(), playlist: $('#ytPlaylist').value }; db.putDraft(d); }
+  } finally { $('#ytMake').disabled = false; }
+}, 'YouTube video');
+
+$('#ytDlVideo').onclick = () => YT.video && download(YT.video, `${S.current.id}-youtube.${YT.ext}`);
+$('#ytDlThumb').onclick = () => YT.thumb && download(YT.thumb, `${S.current.id}-thumbnail.jpg`);
+
+$('#ytUpload').onclick = () => {
+  const cid = googleClientId();
+  if (!cid) return toast('Add your Google Client ID in Settings first.', true);
+  if (!YT.video) return toast('Make the video first.', true);
+  // the sign-in popup must open straight from this click
+  const tokenP = yt.googleToken(cid);
+  guard(async () => {
+    $('#ytUpload').disabled = true;
+    try {
+      const token = await tokenP;
+      const c = S.current;
+      const res = await yt.uploadToYouTube({
+        token, video: YT.video, thumbnail: YT.thumb, text: ytText(), playlistId: $('#ytPlaylist').value,
+        privacy: $('#ytPrivacy').value, language: c.language === 'english' ? 'en' : 'hi',
+        onProgress: (f, s) => ytProgress(f, s + ' ' + Math.round(f * 100) + '%'),
+      });
+      const d = currentDraft(); if (d) { d.youtube = { ...(d.youtube || {}), id: res.id, url: res.url, uploadedAt: Date.now() }; db.putDraft(d); }
+      let html = `✅ Uploaded: <a href="${res.url}" target="_blank" rel="noopener">${res.url}</a> · <a href="https://studio.youtube.com/video/${res.id}/edit" target="_blank" rel="noopener">edit in YouTube Studio</a>`;
+      if (res.privacy && res.privacy !== $('#ytPrivacy').value) html += `<br>⚠️ YouTube kept it <b>${esc(res.privacy)}</b> (new Google apps upload as private until Google reviews them). Open YouTube Studio → Visibility → Public.`;
+      res.notes.forEach((n) => (html += '<br>⚠️ ' + esc(n)));
+      $('#ytDirectInfo').innerHTML = html;
+      $('#ytCardInfo').innerHTML = `Last upload: <a href="${res.url}" target="_blank" rel="noopener">${res.url}</a>`;
+      toast('Uploaded to YouTube.');
+    } finally { $('#ytUpload').disabled = false; }
+  }, 'YouTube upload');
+};
 
 // ---------------------------------------------------------------- dashboard
 $('#btnDashboard').onclick = () => guard(openDashboard, 'Dashboard');

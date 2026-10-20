@@ -148,3 +148,10 @@ table.dash td .btn { padding: 3px 8px; font-size: 12px; }
   .topbar .spacer { display: none; }
   #ghText { max-width: 130px; overflow: hidden; text-overflow: ellipsis; }
 }
+
+/* YouTube dialog */
+.yt-grid{ display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); gap: 18px; }
+.yt-grid input[type="text"], .yt-grid textarea{ width: 100%; }
+.yt-thumb{ width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; background: var(--panel-2); border: 1px solid var(--line); display: block; margin-bottom: 8px; }
+.yt-direct{ margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+@media (max-width: 760px){ .yt-grid{ grid-template-columns: 1fr; } }
