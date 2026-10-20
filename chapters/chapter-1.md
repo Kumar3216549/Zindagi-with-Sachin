@@ -3,7 +3,7 @@ title: legend
 title_hi: legend
 chapter: 1
 book: Zindagi with Sachin
-author: devang
+author: Sachin Kumar Jha
 narrator: Sachin Kumar Jha
 language: hindi
 description: |
