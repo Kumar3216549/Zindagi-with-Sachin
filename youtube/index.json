@@ -1,7 +1,7 @@
 {
   "channel_url": "https://www.youtube.com/@sachinjha8890",
   "channel_id": "UCkXUU2ufb_2EMQ3VynZqv6Q",
-  "updated": "2026-10-18",
+  "updated": "2026-10-20",
   "latest": [
     {
       "id": "UFOj7KMm1Rs",
@@ -149,7 +149,14 @@
       "title": "Political Views",
       "title_hi": "राजनीतिक विचार",
       "category": "political-views",
-      "videos": []
+      "videos": [
+        {
+          "id": "2xc7VCmacgk",
+          "title": "short massage on assembly election in bihar.🙏",
+          "published": "2020-11-07",
+          "short": false
+        }
+      ]
     },
     {
       "id": "PLdLjfj59uUiU",
