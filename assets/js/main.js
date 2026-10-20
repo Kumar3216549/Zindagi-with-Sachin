@@ -262,3 +262,29 @@ document.addEventListener('DOMContentLoaded', function () {
     if (e.target.closest('.sh-native')) navigator.share({ title: d.title, url: d.url }).catch(function () {});
   });
 });
+
+// ---- "Listen" invitation before the footer on every reading page ----
+document.addEventListener('DOMContentLoaded', function () {
+  var here = window.location.pathname.split('/').pop() || 'index.html';
+  var skip = ['audiobooks.html', 'audiobook.html', 'studio.html', 'studio-guide.html', 'write.html'];
+  var footer = document.querySelector('.site-footer');
+  if (!footer || skip.indexOf(here) > -1 || document.querySelector('.ab-invite')) return;
+  var hi = document.documentElement.getAttribute('lang') === 'hi';
+  function L(tag, en, h, cls) {
+    return '<' + tag + (cls ? ' class="' + cls + '"' : '') + ' data-en="' + en + '" data-hi="' + h + '">' + (hi ? h : en) + '</' + tag + '>';
+  }
+  var box = document.createElement('section');
+  box.className = 'ab-invite';
+  box.innerHTML = '<div class="ab-invite-inner">' +
+    '<div class="ab-invite-icon" aria-hidden="true">🎧</div>' +
+    '<div class="ab-invite-text">' +
+      L('h3', 'No time to read? Listen.', 'पढ़ने का समय नहीं? सुनिए।') +
+      L('p', 'The most important books and real life stories — in my own voice. Whatever field you are learning, there is something here to lift you higher.',
+        'सर्वाधिक महत्वपूर्ण किताबें और ज़िंदगी की सच्ची कहानियाँ — मेरी आवाज़ में। आप चाहे किसी भी क्षेत्र के ज्ञानार्थी हों, यहाँ आपको ऊपर उठाने वाला कुछ ज़रूर मिलेगा।') +
+    '</div>' +
+    '<div class="ab-invite-actions">' +
+      '<a class="btn gold" href="audiobooks.html">' + L('span', '🎧 Listen to audiobooks', '🎧 ऑडियोबुक सुनें') + '</a>' +
+      '<a class="btn" href="' + ZWS_YT + '?sub_confirmation=1" target="_blank" rel="noopener">' + L('span', '▶ Subscribe for new chapters', '▶ नए अध्यायों के लिए सब्सक्राइब') + '</a>' +
+    '</div></div>';
+  footer.parentNode.insertBefore(box, footer);
+});
