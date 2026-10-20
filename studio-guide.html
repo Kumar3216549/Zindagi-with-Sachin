@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ऑडियोबुक स्टूडियो गाइड | ज़िंदगी विद सचिन</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="ऑडियोबुक स्टूडियो को प्रोफ़ेशनल तरीके से इस्तेमाल करने की पूरी गाइड।">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/img/favicon-192.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Mukta:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main" data-en="Skip to content" data-hi="मुख्य सामग्री पर जाएं">Skip to content</a>
+
+<div class="masthead">
+  <a href="index.html" class="site-name"><span class="spark">&#10022;</span>Zindagi with Sachin<span class="spark">&#10022;</span></a>
+  <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch to Hindi / हिंदी में बदलें">EN | हिं</button>
+</div>
+
+<nav class="site-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <button class="menu-icon" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">&#9776;</button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" data-en="Home" data-hi="होम">Home</a>
+      <a href="life-stories.html" data-en="Life Stories" data-hi="जीवन की कहानियाँ">Life Stories</a>
+      <a href="blog.html" data-en="Blog" data-hi="ब्लॉग">Blog</a>
+      <a href="gallery.html" data-en="Gallery" data-hi="गैलरी">Gallery</a>
+      <a href="about.html" data-en="About Me" data-hi="मेरे बारे में">About Me</a>
+      <a href="contact.html" data-en="Contact" data-hi="संपर्क करें">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+<style>
+  .g-wrap{ max-width: 900px; margin: 0 auto; }
+  .g-cta{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:18px; }
+  .g-toc{ display:flex; flex-wrap:wrap; gap:8px; margin: 0 0 28px; }
+  .g-toc a{ text-decoration:none; padding:6px 14px; border-radius:999px; background:#fff; border:1px solid var(--color-border); color: var(--color-navy); font-weight:600; font-size:15px; }
+  .g-toc a:hover{ background: var(--color-gold-light); }
+  .g-step{ background:#fff; border:1px solid var(--color-border); border-radius: var(--radius); box-shadow: var(--shadow-card); padding: 22px 24px; margin: 0 0 22px; scroll-margin-top: 80px; }
+  .g-step h2{ display:flex; align-items:center; gap:12px; margin:0 0 12px; font-size: 22px; }
+  .g-num{ flex:none; width:38px; height:38px; border-radius:50%; display:grid; place-items:center; background: var(--color-navy); color:#fff; font-size:18px; font-weight:800; }
+  .g-step p, .g-step li{ font-size: 17px; line-height: 1.75; }
+  .g-step ol, .g-step ul{ margin: 0 0 8px 22px; padding:0; }
+  .g-tip{ background: var(--color-gold-light); border-left: 4px solid var(--color-gold); padding: 10px 14px; border-radius: 8px; margin: 12px 0 0; font-size: 16px; }
+  .g-warn{ background:#fdecec; border-left:4px solid #d64545; padding:10px 14px; border-radius:8px; margin:12px 0 0; font-size:16px; }
+  .g-check{ list-style:none; margin:0 !important; }
+  .g-check li{ padding: 4px 0; }
+  .g-check label{ display:flex; gap:10px; align-items:flex-start; cursor:pointer; }
+  .g-check input{ width:20px; height:20px; margin-top:5px; accent-color: var(--color-navy); flex:none; }
+  .g-check input:checked + span{ text-decoration: line-through; color: var(--color-text-muted); }
+  .g-keys{ width:100%; border-collapse: collapse; font-size:16px; }
+  .g-keys td{ padding: 8px 6px; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+  .g-keys td:first-child{ white-space: nowrap; width: 1%; padding-right: 16px; }
+  kbd{ font: 600 13px ui-monospace, monospace; padding: 2px 7px; border:1px solid var(--color-border); border-bottom-width:3px; border-radius:6px; background:#fff; }
+  .g-table{ width:100%; border-collapse: collapse; font-size:16px; }
+  .g-table th, .g-table td{ text-align:left; padding:8px 6px; border-bottom:1px solid var(--color-border); vertical-align: top; }
+  .g-table th{ color: var(--color-navy); }
+  .g-flow{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin: 6px 0 0; }
+  .g-flow span{ background: var(--color-navy); color:#fff; padding:6px 12px; border-radius:999px; font-weight:600; font-size:15px; }
+  .g-flow b{ color: var(--color-gold); font-size:20px; }
+  .g-faq details{ border-bottom:1px solid var(--color-border); padding: 10px 0; }
+  .g-faq summary{ cursor:pointer; font-weight:700; font-size:17px; color: var(--color-navy); }
+  .g-faq details p{ margin: 8px 0 0; }
+  .g-progress{ font-size:15px; color: var(--color-text-muted); margin-top:8px; }
+  @media (max-width: 640px){ .g-step{ padding: 18px 16px; } .g-step h2{ font-size:19px; } .g-keys td:first-child{ white-space: normal; } }
+</style>
+
+<section class="hero small">
+  <div class="hero-inner">
+    <h1>🎙️ ऑडियोबुक स्टूडियो — पूरी गाइड</h1>
+    <p>अध्याय लिखने से लेकर तैयार MP3 तक — प्रोफ़ेशनल तरीके से, कदम-दर-कदम।</p>
+    <div class="g-cta">
+      <a class="btn gold" href="studio.html">🎙️ स्टूडियो खोलें</a>
+      <a class="btn" href="https://app.pagescms.org/Kumar3216549/Zindagi-with-Sachin/main/collection/chapters" target="_blank" rel="noopener">📖 अध्याय लिखें</a>
+      <a class="btn" href="write.html">← लेखन डेस्क</a>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+<div class="g-wrap">
+
+  <nav class="g-toc" aria-label="इस गाइड में">
+    <a href="#s1">1. पहली बार</a><a href="#s2">2. अध्याय</a><a href="#s3">3. तैयारी</a><a href="#s4">4. रिकॉर्डिंग</a>
+    <a href="#s5">5. एडिटिंग</a><a href="#s6">6. आवाज़</a><a href="#s7">7. म्यूज़िक</a><a href="#s8">8. ड्राफ़्ट</a>
+    <a href="#s9">9. फ़ाइनल</a><a href="#s10">10. अपलोड</a><a href="#keys">शॉर्टकट</a><a href="#faq">सवाल-जवाब</a>
+  </nav>
+
+  <div class="g-step">
+    <h2>⚡ एक नज़र में पूरा काम</h2>
+    <div class="g-flow">
+      <span>अध्याय लिखें</span><b>→</b><span>रिकॉर्ड</span><b>→</b><span>गलतियाँ काटें</span><b>→</b><span>Measure ✅</span><b>→</b><span>Save draft</span><b>→</b><span>Make Ready</span><b>→</b><span>अपलोड</span>
+    </div>
+  </div>
+
+  <div class="g-step" id="s1">
+    <h2><span class="g-num">1</span> पहली बार की तैयारी (सिर्फ़ एक बार)</h2>
+    <ol>
+      <li>Chrome या Edge में <a href="studio.html">स्टूडियो</a> खोलें।</li>
+      <li>ऊपर दाईं ओर <b>“GitHub: not connected”</b> पर क्लिक करें।</li>
+      <li>वहाँ दिए लिंक से GitHub में <b>Fine-grained token</b> बनाएँ:
+        <ul>
+          <li>Repository access → <b>Only select repositories</b> → <b>Zindagi-with-Sachin</b></li>
+          <li>Permissions → <b>Contents: Read and write</b> (और कुछ नहीं)</li>
+        </ul>
+      </li>
+      <li>token कॉपी करके स्टूडियो में पेस्ट करें → <b>Save &amp; check</b>। ऊपर हरा बिंदु और आपका नाम दिखेगा।</li>
+    </ol>
+    <p class="g-warn">🔒 token एक चाबी है — इसे किसी को न भेजें, स्क्रीनशॉट में न दिखाएँ। यह सिर्फ़ आपके ब्राउज़र में रहता है।</p>
+    <p class="g-tip">💡 हमेशा <b>एक ही कंप्यूटर और एक ही ब्राउज़र</b> से रिकॉर्ड करें — अधूरी रिकॉर्डिंग उसी ब्राउज़र में सुरक्षित रहती है।</p>
+  </div>
+
+  <div class="g-step" id="s2">
+    <h2><span class="g-num">2</span> अध्याय (स्क्रिप्ट) लिखना</h2>
+    <ol>
+      <li>लेखन डेस्क → <a href="https://app.pagescms.org/Kumar3216549/Zindagi-with-Sachin/main/collection/chapters" target="_blank" rel="noopener"><b>“Audiobook chapters (scripts)”</b></a> → नया अध्याय।</li>
+      <li>भरें: <b>शीर्षक</b>, <b>अध्याय नंबर</b> (1, 2, 3…), <b>किताब का नाम</b>, <b>छोटा विवरण</b> और <b>स्क्रिप्ट</b>।</li>
+      <li>Save करें → लगभग 1 मिनट में स्टूडियो की बाईं सूची में आ जाएगा (⟳ दबाएँ)।</li>
+    </ol>
+    <p class="g-tip">💡 छोटे पैराग्राफ़ लिखें। कठिन शब्दों पर पहले से अभ्यास कर लें। <b>## शीर्षक</b> लिखने से स्क्रिप्ट में सुनहरा उप-शीर्षक बनता है।</p>
+  </div>
+
+  <div class="g-step" id="s3">
+    <h2><span class="g-num">3</span> रिकॉर्डिंग से पहले — चेकलिस्ट</h2>
+    <ul class="g-check" id="prepList">
+      <li><label><input type="checkbox" data-k="room"><span>शांत कमरा — पंखा / AC / कूलर बंद, खिड़की-दरवाज़ा बंद</span></label></li>
+      <li><label><input type="checkbox" data-k="soft"><span>कमरे में कपड़े / गद्दे / पर्दे (गूँज कम होती है)</span></label></li>
+      <li><label><input type="checkbox" data-k="mic"><span>USB माइक या अच्छा earphone-mic लगा है (लैपटॉप का माइक नहीं)</span></label></li>
+      <li><label><input type="checkbox" data-k="dist"><span>मुँह से माइक 15–20 सेमी (एक हथेली) दूर, थोड़ा तिरछा</span></label></li>
+      <li><label><input type="checkbox" data-k="water"><span>पानी पास में, फ़ोन साइलेंट</span></label></li>
+      <li><label><input type="checkbox" data-k="read"><span>स्क्रिप्ट एक बार ज़ोर से पढ़कर अभ्यास कर लिया</span></label></li>
+    </ul>
+    <p class="g-progress" id="prepProgress"></p>
+  </div>
+
+  <div class="g-step" id="s4">
+    <h2><span class="g-num">4</span> रिकॉर्डिंग करना</h2>
+    <ol>
+      <li>बाईं ओर अध्याय चुनें → <b>● Record</b> टैब।</li>
+      <li><b>A+ / A−</b> से अक्षर बड़े-छोटे करें। चाहें तो <b>Teleprompter scroll</b> चालू करें — स्क्रिप्ट अपने-आप सरकेगी (स्लाइडर से गति)।</li>
+      <li><b>● Record</b> दबाएँ (पहली बार माइक के लिए <b>Allow</b> करें)। नीचे की हरी पट्टी बोलते समय बीच तक जाए — लाल तक नहीं।</li>
+      <li>पढ़ते समय:
+        <ul>
+          <li><kbd>Space</kbd> = रुकें / फिर शुरू</li>
+          <li><b>गलती हुई?</b> <kbd>M</kbd> दबाएँ → 2 सेकंड रुकें → वही वाक्य दोबारा पढ़ें। रिकॉर्डिंग बंद न करें।</li>
+          <li><kbd>Ctrl</kbd> + <kbd>S</kbd> = सेव (हर सेकंड अपने-आप भी सेव होता है)</li>
+        </ul>
+      </li>
+      <li>ब्रेक चाहिए? <b>Pause</b> करके टैब बंद कर दें। अगली बार पूछेगा <b>“Resume paused draft?”</b> → <b>Resume recording</b>।</li>
+      <li>अध्याय पूरा → <b>■ Stop</b>। रिकॉर्डिंग <b>Draft Ready</b> बन जाती है।</li>
+    </ol>
+    <p class="g-tip">💡 हर अध्याय एक जैसे शुरू करें: <i>“ज़िंदगी विद सचिन — अध्याय एक: मेरी पहली यात्रा।”</i> और अंत में 2 सेकंड चुप रहें।</p>
+  </div>
+
+  <div class="g-step" id="s5">
+    <h2><span class="g-num">5</span> एडिटिंग (✂ Edit टैब)</h2>
+    <table class="g-table">
+      <tr><th>काम</th><th>कैसे</th></tr>
+      <tr><td>गलती वाला वाक्य हटाना</td><td>लाल ⚑ निशान पर <b>✕ cut</b> — फिर ▶ Play से सुनकर जाँचें</td></tr>
+      <tr><td>कोई भी हिस्सा हटाना</td><td>waveform पर माउस से खींचकर चुनें → <kbd>Delete</kbd></td></tr>
+      <tr><td>सिर्फ़ चुना हिस्सा रखना</td><td>चुनें → <b>Trim to selection</b></td></tr>
+      <tr><td>एक वाक्य दोबारा बोलना</td><td>वह हिस्सा चुनें → <b>● Record patch</b> → बोलें → <b>■ Stop patch</b></td></tr>
+      <tr><td>बीच में कुछ जोड़ना</td><td>कर्सर रखें → <b>● Record patch</b> या <b>Insert file</b></td></tr>
+      <tr><td>लंबे विराम छोटे करना</td><td><b>Tighten pauses</b> (एक क्लिक)</td></tr>
+      <tr><td>गलती हो गई</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd> (वापस), <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> (फिर से)</td></tr>
+    </table>
+    <p class="g-tip">💡 एडिटिंग के बाद पूरा अध्याय एक बार हेडफ़ोन से सुनें। अगले दिन ताज़े कानों से सुनना और भी अच्छा।</p>
+  </div>
+
+  <div class="g-step" id="s6">
+    <h2><span class="g-num">6</span> आवाज़ की क्वालिटी</h2>
+    <ul>
+      <li><b>Normalize loudness</b> हमेशा चालू रखें:
+        <ul>
+          <li>वेबसाइट / YouTube / Spotify → <b>−16 LUFS</b></li>
+          <li>Audible (ACX) → <b>−20 LUFS (ACX safe)</b></li>
+        </ul>
+      </li>
+      <li>पीछे हल्की सरसराहट हो तो <b>Noise reduction</b> चालू करें।</li>
+      <li><b>Measure</b> दबाएँ — सब <span style="color:#1f8a4c;font-weight:700">हरा</span> और <b>ACX check: PASS</b> हो तो आवाज़ प्रोफ़ेशनल स्तर की है।</li>
+    </ul>
+    <p class="g-tip">💡 Noise floor लाल हो (−60 से ऊपर) तो कमरा और शांत करें — मशीन से ज़्यादा फ़र्क कमरे से पड़ता है।</p>
+  </div>
+
+  <div class="g-step" id="s7">
+    <h2><span class="g-num">7</span> बैकग्राउंड म्यूज़िक और इफ़ेक्ट</h2>
+    <ul>
+      <li><b>Add background</b> → म्यूज़िक चुनें या अपना अपलोड करें। वॉल्यूम <b>5–10%</b>, <b>Auto-duck</b> चालू — आप बोलेंगे तो म्यूज़िक अपने-आप धीमा।</li>
+      <li><b>Sound effects</b> → इफ़ेक्ट चुनें, समय लिखें (जैसे <b>2:15</b>) → <b>+ Add at time</b>, या कर्सर पर <b>+ At cursor</b>।</li>
+      <li><b>▶ Preview mix</b> से पूरा मिक्स सुनें।</li>
+    </ul>
+    <p class="g-tip">💡 कम ही ज़्यादा है — अच्छी ऑडियोबुक्स में म्यूज़िक ज़्यादातर सिर्फ़ शुरुआत और अंत में होता है। कहानी की आवाज़ हमेशा सबसे ऊपर।</p>
+  </div>
+
+  <div class="g-step" id="s8">
+    <h2><span class="g-num">8</span> ड्राफ़्ट सँभालना</h2>
+    <ul>
+      <li><b>💾 Save draft</b> → हर बार नया वर्ज़न (v1, v2, v3…) GitHub पर सुरक्षित। कुछ खोता नहीं।</li>
+      <li><b>🗂 Drafts</b> → सब अध्यायों की स्थिति:
+        <span style="color:#c47f0a;font-weight:700">Paused</span> ·
+        <span style="color:#2f6fd0;font-weight:700">Draft Ready</span> ·
+        <span style="color:#7a4fd6;font-weight:700">Edited</span> ·
+        <span style="color:#1f8a4c;font-weight:700">Ready for Upload</span></li>
+      <li>दूसरे कंप्यूटर पर → Edit टैब → <b>Load draft from GitHub</b>।</li>
+      <li><b>Re-record</b> → अध्याय शून्य से फिर शुरू (GitHub पर पुराने वर्ज़न रहते हैं)।</li>
+    </ul>
+  </div>
+
+  <div class="g-step" id="s9">
+    <h2><span class="g-num">9</span> फ़ाइनल करना — “Make Ready for Upload”</h2>
+    <ol>
+      <li>दाईं ओर नीचे <b>छोटा विवरण</b> लिखें, <b>Cover image</b> चुनें (चौकोर, 1400×1400 या बड़ा)।</li>
+      <li><b>✔ Make Ready for Upload</b> दबाएँ। स्टूडियो अपने-आप:
+        <ul>
+          <li>MP3 बनाता है — 192 kbps, 44.1 kHz, mono (Audible/Spotify वाली क्वालिटी)</li>
+          <li>नाम, लेखक, किताब, अध्याय नंबर और कवर फ़ाइल के अंदर डालता है</li>
+          <li>ACX जाँच करता है और <code>audiobook/final/</code> में GitHub पर सेव करता है</li>
+        </ul>
+      </li>
+      <li>चेकलिस्ट में सब ✅ → <b>⤓ Download MP3</b>।</li>
+    </ol>
+  </div>
+
+  <div class="g-step" id="s10">
+    <h2><span class="g-num">10</span> तैयार फ़ाइल कहाँ डालें</h2>
+    <table class="g-table">
+      <tr><th>जगह</th><th>कैसे</th><th>सेटिंग</th></tr>
+      <tr><td>अपनी वेबसाइट</td><td>लेखन डेस्क → “Upload an audiobook” → यह MP3 अध्याय के रूप में</td><td>−16 LUFS</td></tr>
+      <tr><td>YouTube</td><td>MP3 + कवर फ़ोटो से वीडियो (Canva/CapCut) → सही प्लेलिस्ट में — वेबसाइट पर अपने-आप दिखेगा</td><td>−16 LUFS</td></tr>
+      <tr><td>Spotify</td><td>Spotify for Creators → हर अध्याय एक एपिसोड</td><td>−16 LUFS</td></tr>
+      <tr><td>Audible</td><td>ACX से (पहले वहाँ के नियम और देश की पात्रता देख लें)</td><td>−20 LUFS, ACX PASS</td></tr>
+    </table>
+  </div>
+
+  <div class="g-step" id="keys">
+    <h2>⌨️ कीबोर्ड शॉर्टकट</h2>
+    <table class="g-keys">
+      <tr><td><kbd>Space</kbd></td><td>रिकॉर्डिंग में: रुकें / फिर शुरू · एडिट में: चलाएँ / रोकें</td></tr>
+      <tr><td><kbd>M</kbd></td><td>रिकॉर्डिंग में गलती का निशान</td></tr>
+      <tr><td><kbd>Ctrl</kbd> + <kbd>S</kbd></td><td>ड्राफ़्ट सेव</td></tr>
+      <tr><td><kbd>Delete</kbd></td><td>चुना हुआ हिस्सा हटाएँ</td></tr>
+      <tr><td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td><td>वापस (undo)</td></tr>
+      <tr><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd></td><td>फिर से (redo)</td></tr>
+    </table>
+  </div>
+
+  <div class="g-step" id="routine">
+    <h2>📅 रोज़ का प्रोफ़ेशनल तरीका</h2>
+    <ol>
+      <li>दिन में <b>1–2 अध्याय</b> — सुबह, जब आवाज़ ताज़ा हो।</li>
+      <li>हर दिन <b>कमरा, माइक और दूरी एक जैसी</b> — ताकि सब अध्याय एक जैसे सुनाई दें।</li>
+      <li>रिकॉर्ड → गलतियाँ काटें → Measure → Save draft।</li>
+      <li>अगले दिन एक बार सुनें → छोटे सुधार → Make Ready।</li>
+      <li>पूरी किताब होने पर सब अध्याय एक साथ अपलोड करें।</li>
+    </ol>
+  </div>
+
+  <div class="g-step g-faq" id="faq">
+    <h2>❓ सवाल-जवाब</h2>
+    <details><summary>ब्राउज़र बंद हो गया / बिजली चली गई — रिकॉर्डिंग गई?</summary>
+      <p>नहीं। हर सेकंड सेव होता है। उसी ब्राउज़र में स्टूडियो खोलें → “Resume paused draft?” → Resume या “Finish as draft”।</p></details>
+    <details><summary>माइक काम नहीं कर रहा</summary>
+      <p>एड्रेस बार में ताले 🔒 पर क्लिक करें → Microphone → Allow → पेज रीलोड करें। Windows में Settings → Privacy → Microphone भी चालू हो।</p></details>
+    <details><summary>“GitHub: token invalid” दिख रहा है</summary>
+      <p>token की समय-सीमा खत्म हो गई होगी। GitHub में नया token बनाकर स्टूडियो में फिर पेस्ट करें (कदम 1)।</p></details>
+    <details><summary>कितना लंबा अध्याय रिकॉर्ड कर सकते हैं?</summary>
+      <p>आराम से 30–60 मिनट। इससे लंबा हो तो दो अध्यायों में बाँटें — सुनने वालों के लिए भी आसान।</p></details>
+    <details><summary>ACX check FAIL हो रहा है</summary>
+      <p>RMS लाल → “−20 LUFS (ACX safe)” चुनें। Noise floor लाल → Noise reduction चालू करें और कमरा शांत करें। Peak लाल → फिर Measure करें (स्टूडियो अपने-आप ठीक करता है)।</p></details>
+    <details><summary>दूसरे कंप्यूटर / मोबाइल पर काम कर सकते हैं?</summary>
+      <p>हाँ — Save draft के बाद दूसरे कंप्यूटर पर Edit टैब → “Load draft from GitHub”। मोबाइल पर देख सकते हैं, पर रिकॉर्डिंग कंप्यूटर पर बेहतर होती है।</p></details>
+  </div>
+
+  <div class="g-cta" style="margin-bottom:40px">
+    <a class="btn gold" href="studio.html">🎙️ स्टूडियो खोलें</a>
+    <a class="btn" href="#main">↑ ऊपर जाएँ</a>
+  </div>
+
+</div>
+</section>
+
+<script>
+(function () {
+  var KEY = 'zws.guide.prep';
+  var boxes = document.querySelectorAll('#prepList input');
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+  function update() {
+    var done = 0;
+    boxes.forEach(function (b) { if (b.checked) done++; });
+    document.getElementById('prepProgress').textContent = done === boxes.length
+      ? '✅ सब तैयार — अब रिकॉर्ड करें!' : done + ' / ' + boxes.length + ' तैयार';
+  }
+  boxes.forEach(function (b) {
+    b.checked = !!saved[b.dataset.k];
+    b.addEventListener('change', function () {
+      saved[b.dataset.k] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+      update();
+    });
+  });
+  update();
+})();
+</script>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-links">
+    <a href="index.html" data-en="Home" data-hi="होम">Home</a>
+    <a href="life-stories.html" data-en="Life Stories" data-hi="जीवन की कहानियाँ">Life Stories</a>
+    <a href="blog.html" data-en="Blog" data-hi="ब्लॉग">Blog</a>
+    <a href="gallery.html" data-en="Gallery" data-hi="गैलरी">Gallery</a>
+    <a href="about.html" data-en="About Me" data-hi="मेरे बारे में">About Me</a>
+    <a href="contact.html" data-en="Contact" data-hi="संपर्क करें">Contact</a>
+  </div>
+  <h3>Zindagi with Sachin</h3>
+  <p data-en="&copy; 2026 Sachin Kumar Jha. All rights reserved." data-hi="© 2026 सचिन कुमार झा. सर्वाधिकार सुरक्षित.">&copy; 2026 Sachin Kumar Jha. All rights reserved.</p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>
