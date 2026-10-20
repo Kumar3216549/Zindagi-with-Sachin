@@ -46,6 +46,21 @@
 
 <section class="container">
 
+  <div class="about-block contact-card">
+    <img src="assets/img/sachin-desk.webp" alt="Sachin Kumar Jha at his desk" width="900" height="900">
+    <div>
+      <span class="eyebrow" data-en="Contact Details" data-hi="संपर्क विवरण">Contact Details</span>
+      <h2 data-en="Sachin Kumar Jha" data-hi="सचिन कुमार झा">Sachin Kumar Jha</h2>
+      <p data-en="Writer &amp;amp; storyteller · Zindagi with Sachin" data-hi="लेखक और कहानीकार · ज़िंदगी विद सचिन">Writer &amp; storyteller · Zindagi with Sachin</p>
+      <ul class="contact-list">
+        <li><span>🌐</span><a href="https://zindagi-with-sachin.vercel.app">zindagi-with-sachin.vercel.app</a></li>
+        <li><span>▶</span><a href="https://www.youtube.com/@sachinjha8890" target="_blank" rel="noopener" data-en="YouTube — Zindagi with Sachin" data-hi="यूट्यूब — ज़िंदगी विद सचिन">YouTube — Zindagi with Sachin</a></li>
+        <li><span>f</span><a href="https://www.facebook.com/profile.php?id=61595392176657" target="_blank" rel="noopener" data-en="Facebook Page — Zindagi with Sachin" data-hi="फ़ेसबुक पेज — ज़िंदगी विद सचिन">Facebook Page — Zindagi with Sachin</a></li>
+        <li><span>✉</span><a href="#contact-form" data-en="Send a message using the form below" data-hi="नीचे दिए फ़ॉर्म से संदेश भेजें">Send a message using the form below</a></li>
+      </ul>
+    </div>
+  </div>
+
   <!--
     NOTE FOR SACHIN: This is a static site (no server), so this form can't send
     email on its own yet. Two easy ways to make it work:
@@ -55,7 +70,7 @@
          Formspree or EmailJS, and point the <form action="..."> at the URL
          they give you. No code changes needed beyond that one attribute.
   -->
-  <form class="form-card" action="https://formspree.io/f/YOUR-FORM-ID" method="POST">
+  <form class="form-card" id="contact-form" action="https://formspree.io/f/YOUR-FORM-ID" method="POST">
     <div class="form-row">
       <label for="name" data-en="Your Name" data-hi="आपका नाम">Your Name</label>
       <input type="text" id="name" name="name" required>
