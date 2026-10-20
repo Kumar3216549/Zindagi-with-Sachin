@@ -11,6 +11,7 @@ import { Project } from './project.js';
 import { LIBRARY, processVoice, renderMix } from './mixer.js';
 import { encodeMp3, tagMp3, loadCover, download } from './export.js';
 import * as yt from './youtube.js';
+import yamlLite from './yaml-lite.js';
 import {
   SR, decodeToMono, encodeWav, computePeaks, detectSilences, acxCheck, integratedLoudness,
   peakDb, formatTime, parseTime,
@@ -701,6 +702,66 @@ function setProgress(frac, text) {
   if (text) $('#expStep').textContent = text;
 }
 
+
+// ---------------------------------------------------------------- website (Audiobooks page) entry
+// One file per book in content/audiobooks/ — the same file Pages CMS edits.
+// Studio chapters are added/updated in it; anything else in the file is kept.
+function bookSlug(book) {
+  const s = String(book || 'audiobook').toLowerCase().normalize('NFKD').replace(/[^\wऀ-ॿ]+/g, '-').replace(/^-+|-+$/g, '');
+  return s || 'audiobook';
+}
+const yq = (v) => JSON.stringify(v == null ? '' : String(v));
+function toYaml(meta, order) {
+  const keys = [...order.filter((k) => k in meta), ...Object.keys(meta).filter((k) => !order.includes(k))];
+  let out = '';
+  for (const k of keys) {
+    const v = meta[k];
+    if (k === 'chapters') {
+      out += 'chapters:\n';
+      for (const ch of v) {
+        const ck = Object.keys(ch).filter((x) => ch[x] !== '' && ch[x] != null);
+        ck.forEach((x, i) => (out += (i ? '    ' : '  - ') + x + ': ' + yq(ch[x]) + '\n'));
+      }
+    } else if (typeof v === 'boolean') out += `${k}: ${v}\n`;
+    else if (v !== '' && v != null && typeof v !== 'object') out += `${k}: ${yq(v)}\n`;
+  }
+  return out;
+}
+async function websiteEntry(c, mp3Path) {
+  const slug = bookSlug(c.book);
+  const path = `content/audiobooks/${slug}.md`;
+  let meta = {}, body = '';
+  try {
+    const raw = await gh.readText(path);
+    const m = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/.exec(raw);
+    if (m) { meta = yamlLite(m[1]) || {}; body = m[2] || ''; }
+  } catch (e) { if (e.status && e.status !== 404) throw e; }
+  const desc = $('#expDesc').value.trim();
+  meta.title = meta.title || c.book;
+  if (!meta.cover && c.cover) meta.cover = c.cover.replace(/^\/+/, '');
+  meta.author = meta.author || c.author;
+  meta.narrator = meta.narrator || c.narrator;
+  meta.language = meta.language || c.language;
+  meta.category = meta.category || c.category || 'zindagi-ke-sabak';
+  meta.date = meta.date || new Date().toISOString().slice(0, 10);
+  if (!meta.description && desc) meta.description = desc;
+  meta.draft = false;
+  const list = Array.isArray(meta.chapters) ? meta.chapters.filter(Boolean).map((x) => ({ title: x.title || '', title_hi: x.title_hi || '', audio: x.audio || '', audio_url: x.audio_url || '' })) : [];
+  const entry = { title: (c.number != null ? c.number + '. ' : '') + c.title, title_hi: c.titleHi ? (c.number != null ? c.number + '. ' : '') + c.titleHi : '', audio: mp3Path, audio_url: '' };
+  const numOf = (x) => { const m = /audiobook\/final\/.*?(\d+)\.mp3$/.exec(x.audio || ''); return m ? Number(m[1]) : null; };
+  const at = list.findIndex((x) => x.audio === mp3Path);
+  if (at >= 0) list[at] = entry;
+  else {
+    const n = c.number ?? numOf(entry);
+    let pos = list.length;
+    if (n != null) { const j = list.findIndex((x) => { const k = numOf(x); return k != null && k > n; }); if (j >= 0) pos = j; }
+    list.splice(pos, 0, entry);
+  }
+  meta.chapters = list;
+  const order = ['title', 'title_hi', 'cover', 'author', 'narrator', 'language', 'category', 'subcategory', 'subcategory_hi', 'date', 'description', 'description_hi', 'youtube', 'chapters', 'draft'];
+  return { slug, path, text: '---\n' + toYaml(meta, order) + '---\n' + body };
+}
+
 async function makeReady() {
   const c = S.current, d = currentDraft();
   if (!S.project || !S.project.duration) return toast('Record this chapter first.');
@@ -724,7 +785,7 @@ async function makeReady() {
     language: c.language, comment: $('#expDesc').value.trim(), cover,
   });
   const path = `audiobook/final/${c.id}.mp3`;
-  let committed = null;
+  let committed = null, published = null;
   if (gh.isConnected()) {
     setProgress(0.88, 'Saving to GitHub…');
     const meta = {
@@ -734,12 +795,16 @@ async function makeReady() {
       acx: { peak: +acx.peak.toFixed(1), rms: +acx.rms.toFixed(1), noise_floor: +acx.floor.toFixed(1), pass: acx.pass },
       created: new Date().toISOString(),
     };
-    committed = await gh.commitFiles(
-      [{ path, blob: tagged }, { path: `audiobook/final/${c.id}.json`, text: JSON.stringify(meta, null, 2) + '\n' }],
-      `audiobook: final chapter ${chapterLabel(c)} ready`, (t) => setProgress(0.92, t));
+    const files = [{ path, blob: tagged }, { path: `audiobook/final/${c.id}.json`, text: JSON.stringify(meta, null, 2) + '\n' }];
+    if ($('#optPublish').checked) {
+      setProgress(0.9, 'Adding the chapter to the website Audiobooks page…');
+      published = await websiteEntry(c, path);
+      files.push({ path: published.path, text: published.text });
+    }
+    committed = await gh.commitFiles(files, `audiobook: final chapter ${chapterLabel(c)} ready`, (t) => setProgress(0.92, t));
     S.remote[c.id] = { ...(S.remote[c.id] || {}), final: { path } };
   }
-  d.status = 'ready'; d.finalAt = Date.now(); await db.putDraft(d);
+  d.status = committed ? 'ready' : 'edited'; d.finalAt = Date.now(); await db.putDraft(d);
   setStatusChip();
   setProgress(1, 'Done.');
 
@@ -752,7 +817,8 @@ async function makeReady() {
   li(acx.floorOk, 'Noise floor ' + acx.floor.toFixed(1) + ' dB (ACX ≤ −60)' + (acx.floorOk ? '' : ' — try Noise reduction'));
   li(!!cover, 'Cover image embedded');
   if (committed) li(true, `Saved to GitHub: <a href="${gh.fileUrl(path)}" target="_blank" rel="noopener">${path}</a> (on the website in ~1 min: <a href="${gh.siteUrl(path)}" target="_blank" rel="noopener">link</a>)`);
-  else li(false, 'Not saved to GitHub — connect GitHub (top right) and run again');
+  else li(false, '<b>Not saved to GitHub, so it is NOT on the website.</b> Click “GitHub: not connected” (top right), paste your token, then press Make Ready again.');
+  if (published) li(true, `Published on the website: <a href="${gh.siteUrl('audiobook.html')}?b=${encodeURIComponent(published.slug)}" target="_blank" rel="noopener">${esc(c.book)}</a> (Audiobooks page, ~1 min)`);
   $('#checklist').innerHTML = items.join('') +
     `<li style="margin-top:8px"><button class="btn" id="dlFinal">⤓ Download MP3</button> <button class="btn" id="upApi">⇪ Send to my upload API</button></li>`;
   $('#dlFinal').onclick = () => download(tagged, `${c.id}.mp3`);
