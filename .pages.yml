@@ -229,6 +229,32 @@ content:
       - name: description
         label: Short description (used for the final MP3 and listings)
         type: text
+      - name: category
+        label: Category = YouTube playlist / श्रेणी
+        type: select
+        default: zindagi-ke-sabak
+        options:
+          values:
+            - value: science
+              label: "Science / विज्ञान"
+            - value: commerce-finance
+              label: "Commerce & Finance / वाणिज्य और वित्त"
+            - value: humanities
+              label: "Humanities / मानविकी"
+            - value: zindagi-ke-sabak
+              label: "Zindagi ke Sabak / ज़िंदगी के सबक"
+            - value: mera-safar
+              label: "My Journey / मेरा सफ़र"
+            - value: kahani
+              label: "Stories / कहानी"
+            - value: anya-sroton-ke-chuninda-gyan
+              label: "Selected Wisdom from Other Sources / अन्य स्रोतों के चुनिंदा ज्ञान"
+            - value: political-views
+              label: "Political Views / राजनीतिक विचार"
+            - value: kavita
+              label: "Mahan Kavita / महान कविताएँ"
+            - value: sva-rachit
+              label: "My Own Poems / स्व-रचित"
       - name: cover
         label: Cover image (optional, square)
         type: image
