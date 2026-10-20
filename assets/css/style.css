@@ -1021,3 +1021,14 @@ footer.site-footer p{
 /* ---------- home hero: listen line + buttons ---------- */
 .hero-listen{ margin-top: 10px !important; font-style: italic; opacity: .95; }
 .hero-actions{ display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+
+/* ---------- "listen" invitation above the footer ---------- */
+.ab-invite{ padding: 36px 20px; background: linear-gradient(135deg, #1B2C46 0%, #3a2a3f 60%, #5a3a2a 100%); color: #fff; }
+.ab-invite-inner{ max-width: 1000px; margin: 0 auto; display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.ab-invite-icon{ font-size: 46px; line-height: 1; flex: none; }
+.ab-invite-text{ flex: 1 1 320px; }
+.ab-invite-text h3{ color: #fff; margin: 0 0 6px; font-size: 24px; }
+.ab-invite-text p{ margin: 0; opacity: .9; font-size: 17px; line-height: 1.6; }
+.ab-invite-actions{ display: flex; gap: 10px; flex-wrap: wrap; }
+.ab-invite .btn:not(.gold){ background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.5); }
+@media (max-width: 640px){ .ab-invite-inner{ text-align: center; justify-content: center; } .ab-invite-actions{ justify-content: center; width: 100%; } }
