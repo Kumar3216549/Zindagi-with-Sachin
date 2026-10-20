@@ -1017,3 +1017,7 @@ footer.site-footer p{
 .contact-list span{ width: 30px; height: 30px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--color-gold-light); color: var(--color-navy); font-weight: 700; }
 .contact-list a{ color: var(--color-navy); text-decoration: none; font-weight: 600; word-break: break-word; }
 .contact-list a:hover{ text-decoration: underline; }
+
+/* ---------- home hero: listen line + buttons ---------- */
+.hero-listen{ margin-top: 10px !important; font-style: italic; opacity: .95; }
+.hero-actions{ display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
