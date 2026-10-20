@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: data:; connect-src 'self' https: blob: data:; worker-src 'self' blob:">
+<title>Audiobook Studio · Zindagi with Sachin</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/studio/studio.css">
+</head>
+<body>
+
+<header class="topbar">
+  <button class="btn icon only-mobile" id="btnChapters" title="Chapters">☰</button>
+  <div class="brand">🎙 Audiobook Studio<small>Zindagi Writer Desk</small></div>
+  <div class="spacer"></div>
+  <button class="btn" id="btnDashboard" title="All drafts">🗂 Drafts</button>
+  <button class="pill" id="ghPill" title="GitHub connection"><span class="dot" id="ghDot"></span><span id="ghText">GitHub: not connected</span></button>
+  <button class="btn icon" id="btnTheme" title="Dark / light">◐</button>
+  <a class="btn" href="write.html" title="Back to Writer's Desk">← Desk</a>
+</header>
+
+<div class="layout">
+  <!-- LEFT: chapters from GitHub -->
+  <aside class="side left" id="leftPanel">
+    <div class="side-head"><h3>Chapters</h3><button class="btn icon" id="btnReload" title="Reload chapters from GitHub">⟳</button></div>
+    <ul class="chapters" id="chapterList"><li class="muted small" style="padding:8px">Loading chapters…</li></ul>
+  </aside>
+
+  <!-- CENTER: script + timeline -->
+  <main class="center" id="center">
+    <div class="empty" id="emptyState">
+      <h2>Choose a chapter</h2>
+      <p>Your chapters come from the <code>/chapters</code> folder of the website repo. Write them in the Writer's Desk (Pages CMS → “Audiobook chapters”), then pick one on the left to record.</p>
+    </div>
+
+    <div id="workspace" class="hidden" style="display:flex;flex-direction:column;min-height:100%">
+      <div class="chapter-head">
+        <h1 id="chTitle"></h1>
+        <span class="chip" id="chStatus">No draft</span>
+        <span class="muted small" id="chMeta"></span>
+      </div>
+      <div class="tabs" role="tablist">
+        <button class="active" data-tab="record" role="tab">● Record</button>
+        <button data-tab="edit" role="tab">✂ Edit</button>
+      </div>
+
+      <div class="script-tools">
+        <span class="muted small">Script</span>
+        <button class="btn icon" id="fontDown" title="Smaller text">A−</button>
+        <button class="btn icon" id="fontUp" title="Bigger text">A+</button>
+        <label class="small"><input type="checkbox" id="autoScroll"> Teleprompter scroll</label>
+        <input type="range" id="scrollSpeed" min="5" max="80" value="25" title="Scroll speed" style="width:110px">
+      </div>
+      <div class="script" id="script"><div class="text" id="scriptText"></div></div>
+
+      <!-- RECORD -->
+      <section class="deck" id="recordDeck">
+        <canvas class="live-wave" id="liveWave"></canvas>
+        <div class="transport">
+          <span class="timer" id="recTimer">0:00</span>
+          <button class="btn big rec" id="btnRecord">● Record</button>
+          <button class="btn big hidden" id="btnPause">❚❚ Pause</button>
+          <button class="btn big hidden" id="btnStop">■ Stop</button>
+          <button class="btn hidden" id="btnMark" title="Mark a mistake (M)">⚑ Mistake</button>
+          <div class="meter" title="Input level"><i id="meter"></i></div>
+        </div>
+        <div class="hint" id="recHint">
+          <kbd>Space</kbd> pause/resume · <kbd>M</kbd> mark a mistake · <kbd>Ctrl</kbd>+<kbd>S</kbd> save draft · Every second is saved on this computer — you can close the tab while paused and continue later.
+        </div>
+        <div class="hint" id="recInfo"></div>
+      </section>
+
+      <!-- EDIT -->
+      <section class="deck hidden" id="editDeck">
+        <div class="toolbar">
+          <button class="btn" id="edPlay" title="Play / pause (Space)">▶ Play</button>
+          <span class="sep"></span>
+          <button class="btn icon" id="edUndo" title="Undo (Ctrl+Z)">↶</button>
+          <button class="btn icon" id="edRedo" title="Redo (Ctrl+Shift+Z)">↷</button>
+          <span class="sep"></span>
+          <button class="btn danger" id="edDelete" title="Delete selection (Delete)">✂ Delete selection</button>
+          <button class="btn" id="edTrim" title="Keep only the selection">⇤⇥ Trim to selection</button>
+          <button class="btn" id="edInsert" title="Insert an audio file at the cursor">⤓ Insert file</button>
+          <button class="btn" id="edPatch" title="Record a patch at the cursor, or replace the selection">● Record patch</button>
+          <button class="btn" id="edSilence" title="Shorten every pause longer than 1.2 s">⏸ Tighten pauses</button>
+          <span class="sep"></span>
+          <label class="small muted">Zoom <input type="range" id="edZoom" min="0" max="300" value="0" style="width:90px;vertical-align:middle"></label>
+          <span class="muted small" id="edPos">0:00 / 0:00</span>
+        </div>
+        <div id="waveform"></div>
+        <div class="lane-label">Track 2 · Background music &amp; sound effects</div>
+        <canvas class="lane2" id="lane2"></canvas>
+        <div class="markers" id="markerList"></div>
+        <div class="hint">Drag on the waveform to select. <kbd>Delete</kbd> removes it. Red flags are mistakes you marked while recording — click ✕ to cut that phrase. Grey areas are pauses. Recording a patch while something is selected replaces the selection.</div>
+        <input type="file" id="insertFile" accept="audio/*" hidden>
+      </section>
+    </div>
+  </main>
+
+  <!-- RIGHT: processing, background, export -->
+  <aside class="side right" id="rightPanel">
+    <div class="card">
+      <h3>Voice processing</h3>
+      <div class="row"><label><input type="checkbox" id="optNormalize" checked> Normalize loudness</label>
+        <select id="optTarget" title="Target loudness"><option value="-16">−16 LUFS</option><option value="-18">−18 LUFS</option><option value="-20">−20 LUFS (ACX safe)</option></select></div>
+      <div class="row"><label><input type="checkbox" id="optDenoise"> Noise reduction</label></div>
+      <div class="row"><button class="btn" id="btnMeasure">Measure</button><button class="btn" id="btnPreview">▶ Preview mix</button></div>
+      <div class="stat" id="measureOut"></div>
+      <audio id="previewAudio" controls class="hidden" style="width:100%;margin-top:8px"></audio>
+    </div>
+
+    <div class="card">
+      <h3>Add background</h3>
+      <div class="row"><select id="bgmSelect" style="flex:1"><option value="">No background music</option></select></div>
+      <div class="row"><button class="btn" id="bgmUpload">Upload music…</button><span class="muted small" id="bgmName"></span></div>
+      <div class="row"><span class="small">Volume</span><input type="range" id="bgmVol" min="0" max="20" value="8"><b id="bgmVolOut" class="small">8%</b></div>
+      <div class="row"><label class="small"><input type="checkbox" id="bgmDuck" checked> Auto-duck under the voice</label></div>
+      <input type="file" id="bgmFile" accept="audio/*" hidden>
+    </div>
+
+    <div class="card">
+      <h3>Sound effects</h3>
+      <div class="row">
+        <select id="sfxSelect" style="flex:1"></select>
+        <input type="text" id="sfxTime" value="0:00" style="width:64px" title="Time (m:ss)">
+      </div>
+      <div class="row"><button class="btn" id="sfxAdd">+ Add at time</button><button class="btn" id="sfxAddCursor">+ At cursor</button><button class="btn" id="sfxUpload">Upload…</button></div>
+      <ul class="sfx-list" id="sfxList"></ul>
+      <input type="file" id="sfxFile" accept="audio/*" hidden>
+    </div>
+
+    <div class="card">
+      <h3>Draft</h3>
+      <div class="row"><button class="btn" id="btnSave">💾 Save draft <kbd>Ctrl S</kbd></button></div>
+      <div class="row"><label class="small"><input type="checkbox" id="optSync" checked> Also save drafts to GitHub</label></div>
+      <div class="muted small" id="saveInfo"></div>
+    </div>
+
+    <div class="card">
+      <h3>Final export</h3>
+      <div class="row"><input type="text" id="expDesc" placeholder="Short description for the listing" style="flex:1"></div>
+      <div class="row"><button class="btn" id="coverBtn">Cover image…</button><span class="muted small" id="coverName">Site logo</span></div>
+      <input type="file" id="coverFile" accept="image/*" hidden>
+      <div class="row"><button class="btn primary" id="btnFinal" style="flex:1">✔ Make Ready for Upload</button></div>
+      <div class="progress hidden" id="expProgress"><i></i></div>
+      <div class="muted small" id="expStep"></div>
+      <ul class="checklist" id="checklist"></ul>
+    </div>
+  </aside>
+</div>
+
+<!-- GitHub settings -->
+<dialog id="dlgSettings">
+  <div class="dh"><h2>Connect GitHub</h2><button class="btn icon" data-close>✕</button></div>
+  <div class="db">
+    <p>The studio saves drafts and final MP3s straight into <b>Kumar3216549/Zindagi-with-Sachin</b>. It needs a GitHub token once. The token stays only in this browser.</p>
+    <ol class="steps">
+      <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → Fine-grained token</a>.</li>
+      <li>Name: <i>Audiobook Studio</i>. Expiration: up to you (e.g. 1 year).</li>
+      <li>Repository access → <b>Only select repositories</b> → <b>Zindagi-with-Sachin</b>.</li>
+      <li>Permissions → Repository → <b>Contents: Read and write</b>. Nothing else.</li>
+      <li>Generate, copy the token and paste it here.</li>
+    </ol>
+    <div class="row"><input type="password" id="tokenInput" placeholder="github_pat_…" style="flex:1" autocomplete="off"></div>
+    <div class="muted small" id="tokenMsg"></div>
+    <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+    <h3 class="small muted" style="text-transform:uppercase;letter-spacing:.08em">Optional · your upload API</h3>
+    <p class="small muted">If you have a server that accepts the final file, enter its URL. The studio sends a POST with form fields <code>file</code>, <code>title</code>, <code>description</code>, <code>chapter</code>.</p>
+    <div class="row"><input type="url" id="uploadApi" placeholder="https://…" style="flex:1"></div>
+    <p class="muted small" style="margin-top:14px">Built with <a href="https://wavesurfer.xyz" target="_blank" rel="noopener">wavesurfer.js</a> (BSD-3), MP3 encoding by <a href="https://lame.sourceforge.net" target="_blank" rel="noopener">LAME</a> via lamejs (LGPL), ID3 tags by browser-id3-writer (MIT). Licences are in <code>assets/studio/vendor/</code>.</p>
+  </div>
+  <div class="df">
+    <button class="btn danger" id="tokenRemove">Disconnect</button>
+    <button class="btn primary" id="tokenSave">Save &amp; check</button>
+  </div>
+</dialog>
+
+<!-- Draft dashboard -->
+<dialog id="dlgDash">
+  <div class="dh"><h2>Draft dashboard</h2><button class="btn icon" data-close>✕</button></div>
+  <div class="db">
+    <table class="dash"><thead><tr><th>Chapter</th><th>Status</th><th>Duration</th><th>Last edited</th><th></th></tr></thead><tbody id="dashBody"></tbody></table>
+    <p class="muted small" id="dashStorage"></p>
+  </div>
+</dialog>
+
+<!-- Resume paused draft -->
+<dialog id="dlgResume">
+  <div class="dh"><h2>Resume paused draft?</h2></div>
+  <div class="db"><p id="resumeText"></p></div>
+  <div class="df">
+    <button class="btn danger" id="resumeDiscard">Discard recording</button>
+    <button class="btn" id="resumeFinish">Finish as draft</button>
+    <button class="btn primary" id="resumeGo">Resume recording</button>
+  </div>
+</dialog>
+
+<div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+<div class="busy hidden" id="busy"><div><div id="busyText">Working…</div><div class="progress"><i id="busyBar"></i></div></div></div>
+
+<script type="module" src="assets/studio/app.js"></script>
+</body>
+</html>
