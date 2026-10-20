@@ -8,6 +8,8 @@ narrator: Sachin Kumar Jha
 language: hindi
 description: |
   dfd
+category: zindagi-ke-sabak
+cover: assets/img/uploads/WhatsApp Image 2026-10-19 at 16.42.24.jpeg
 ---
 • The Climax: The most dramatic, high-stakes moment or final showdown where the protagonist faces the central conflict head-on.
 • The Falling Action & Resolution: The immediate aftermath of the climax where remaining plot points are tied up and questions are answered.
