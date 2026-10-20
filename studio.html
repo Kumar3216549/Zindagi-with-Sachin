@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: data:; connect-src 'self' https: blob: data:; worker-src 'self' blob:">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com; frame-src https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: data:; connect-src 'self' https: blob: data:; worker-src 'self' blob:">
 <title>Audiobook Studio · Zindagi with Sachin</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -152,6 +152,13 @@
       <div class="muted small" id="expStep"></div>
       <ul class="checklist" id="checklist"></ul>
     </div>
+
+    <div class="card">
+      <h3>YouTube</h3>
+      <p class="muted small" style="margin:0 0 8px">Video with your photo, chapter title and moving sound bars + thumbnail + ready title &amp; description. Optional one-click upload.</p>
+      <div class="row"><button class="btn primary" id="btnYT" style="flex:1">🎬 Prepare for YouTube</button></div>
+      <div class="muted small" id="ytCardInfo"></div>
+    </div>
   </aside>
 </div>
 
@@ -173,7 +180,11 @@
     <h3 class="small muted" style="text-transform:uppercase;letter-spacing:.08em">Optional · your upload API</h3>
     <p class="small muted">If you have a server that accepts the final file, enter its URL. The studio sends a POST with form fields <code>file</code>, <code>title</code>, <code>description</code>, <code>chapter</code>.</p>
     <div class="row"><input type="url" id="uploadApi" placeholder="https://…" style="flex:1"></div>
-    <p class="muted small" style="margin-top:14px">Built with <a href="https://wavesurfer.xyz" target="_blank" rel="noopener">wavesurfer.js</a> (BSD-3), MP3 encoding by <a href="https://lame.sourceforge.net" target="_blank" rel="noopener">LAME</a> via lamejs (LGPL), ID3 tags by browser-id3-writer (MIT). Licences are in <code>assets/studio/vendor/</code>.</p>
+    <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+    <h3 class="small muted" style="text-transform:uppercase;letter-spacing:.08em">Optional · direct YouTube upload</h3>
+    <p class="small muted">Paste your Google OAuth <b>Client ID</b> (one-time setup — steps in the <a href="studio-guide.html#youtube" target="_blank">guide</a>). Without it you can still make the video and thumbnail and upload them yourself.</p>
+    <div class="row"><input type="text" id="googleClientId" placeholder="xxxxxxxx.apps.googleusercontent.com" style="flex:1" autocomplete="off"></div>
+    <p class="muted small" style="margin-top:14px">Built with <a href="https://wavesurfer.xyz" target="_blank" rel="noopener">wavesurfer.js</a> (BSD-3), MP3 encoding by <a href="https://lame.sourceforge.net" target="_blank" rel="noopener">LAME</a> via lamejs (LGPL), ID3 tags by browser-id3-writer (MIT), video files by mp4-muxer / webm-muxer (MIT). Licences are in <code>assets/studio/vendor/</code>.</p>
   </div>
   <div class="df">
     <button class="btn danger" id="tokenRemove">Disconnect</button>
@@ -187,6 +198,41 @@
   <div class="db">
     <table class="dash"><thead><tr><th>Chapter</th><th>Status</th><th>Duration</th><th>Last edited</th><th></th></tr></thead><tbody id="dashBody"></tbody></table>
     <p class="muted small" id="dashStorage"></p>
+  </div>
+</dialog>
+
+<!-- YouTube -->
+<dialog id="dlgYT" style="width:min(920px,calc(100vw - 32px))">
+  <div class="dh"><h2>🎬 Prepare for YouTube</h2><button class="btn icon" data-close>✕</button></div>
+  <div class="db">
+    <div class="yt-grid">
+      <div>
+        <div class="row"><b class="small">Photo</b><button class="btn" id="ytPhotoBtn">Choose photo…</button><span class="muted small" id="ytPhotoName">Default: you with books</span></div>
+        <input type="file" id="ytPhotoFile" accept="image/*" hidden>
+        <div class="row"><b class="small">Playlist</b><select id="ytPlaylist" style="flex:1"><option value="">— no playlist —</option></select></div>
+        <label class="small muted">Title <span id="ytTitleCount"></span></label>
+        <input type="text" id="ytTitle" maxlength="100" style="width:100%">
+        <label class="small muted" style="display:block;margin-top:8px">Description</label>
+        <textarea id="ytDesc" style="min-height:150px"></textarea>
+        <label class="small muted" style="display:block;margin-top:8px">Tags (comma separated)</label>
+        <input type="text" id="ytTags" style="width:100%">
+        <div class="row" style="margin-top:8px"><button class="btn" id="ytCopyTitle">📋 Copy title</button><button class="btn" id="ytCopyDesc">📋 Copy description</button><button class="btn" id="ytCopyTags">📋 Copy tags</button></div>
+      </div>
+      <div>
+        <img id="ytThumbPreview" alt="Thumbnail preview" class="yt-thumb">
+        <div class="row"><button class="btn primary" id="ytMake" style="flex:1">🎬 Make video + thumbnail</button></div>
+        <div class="progress hidden" id="ytProgress"><i></i></div>
+        <div class="muted small" id="ytStep"></div>
+        <div class="row hidden" id="ytFiles"><button class="btn" id="ytDlVideo">⤓ Video</button><button class="btn" id="ytDlThumb">⤓ Thumbnail</button>
+          <a class="btn" id="ytOpenStudio" href="https://studio.youtube.com/channel/UCkXUU2ufb_2EMQ3VynZqv6Q/videos/upload?d=ud" target="_blank" rel="noopener">Open YouTube Studio ↗</a></div>
+        <div class="yt-direct" id="ytDirect">
+          <div class="row"><b class="small">Direct upload</b>
+            <select id="ytPrivacy"><option value="public">Public</option><option value="unlisted">Unlisted</option><option value="private">Private</option></select></div>
+          <div class="row"><button class="btn primary" id="ytUpload" style="flex:1" disabled>⇪ Upload to YouTube</button></div>
+          <div class="muted small" id="ytDirectInfo"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </dialog>
 

@@ -91,13 +91,13 @@
   <nav class="g-toc" aria-label="इस गाइड में">
     <a href="#s1">1. पहली बार</a><a href="#s2">2. अध्याय</a><a href="#s3">3. तैयारी</a><a href="#s4">4. रिकॉर्डिंग</a>
     <a href="#s5">5. एडिटिंग</a><a href="#s6">6. आवाज़</a><a href="#s7">7. म्यूज़िक</a><a href="#s8">8. ड्राफ़्ट</a>
-    <a href="#s9">9. फ़ाइनल</a><a href="#s10">10. अपलोड</a><a href="#keys">शॉर्टकट</a><a href="#faq">सवाल-जवाब</a>
+    <a href="#s9">9. फ़ाइनल</a><a href="#s10">10. अपलोड</a><a href="#youtube">▶ YouTube</a><a href="#keys">शॉर्टकट</a><a href="#faq">सवाल-जवाब</a>
   </nav>
 
   <div class="g-step">
     <h2>⚡ एक नज़र में पूरा काम</h2>
     <div class="g-flow">
-      <span>अध्याय लिखें</span><b>→</b><span>रिकॉर्ड</span><b>→</b><span>गलतियाँ काटें</span><b>→</b><span>Measure ✅</span><b>→</b><span>Save draft</span><b>→</b><span>Make Ready</span><b>→</b><span>अपलोड</span>
+      <span>अध्याय लिखें</span><b>→</b><span>रिकॉर्ड</span><b>→</b><span>गलतियाँ काटें</span><b>→</b><span>Measure ✅</span><b>→</b><span>Save draft</span><b>→</b><span>Make Ready</span><b>→</b><span>🎬 YouTube</span>
     </div>
   </div>
 
@@ -238,6 +238,43 @@
       <tr><td>Spotify</td><td>Spotify for Creators → हर अध्याय एक एपिसोड</td><td>−16 LUFS</td></tr>
       <tr><td>Audible</td><td>ACX से (पहले वहाँ के नियम और देश की पात्रता देख लें)</td><td>−20 LUFS, ACX PASS</td></tr>
     </table>
+  </div>
+
+  <div class="g-step" id="youtube">
+    <h2><span class="g-num">▶</span> YouTube पर डालना — सबसे आसान तरीका</h2>
+    <p>YouTube सिर्फ़ ऑडियो नहीं लेता, उसे वीडियो चाहिए। स्टूडियो यह खुद बना देता है।</p>
+    <ol>
+      <li>अध्याय एडिट करके दाईं ओर नीचे <b>🎬 Prepare for YouTube</b> दबाएँ।</li>
+      <li>फ़ोटो चुनें (न चुनें तो किताबों वाली आपकी फ़ोटो लगेगी) और <b>Playlist</b> देख लें — अध्याय की श्रेणी से अपने-आप चुनी जाती है।</li>
+      <li>शीर्षक, विवरण और टैग पहले से तैयार मिलेंगे — चाहें तो बदलें।</li>
+      <li><b>🎬 Make video + thumbnail</b> दबाएँ। स्टूडियो बनाता है:
+        <ul>
+          <li><b>वीडियो (720p)</b> — आपकी फ़ोटो, अध्याय का नाम, आवाज़ के साथ नाचती सुनहरी लहरें और समय-पट्टी</li>
+          <li><b>थंबनेल (1280×720)</b> — बड़ा शीर्षक, “🎧 ऑडियोबुक · अध्याय”, लहरें और “सुनिए · सीखिए · आगे बढ़िए”</li>
+        </ul>
+        30 मिनट का अध्याय बनने में कुछ मिनट लगते हैं — टैब खुला रखें।</li>
+      <li>फिर दो में से एक:
+        <ul>
+          <li><b>⇪ Upload to YouTube</b> (एक क्लिक — नीचे वाली एक बार की सेटिंग के बाद) — वीडियो, थंबनेल, शीर्षक, विवरण और प्लेलिस्ट सब अपने-आप।</li>
+          <li>या <b>⤓ Video</b> और <b>⤓ Thumbnail</b> डाउनलोड करें → <b>Open YouTube Studio</b> → फ़ाइल डालें → <b>📋 Copy</b> बटन से शीर्षक/विवरण चिपकाएँ → प्लेलिस्ट चुनें → Public।</li>
+        </ul>
+      </li>
+    </ol>
+    <p class="g-tip">💡 Google Chrome या Microsoft Edge इस्तेमाल करें — वीडियो बनाना इन्हीं में चलता है। वीडियो सही प्लेलिस्ट में गया तो वह वेबसाइट के वीडियो पेज पर भी अपने-आप दिखेगा।</p>
+
+    <h3 style="margin-top:20px">एक-क्लिक अपलोड की एक बार की सेटिंग (लगभग 15 मिनट)</h3>
+    <ol>
+      <li><a href="https://console.cloud.google.com/projectcreate" target="_blank" rel="noopener">Google Cloud Console</a> खोलें (उसी Google खाते से जिससे YouTube चैनल है) → नया प्रोजेक्ट: <b>Zindagi Studio</b>।</li>
+      <li><b>APIs &amp; Services → Library</b> → <b>YouTube Data API v3</b> खोजें → <b>Enable</b>।</li>
+      <li><b>Google Auth Platform / OAuth consent screen</b> → <b>External</b> → App name: <i>Zindagi Studio</i>, अपना ईमेल डालें → Save।</li>
+      <li><b>Audience → Test users → Add users</b> → अपना वही Google ईमेल जोड़ें।</li>
+      <li><b>Clients → Create client → Web application</b> → <b>Authorized JavaScript origins</b> में डालें:
+        <code>https://zindagi-with-sachin.vercel.app</code> → Create।</li>
+      <li>जो <b>Client ID</b> मिले (…apps.googleusercontent.com), उसे कॉपी करें।</li>
+      <li>स्टूडियो में ऊपर <b>GitHub</b> बटन → नीचे <b>Optional · direct YouTube upload</b> में पेस्ट करें → <b>Save &amp; check</b>।</li>
+    </ol>
+    <p class="g-warn">⚠️ YouTube का नियम: ऐसे नए टूल से डाला गया वीडियो पहले <b>Private</b> रहता है (जब तक Google टूल की जाँच न कर ले)। अपलोड के बाद स्टूडियो में दिखे लिंक से YouTube Studio खोलें → <b>Visibility → Public</b> — बस एक क्लिक। अपना थंबनेल लगाने के लिए चैनल <a href="https://www.youtube.com/verify" target="_blank" rel="noopener">verify</a> होना चाहिए।</p>
+    <p class="g-tip">💡 Client ID कोई पासवर्ड नहीं है, पर इसे फिर भी किसी को भेजने की ज़रूरत नहीं। Google में लॉगिन हमेशा आप खुद करेंगे।</p>
   </div>
 
   <div class="g-step" id="keys">
