@@ -100,4 +100,6 @@ for (const name of fs.readdirSync(ROOT)) {
   if (SKIP.has(name)) continue;
   fs.cpSync(path.join(ROOT, name), path.join(PUBLIC, name), { recursive: true });
 }
+// audiobook drafts are work in progress: keep them in the repo, not on the website
+fs.rmSync(path.join(PUBLIC, 'audiobook', 'drafts'), { recursive: true, force: true });
 console.log('Copied site to public/');
