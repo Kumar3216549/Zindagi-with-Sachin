@@ -993,3 +993,18 @@ footer.site-footer p{
 @media (max-width: 640px){
   .story-figure{ float: none; width: 100%; max-width: 320px; margin: 8px auto 22px; }
 }
+
+/* ---------- journey in pictures (story1) ---------- */
+.journey-collage{ display: block; width: 100%; height: auto; margin: 8px 0 26px; border-radius: var(--radius); box-shadow: var(--shadow-card); }
+.journey-grid{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; clear: both; margin-bottom: 12px; }
+.journey-card{ margin: 0; background: #fff; padding: 8px 8px 12px; border-radius: 10px; box-shadow: var(--shadow-card); text-align: center; transition: transform .25s ease; }
+.journey-card:nth-child(odd){ transform: rotate(-1.5deg); }
+.journey-card:nth-child(even){ transform: rotate(1.5deg); }
+.journey-card:hover{ transform: rotate(0) scale(1.04); }
+.story-body .journey-card img{ display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; margin: 0; border-radius: 6px; }
+.journey-card figcaption{ display: inline-block; margin-top: 10px; padding: 3px 14px; border-radius: 999px; font-weight: 700; font-size: 14px; color: #fff; }
+.jc-0 figcaption{ background: #F4A300; } .jc-1 figcaption{ background: #00A6C0; }
+.jc-2 figcaption{ background: #6BAA2E; } .jc-3 figcaption{ background: #F05A28; }
+.jc-4 figcaption{ background: #9C27B0; } .jc-5 figcaption{ background: #0288D1; }
+.jc-6 figcaption{ background: #E91E63; } .jc-7 figcaption{ background: var(--color-navy); }
+@media (max-width: 640px){ .journey-grid{ grid-template-columns: repeat(2, 1fr); gap: 14px; } }
