@@ -1057,7 +1057,8 @@ footer.site-footer p{
 }
 .hero.has-slides h1, .hero.has-slides p{ text-shadow: 0 2px 14px rgba(0,0,0,.55); }
 @media (max-width: 760px){
-  .hero-slides span{ background-size: contain, cover !important; background-position: center center, center !important; }
+  .hero-slides span{ background-size: auto 100%, cover !important; background-position: center center, center !important; }
+  .hero-slides::after{ background: linear-gradient(180deg, rgba(14,22,40,.35) 0%, rgba(14,22,40,.55) 55%, rgba(14,22,40,.7) 100%); }
 }
 @media (prefers-reduced-motion: reduce){
   .hero-slides span{ animation: none; }
