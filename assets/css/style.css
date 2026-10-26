@@ -1131,3 +1131,13 @@ footer.site-footer::before{
 footer.site-footer > *{ position: relative; }
 
 @media (prefers-reduced-motion: reduce){ .hero::before{ animation: none; } }
+
+/* ---------- Audiobooks page: journey photo as a soft shadowed background ---------- */
+.hero.ab-list-hero{
+  padding-top: 70px; padding-bottom: 70px;
+  background:
+    linear-gradient(180deg, rgba(16,25,43,.78) 0%, rgba(16,25,43,.62) 45%, rgba(40,22,18,.82) 100%),
+    url(../img/ai/journey-growth.webp) center 35% / cover no-repeat;
+}
+.hero.ab-list-hero h1, .hero.ab-list-hero p{ text-shadow: 0 2px 14px rgba(0,0,0,.6); }
+@media (max-width: 640px){ .hero.ab-list-hero{ padding-top: 54px; padding-bottom: 54px; background-position: center, 40% 30%; } }
