@@ -1004,6 +1004,12 @@ footer.site-footer p{
 @keyframes fsWave{ 50%{ height: 100%; } }
 .fs-actions{ display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
 .fs-actions .btn{ margin: 0; }
+.fs-title{ line-height: 1.35; }
+.fs-title > span:not(.fs-sep){ display: inline-block; }
+@media (max-width: 640px){ .feature-card .card-content h2.fs-title{ font-size: 21px; } }
+.fs-title .fs-sep{ color: var(--color-saffron, #E7B95C); margin: 0 .35em; font-weight: 400; }
+.fs-title .fs-ab{ color: var(--color-terracotta); }
+.fs-title .fs-more{ color: var(--color-text-muted); font-style: italic; }
 @media (prefers-reduced-motion: reduce){ .fs-play, .fs-wave i{ animation: none; } .fs-wave i{ height: 60%; } }
 @media (max-width: 640px){
   .fs-badge{ top: 10px; font-size: 12px; padding: 5px 10px; }
