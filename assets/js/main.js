@@ -288,3 +288,16 @@ document.addEventListener('DOMContentLoaded', function () {
     '</div></div>';
   footer.parentNode.insertBefore(box, footer);
 });
+
+// ---- Shloka in the footer (spiritual touch) ----
+document.addEventListener('DOMContentLoaded', function () {
+  var footer = document.querySelector('.site-footer');
+  if (!footer || footer.querySelector('.footer-shloka')) return;
+  var hi = document.documentElement.getAttribute('lang') === 'hi';
+  var box = document.createElement('div');
+  box.className = 'footer-shloka';
+  box.innerHTML = '<div class="s">ॐ असतो मा सद्गमय । तमसो मा ज्योतिर्गमय । मृत्योर्मा अमृतं गमय ॥</div>' +
+    '<div class="m" data-en="Lead me from untruth to truth, from darkness to light, from death to immortality. — Brihadaranyaka Upanishad" data-hi="मुझे असत्य से सत्य की ओर, अंधकार से प्रकाश की ओर, मृत्यु से अमरता की ओर ले चलो। — बृहदारण्यक उपनिषद">' +
+    (hi ? 'मुझे असत्य से सत्य की ओर, अंधकार से प्रकाश की ओर, मृत्यु से अमरता की ओर ले चलो। — बृहदारण्यक उपनिषद' : 'Lead me from untruth to truth, from darkness to light, from death to immortality. — Brihadaranyaka Upanishad') + '</div>';
+  footer.insertBefore(box, footer.firstChild);
+});
