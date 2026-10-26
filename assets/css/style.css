@@ -811,7 +811,8 @@ footer.site-footer p{
 @keyframes abPulse{ 50%{ box-shadow: 0 16px 44px rgba(181,84,46,.38); } }
 
 .ab-player{
-  background: linear-gradient(160deg, var(--color-navy), var(--color-navy-dark));
+  background: linear-gradient(160deg, rgba(27,44,70,.84), rgba(16,25,43,.90)),
+    url(../img/ai/journey-growth.webp) center 35% / cover no-repeat;
   color: #fff; border-radius: 20px; padding: 22px 22px 18px; margin-bottom: 28px;
   box-shadow: var(--shadow-soft);
 }
