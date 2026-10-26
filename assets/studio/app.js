@@ -842,7 +842,7 @@ async function sendToApi(blob, c) {
 
 // ---------------------------------------------------------------- YouTube
 const YT = { photo: null, photoName: '', playlists: [], video: null, thumb: null, ext: 'mp4' };
-const DEFAULT_YT_PHOTO = 'assets/img/hero/sachin-books-v4.webp';
+const DEFAULT_YT_PHOTO = 'assets/img/ai/sachin-books-ai.webp';
 function googleClientId() { try { return localStorage.getItem('zws.studio.googleClientId') || ''; } catch (_) { return ''; } }
 
 async function loadPlaylists() {
