@@ -1064,3 +1064,70 @@ footer.site-footer p{
   .hero-slides span{ animation: none; }
   .hero-slides span:first-child{ opacity: 1; }
 }
+
+/* =========================================================
+   Spiritual touch: marigold toran, Om, mandala, lotus, diya
+   ========================================================= */
+:root{ --color-saffron: #E8871E; --color-kumkum: #B3261E; }
+
+/* marigold garland under the masthead */
+.masthead{ padding-bottom: 22px; }
+.masthead::after{
+  content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 22px;
+  background: url(../img/toran.svg) repeat-x center top / 90px 26px;
+  pointer-events: none; z-index: 2;
+}
+@media (max-width: 560px){ .masthead{ padding-bottom: 20px; } .masthead::after{ background-size: 70px 20px; height: 18px; } }
+
+/* Om before the site name */
+.site-name::before{
+  content: "ॐ"; color: var(--color-saffron); font-weight: 700;
+  margin-right: 6px; font-size: 1.05em;
+  text-shadow: 0 0 10px rgba(232,135,30,.35);
+}
+
+/* slowly turning mandala behind hero banners */
+.hero::before{
+  content: ""; position: absolute; z-index: 0; pointer-events: none;
+  width: 560px; height: 560px; left: 50%; top: 50%;
+  margin: -280px 0 0 -280px;
+  background: url(../img/mandala.svg) center / contain no-repeat;
+  opacity: .16;
+  animation: mandalaSpin 120s linear infinite;
+}
+.hero.has-slides::before{ z-index: 1; opacity: .13; }
+.hero.has-slides .hero-inner{ z-index: 2; }
+@keyframes mandalaSpin{ to{ transform: rotate(360deg); } }
+
+/* section labels get a small diya-flame mark */
+.eyebrow::before{ content: "🪔 "; font-size: 1.05em; letter-spacing: 0; }
+.eyebrow{ color: var(--color-kumkum); }
+
+/* lotus divider under section headings */
+.section-head h2::after{
+  content: ""; display: block; width: 64px; height: 26px; margin: 10px auto 0;
+  background: url(../img/lotus.svg) center / contain no-repeat;
+}
+
+/* faint mandala corner on cards */
+.card{ position: relative; }
+.card::after{
+  content: ""; position: absolute; right: -40px; bottom: -40px; width: 140px; height: 140px;
+  background: url(../img/mandala.svg) center / contain no-repeat; opacity: .07; pointer-events: none;
+}
+
+/* saffron border glow on buttons on hover */
+.btn.gold{ background: linear-gradient(135deg, #E8A23A, var(--color-gold)); }
+
+/* footer shloka */
+.footer-shloka{ margin: 0 auto 18px; max-width: 640px; }
+.footer-shloka .s{ font-size: 18px; color: #F2C46D; letter-spacing: .02em; }
+.footer-shloka .m{ font-size: 13px; color: #b8ab92; margin-top: 4px; font-style: italic; }
+footer.site-footer{ position: relative; overflow: hidden; }
+footer.site-footer::before{
+  content: ""; position: absolute; width: 420px; height: 420px; left: 50%; top: -210px; margin-left: -210px;
+  background: url(../img/mandala.svg) center / contain no-repeat; opacity: .08; pointer-events: none;
+}
+footer.site-footer > *{ position: relative; }
+
+@media (prefers-reduced-motion: reduce){ .hero::before{ animation: none; } }
