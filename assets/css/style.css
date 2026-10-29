@@ -1568,3 +1568,16 @@ footer.site-footer::before{ opacity: .06; filter: sepia(1) saturate(3); }
   .me-timeline li::before{ left: -26px; }
   .me-timeline::before{ left: 7px; }
 }
+
+/* ---------- brand logo (Z monogram) ---------- */
+.site-name::before{
+  content: ""; display: inline-block; width: 1.55em; height: 1.55em; margin-right: 10px; vertical-align: -0.42em;
+  background: url(../img/logo.svg) center / contain no-repeat; text-shadow: none;
+  filter: drop-shadow(0 0 8px rgba(231,185,92,.35));
+}
+.cine-logo{ width: 30px; height: 30px; border-radius: 50%; color: transparent; font-size: 0;
+  background: url(../img/logo.svg) center / contain no-repeat; box-shadow: 0 0 18px rgba(231,185,92,.45); }
+footer.site-footer h3::before{
+  content: ""; display: block; width: 64px; height: 64px; margin: 0 auto 10px;
+  background: url(../img/logo.svg) center / contain no-repeat; filter: drop-shadow(0 0 14px rgba(231,185,92,.35));
+}
