@@ -1581,3 +1581,38 @@ footer.site-footer h3::before{
   content: ""; display: block; width: 64px; height: 64px; margin: 0 auto 10px;
   background: url(../img/logo.svg) center / contain no-repeat; filter: drop-shadow(0 0 14px rgba(231,185,92,.35));
 }
+
+/* ---------- Motto: three dimensions of time ---------- */
+.motto{
+  position: relative; max-width: 860px; margin: 0 auto; text-align: center; overflow: hidden;
+  padding: 44px 40px 38px; border-radius: 22px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(231,185,92,.14), transparent 60%), linear-gradient(160deg, rgba(23,34,58,.92), rgba(8,13,26,.96));
+  border: 1px solid rgba(231,185,92,.35); box-shadow: 0 30px 70px rgba(0,0,0,.5), 0 0 50px rgba(231,185,92,.08);
+}
+.motto::before, .motto::after{ content: "“"; position: absolute; font: 700 180px/1 var(--font-heading); color: rgba(231,185,92,.10); }
+.motto::before{ left: 18px; top: -10px; }
+.motto::after{ content: "”"; right: 18px; bottom: -90px; }
+.motto-time{ display: flex; align-items: center; justify-content: center; gap: 12px; margin: 6px 0 18px;
+  font: 700 13px/1 var(--font-body); letter-spacing: .22em; text-transform: uppercase; color: #A99E88; }
+.motto-time i{ width: 46px; height: 1px; background: linear-gradient(90deg, rgba(231,185,92,.2), #E7B95C, rgba(231,185,92,.2)); position: relative; }
+.motto-time i::after{ content: ""; position: absolute; right: -2px; top: -3px; border: 3.5px solid transparent; border-left: 6px solid #E7B95C; }
+.motto-time b{ color: #1A1206; background: var(--gold-foil); padding: 7px 14px; border-radius: 999px; letter-spacing: .18em; box-shadow: 0 0 22px rgba(231,185,92,.4); }
+.motto-title{ font-size: clamp(24px, 3.2vw, 34px); line-height: 1.35; margin: 0 0 6px;
+  background: var(--gold-foil); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: foilShine 8s linear infinite; }
+.motto-en-title{ font-family: "Cormorant Garamond", var(--font-body); font-style: italic; font-size: 19px; color: #CBBFA6; margin: 0 0 18px; }
+.motto-en-title:empty{ display: none; }
+.motto-body{ font-size: 18.5px; line-height: 1.9; color: #EDE4D0; max-width: 700px; margin: 0 auto 12px; }
+.motto-body strong{ color: #F7DC8F; }
+.motto-en{ font-size: 15.5px; line-height: 1.75; color: #A99E88; font-style: italic; max-width: 680px; margin: 14px auto 0; padding-top: 14px; border-top: 1px dashed rgba(231,185,92,.2); }
+.motto-en:empty{ display: none; }
+.motto-en strong{ color: #E7C98A; }
+.motto-sign{ margin: 20px auto 0; font-size: 16px; color: #F3D99A; }
+.motto-sign span{ display: inline-block; margin-top: 4px; font-size: 13.5px; color: #A99E88; font-style: italic; }
+@media (max-width: 640px){
+  .motto{ padding: 34px 20px 30px; }
+  .motto-time{ gap: 8px; font-size: 11px; letter-spacing: .14em; }
+  .motto-time i{ width: 24px; }
+  .motto-body{ font-size: 17px; }
+}
+/* Devanagari breaks apart with wide letter-spacing */
+html[lang="hi"] .eyebrow, html[lang="hi"] .motto-time, html[lang="hi"] .cine-kicker{ letter-spacing: .04em; }
