@@ -69,7 +69,8 @@ function parseBook(file) {
   const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   const meta = m ? yamlLite(m[1]) : {};
   const chapters = (Array.isArray(meta.chapters) ? meta.chapters : [])
-    .map((c) => ({ title: (c && c.title) || '', title_hi: (c && c.title_hi) || '', src: clean((c && (c.audio_url || c.audio)) || '') }))
+    .map((c) => ({ title: (c && c.title) || '', title_hi: (c && c.title_hi) || '', src: clean((c && (c.audio_url || c.audio)) || ''),
+      script: clean(c && c.script), duration: Number(c && c.duration) || 0, intro: Number(c && c.intro) || 0, date: c && c.date ? String(c.date) : '' }))
     .filter((c) => c.src);
   return {
     slug: file.replace(/\.md$/, ''),
@@ -89,6 +90,9 @@ const books = abFiles.map(parseBook).filter((b) => !b.draft && b.chapters.length
 fs.mkdirSync(path.dirname(AB_OUT), { recursive: true });
 fs.writeFileSync(AB_OUT, JSON.stringify(books, null, 2));
 console.log('audiobooks/index.json: ' + books.length + ' audiobook(s)');
+
+// Podcast feed (Spotify, Apple, YouTube Music…), sitemap.xml and robots.txt
+require('./build-feed.js')({ books, posts, root: path.join(__dirname, '..') });
 
 // Vercel serves the "public" folder after a build, so copy the site there.
 const ROOT = path.join(__dirname, '..');
