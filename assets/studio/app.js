@@ -618,7 +618,7 @@ async function buildMix(withProgress = true) {
   await nextFrame();
   const pv = processVoice(voice, m);
   if (withProgress) busy('Mixing background…', 0.5);
-  const bgm = m.bgm ? { samples: await audioFor(m.bgm.ref), volume: m.bgm.volume / 100, duck: m.bgm.duck !== false } : null;
+  const bgm = m.bgm ? { samples: await audioFor(m.bgm.ref), volume: m.bgm.volume, duck: m.bgm.duck !== false } : null;
   const sfx = [];
   for (const s of m.sfx) sfx.push({ samples: await audioFor(s.ref), time: s.time, volume: s.volume });
   const mixed = await renderMix(pv.samples, bgm, sfx);
@@ -645,7 +645,9 @@ $('#btnPreview').onclick = () => guard(async () => {
   const el = $('#previewAudio');
   if (el.src) URL.revokeObjectURL(el.src);
   el.src = URL.createObjectURL(encodeWav(mixed));
-  el.currentTime = S.ws ? S.ws.getCurrentTime() : 0;
+  // start at the cursor; with music there is an intro before the narration, so play it from the top
+  const cur = S.ws ? S.ws.getCurrentTime() : 0;
+  el.currentTime = cur > 0.05 ? cur + (mixed.voiceOffset || 0) : 0;
   el.classList.remove('hidden'); el.play();
 }, 'Preview');
 
