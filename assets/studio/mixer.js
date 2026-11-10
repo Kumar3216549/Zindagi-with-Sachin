@@ -2,7 +2,7 @@
 // The music is loudness-matched to the voice, looped seamlessly, gets a short
 // intro/outro, and dips automatically (with look-ahead) while the voice speaks.
 
-import { SR, samplesToAudioBuffer, denoise, normalizeLoudness, limit, integratedLoudness } from './audio-utils.js';
+import { SR, samplesToAudioBuffer, denoise, normalizeLoudness, limit, limitStereo, integratedLoudness, applyVoicePreset, softenBreaths } from './audio-utils.js';
 
 // Voice activity in 50 ms frames (true = speaking). The threshold follows the
 // voice's own loudness, so ducking works even on quiet, un-normalised takes.
@@ -28,10 +28,13 @@ function voiceActivity(voice) {
   return { frames: out, win };
 }
 
-// Processing chain for the voice before mixing.
+// Processing chain for the voice before mixing:
+// clean-up → voice preset (EQ, de-esser, compressor) → breath softener → loudness.
 export function processVoice(voice, settings) {
   let v = voice;
   if (settings.denoise) v = denoise(v);
+  if (settings.preset && settings.preset !== 'none') v = applyVoicePreset(v, settings.preset);
+  if (settings.breath) v = softenBreaths(v);
   let loud = null;
   if (settings.normalize) {
     loud = normalizeLoudness(v, settings.target ?? -16, -3.2);
@@ -52,8 +55,8 @@ export function bgmRelDb(vol) { return -24 + ((Math.min(20, Math.max(1, vol)) - 
 
 // Build a seamless bed of `length` samples: loudness-matched to the voice,
 // looped with equal-power cross-fades instead of hard jumps.
-function buildBed(src, length, loop, refLufs, relDb) {
-  const srcL = integratedLoudness(src);
+function buildBed(src, length, loop, refLufs, relDb, measureFrom = src) {
+  const srcL = integratedLoudness(measureFrom);
   const gain = isFinite(srcL) ? Math.pow(10, (refLufs + relDb - srcL) / 20) : 0;
   const bed = new Float32Array(length);
   const xf = Math.min(Math.round(LOOP_XFADE * SR), Math.floor(src.length / 3));
@@ -84,7 +87,9 @@ export async function renderMix(voice, bgm, sfx = []) {
   const post = useBgm ? Math.round(BGM_OUTRO * SR) : 0;
   const sfxEnd = sfx.reduce((m, s) => Math.max(m, pre + s.time * SR + s.samples.length), 0);
   const length = Math.max(pre + voice.length + post, Math.ceil(sfxEnd), 1);
-  const off = new OfflineAudioContext(1, length, SR);
+  // stereo when the music bed has two channels (bgm.stereo = [L, R])
+  const stereo = useBgm && Array.isArray(bgm.stereo);
+  const off = new OfflineAudioContext(stereo ? 2 : 1, length, SR);
 
   const v = off.createBufferSource();
   v.buffer = samplesToAudioBuffer(voice);
@@ -96,7 +101,14 @@ export async function renderMix(voice, bgm, sfx = []) {
     const vL = integratedLoudness(voice);
     const ref = isFinite(vL) ? vL : -16;
     const b = off.createBufferSource();
-    b.buffer = samplesToAudioBuffer(buildBed(bgm.samples, length, bgm.loop !== false, ref, bgmRelDb(vol)));
+    if (stereo) {
+      // loudness-match on the mono sum, then apply the same gain to both channels
+      const relDb = bgmRelDb(vol), loop = bgm.loop !== false;
+      const bl = buildBed(bgm.stereo[0], length, loop, ref, relDb, bgm.samples);
+      const br = buildBed(bgm.stereo[1], length, loop, ref, relDb, bgm.samples);
+      const buf = off.createBuffer(2, length, SR); buf.copyToChannel(bl, 0); buf.copyToChannel(br, 1);
+      b.buffer = buf;
+    } else b.buffer = samplesToAudioBuffer(buildBed(bgm.samples, length, bgm.loop !== false, ref, bgmRelDb(vol)));
     const g = off.createGain();
     const ducked = Math.pow(10, DUCK_DB / 20);
     g.gain.setValueAtTime(1, 0);
@@ -135,7 +147,13 @@ export async function renderMix(voice, bgm, sfx = []) {
   }
 
   const out = await off.startRendering();
-  const res = limit(out.getChannelData(0).slice(), -3.2);
+  let res;
+  if (stereo) {
+    const [L, R] = limitStereo(out.getChannelData(0), out.getChannelData(1), -3.2);
+    res = new Float32Array(L.length);
+    for (let i = 0; i < L.length; i++) res[i] = (L[i] + R[i]) * 0.5;
+    res.stereo = [L, R];
+  } else res = limit(out.getChannelData(0).slice(), -3.2);
   res.voiceOffset = pre / SR;
   return res;
 }

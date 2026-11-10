@@ -135,8 +135,8 @@ export async function makeThumbnail(img, info) {
 
 export function videoSupport() { return typeof VideoEncoder !== 'undefined' && typeof AudioEncoder !== 'undefined'; }
 
-async function pickFormat() {
-  const vAvc = { codec: 'avc1.640028', width: VW, height: VH, bitrate: 600_000, framerate: FPS, avc: { format: 'avc' } };
+async function pickFormat(W = VW, H = VH, fps = FPS, vbr = 600_000) {
+  const vAvc = { codec: 'avc1.640028', width: W, height: H, bitrate: vbr, framerate: fps, avc: { format: 'avc' } };
   const aAac = { codec: 'mp4a.40.2', sampleRate: SR, numberOfChannels: 1, bitrate: 160_000 };
   try {
     if ((await VideoEncoder.isConfigSupported(vAvc)).supported && (await AudioEncoder.isConfigSupported(aAac)).supported) {
@@ -144,7 +144,7 @@ async function pickFormat() {
     }
   } catch (_) {}
   for (const codec of ['vp09.00.10.08', 'vp8']) {
-    const v = { codec, width: VW, height: VH, bitrate: 600_000, framerate: FPS };
+    const v = { codec, width: W, height: H, bitrate: vbr, framerate: fps };
     const a = { codec: 'opus', sampleRate: 48000, numberOfChannels: 1, bitrate: 128_000 };
     try {
       if ((await VideoEncoder.isConfigSupported(v)).supported && (await AudioEncoder.isConfigSupported(a)).supported) {
@@ -370,4 +370,124 @@ export async function uploadToYouTube({ token, video, thumbnail, text, playlistI
   }
   onProgress(1, 'Done.');
   return { id: item.id, url: 'https://youtu.be/' + item.id, privacy: item.status && item.status.privacyStatus, notes };
+}
+
+
+// ---------------------------------------------------------------- Shorts / Reels (vertical)
+// 1080×1920, 24 fps: blurred photo, logo, chapter title, big word-by-word
+// captions, sound bars, progress bar and a "full chapter" call to action.
+// samples: mono Float32Array (44.1 kHz). captions: [{ text, start, end }] in seconds.
+const SW = 1080, SH = 1920, SFPS = 24;
+export function splitCaptions(text, duration, lead = 0.2) {
+  const words = String(text || '').replace(/[#*_>\[\]]/g, ' ').split(/\s+/).filter(Boolean);
+  if (!words.length) return [];
+  const chunks = []; let cur = [];
+  for (const w of words) {
+    cur.push(w);
+    const len = cur.join(' ').length;
+    if (len > 26 || /[।.!?,;:—]$/.test(w) && len > 10) { chunks.push(cur.join(' ')); cur = []; }
+  }
+  if (cur.length) chunks.push(cur.join(' '));
+  const total = chunks.reduce((a, c) => a + c.length + 4, 0), span = Math.max(0.5, duration - lead - 0.3);
+  let t = lead;
+  return chunks.map((c) => { const d = span * (c.length + 4) / total; const r = { text: c, start: t, end: t + d }; t += d; return r; });
+}
+
+export async function makeShort(samples, img, logo, info, captions, onProgress = () => {}) {
+  await fontsReady();
+  const format = await pickFormat(SW, SH, SFPS, 4_000_000);
+  const duration = samples.length / SR, frames = Math.max(1, Math.ceil(duration * SFPS));
+  // static background
+  const base = document.createElement('canvas'); base.width = SW; base.height = SH;
+  const b = base.getContext('2d');
+  b.filter = 'blur(28px) brightness(.55) saturate(1.2)'; cover(b, img, -80, -80, SW + 160, SH + 160); b.filter = 'none';
+  const vg = b.createLinearGradient(0, 0, 0, SH);
+  vg.addColorStop(0, 'rgba(5,8,15,.55)'); vg.addColorStop(.45, 'rgba(5,8,15,.15)'); vg.addColorStop(1, 'rgba(5,8,15,.85)');
+  b.fillStyle = vg; b.fillRect(0, 0, SW, SH);
+  // sharp photo card
+  b.save(); roundRect(b, 140, 330, 800, 800, 48); b.clip(); cover(b, img, 140, 330, 800, 800, 0.08); b.restore();
+  b.strokeStyle = 'rgba(231,185,92,.85)'; b.lineWidth = 6; roundRect(b, 140, 330, 800, 800, 48); b.stroke();
+  // header: logo + name
+  if (logo) b.drawImage(logo, 90, 110, 130, 130);
+  b.fillStyle = '#F6E7C1'; b.font = `800 58px ${FONT}`; b.fillText('Zindagi with Sachin', 245, 175);
+  b.fillStyle = '#E7B95C'; b.font = `600 34px ${FONT}`; b.fillText('🎧 ' + (info.language === 'english' ? 'Audiobook' : 'ऑडियोबुक'), 248, 225);
+  // chapter title under the photo
+  b.fillStyle = '#ffffff'; b.font = `800 54px ${FONT}`; b.textAlign = 'center';
+  const tl = wrap(b, info.displayTitle || '', 900, 2);
+  tl.forEach((ln, i) => b.fillText(ln, SW / 2, 1210 + i * 64));
+  b.textAlign = 'left';
+  // footer call to action
+  b.fillStyle = 'rgba(231,185,92,.95)'; roundRect(b, 140, SH - 230, 800, 110, 55); b.fill();
+  b.fillStyle = '#1A1206'; b.font = `800 40px ${FONT}`; b.textAlign = 'center';
+  b.fillText(info.language === 'english' ? '▶ Full chapter — link in bio' : '▶ पूरा अध्याय — लिंक बायो में', SW / 2, SH - 162);
+  b.textAlign = 'left';
+
+  // per-frame loudness for the bars
+  const hop = SR / SFPS, env = new Float32Array(frames);
+  for (let f = 0; f < frames; f++) {
+    let s = 0; const a = Math.floor(f * hop), e = Math.min(samples.length, Math.floor((f + 1) * hop));
+    for (let i = a; i < e; i++) s += samples[i] * samples[i];
+    env[f] = Math.min(1, Math.sqrt(s / Math.max(1, e - a)) * 5.5);
+  }
+  const c = document.createElement('canvas'); c.width = SW; c.height = SH; const g = c.getContext('2d');
+  const target = format.kind === 'mp4' ? new Mp4Target() : new WebmTarget();
+  const muxer = format.kind === 'mp4'
+    ? new Mp4Muxer({ target, video: { codec: 'avc', width: SW, height: SH, frameRate: SFPS }, audio: { codec: 'aac', sampleRate: SR, numberOfChannels: 1 }, fastStart: 'in-memory' })
+    : new WebmMuxer({ target, video: { codec: format.video.codec.startsWith('vp09') ? 'V_VP9' : 'V_VP8', width: SW, height: SH, frameRate: SFPS }, audio: { codec: 'A_OPUS', sampleRate: 48000, numberOfChannels: 1 } });
+  let failed = null;
+  const venc = new VideoEncoder({ output: (ch, m) => muxer.addVideoChunk(ch, m), error: (e) => { failed = e; } });
+  venc.configure(format.video);
+  const aenc = new AudioEncoder({ output: (ch, m) => muxer.addAudioChunk(ch, m), error: (e) => { failed = e; } });
+  aenc.configure(format.audio);
+  const aRate = format.audio.sampleRate, aud = await resample(samples, aRate);
+  let aPos = 0;
+  const feedAudio = (until) => {
+    while (aPos < aud.length && aPos / aRate <= until) {
+      const part = aud.slice(aPos, Math.min(aud.length, aPos + aRate));
+      const ad = new AudioData({ format: 'f32-planar', sampleRate: aRate, numberOfFrames: part.length, numberOfChannels: 1, timestamp: Math.round(aPos / aRate * 1e6), data: part });
+      aenc.encode(ad); ad.close(); aPos += aRate;
+    }
+  };
+  const NB = 28; let smooth = 0;
+  for (let f = 0; f < frames; f++) {
+    if (failed) throw failed;
+    const t = f / SFPS;
+    smooth += (env[f] - smooth) * 0.45;
+    g.drawImage(base, 0, 0);
+    // caption
+    const cap = captions.find((x) => t >= x.start && t < x.end);
+    if (cap) {
+      const k = Math.min(1, (t - cap.start) / 0.18);
+      g.save(); g.globalAlpha = k; g.textAlign = 'center';
+      g.font = `800 78px ${FONT}`;
+      const lines = wrap(g, cap.text, 920, 3);
+      const y0 = 1420 - (lines.length - 1) * 46;
+      lines.forEach((ln, i) => {
+        const w = g.measureText(ln).width;
+        g.fillStyle = 'rgba(5,8,15,.72)'; roundRect(g, SW / 2 - w / 2 - 26, y0 + i * 92 - 70, w + 52, 92, 20); g.fill();
+        g.fillStyle = i === 0 ? '#FFE9A8' : '#ffffff'; g.fillText(ln, SW / 2, y0 + i * 92);
+      });
+      g.restore();
+    }
+    // bars
+    const bx = 160, bw = (SW - 320) / NB, by = 1555;
+    for (let i = 0; i < NB; i++) {
+      const wob = 0.55 + 0.45 * Math.sin(t * (3 + (i % 5)) + i * 2.399);
+      const h = 10 + smooth * 120 * wob * (0.6 + 0.4 * Math.sin((i / NB) * Math.PI));
+      g.fillStyle = '#E7B95C'; roundRect(g, bx + i * bw + bw * 0.2, by - h / 2, bw * 0.6, h, Math.min(bw * 0.3, h / 2)); g.fill();
+    }
+    // progress
+    g.fillStyle = 'rgba(255,255,255,.2)'; roundRect(g, 140, 1640, 800, 10, 5); g.fill();
+    g.fillStyle = '#F7DC8F'; roundRect(g, 140, 1640, Math.max(10, 800 * t / duration), 10, 5); g.fill();
+    feedAudio(t + 1);
+    const vf = new VideoFrame(c, { timestamp: Math.round(t * 1e6), duration: Math.round(1e6 / SFPS) });
+    venc.encode(vf, { keyFrame: f % (SFPS * 2) === 0 }); vf.close();
+    while (venc.encodeQueueSize > 6) await new Promise((r) => setTimeout(r, 2));
+    if (f % 12 === 0) { onProgress(f / frames); await new Promise((r) => setTimeout(r, 0)); }
+  }
+  feedAudio(Infinity);
+  await venc.flush(); await aenc.flush();
+  if (failed) throw failed;
+  muxer.finalize(); onProgress(1);
+  return { blob: new Blob([target.buffer], { type: format.mime }), ext: format.ext };
 }

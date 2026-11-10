@@ -1,6 +1,6 @@
 // MP3 export (LAME, in the browser) + ID3 tags.
-// Final files: 192 kbps CBR, 44.1 kHz, mono — the format Audible/ACX and
-// Spotify accept for spoken word.
+// Final files: 192 kbps CBR, 44.1 kHz — mono voice, or joint stereo when the
+// music bed is stereo. Both are accepted by ACX, Spotify and Apple.
 
 import { ID3Writer } from './vendor/browser-id3-writer.mjs';
 import { SR, floatToInt16 } from './audio-utils.js';
@@ -20,16 +20,20 @@ function loadLame() {
 }
 
 // Encodes in slices and yields to the browser so the page stays responsive.
+// A mix that carries .stereo = [L, R] is written as a joint-stereo MP3.
 export async function encodeMp3(samples, kbps = 192, onProgress = () => {}) {
   const lamejs = await loadLame();
-  const enc = new lamejs.Mp3Encoder(1, SR, kbps);
-  const pcm = floatToInt16(samples);
+  const st = samples.stereo;
+  const enc = new lamejs.Mp3Encoder(st ? 2 : 1, SR, st ? Math.max(kbps, 192) : kbps);
+  const pcm = st ? floatToInt16(st[0]) : floatToInt16(samples);
+  const pcmR = st ? floatToInt16(st[1]) : null;
   const block = 1152, chunks = [];
   const sliceBlocks = 400; // ~10 s of audio per slice
   for (let i = 0; i < pcm.length; i += block * sliceBlocks) {
     const end = Math.min(pcm.length, i + block * sliceBlocks);
     for (let j = i; j < end; j += block) {
-      const buf = enc.encodeBuffer(pcm.subarray(j, Math.min(end, j + block)));
+      const k = Math.min(end, j + block);
+      const buf = pcmR ? enc.encodeBuffer(pcm.subarray(j, k), pcmR.subarray(j, k)) : enc.encodeBuffer(pcm.subarray(j, k));
       if (buf.length) chunks.push(new Uint8Array(buf));
     }
     onProgress(end / pcm.length);

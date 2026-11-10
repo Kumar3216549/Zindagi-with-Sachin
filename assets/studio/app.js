@@ -14,7 +14,7 @@ import * as yt from './youtube.js';
 import yamlLite from './yaml-lite.js';
 import {
   SR, decodeToMono, encodeWav, computePeaks, detectSilences, acxCheck, integratedLoudness,
-  peakDb, formatTime, parseTime,
+  peakDb, formatTime, parseTime, decodeToStereo, encodeWavStereo,
 } from './audio-utils.js';
 
 // ---------------------------------------------------------------- helpers
@@ -206,7 +206,7 @@ function newDraft(c) {
     markers: [], duration: 0, version: 0, mix: defaultMix(), createdAt: Date.now(),
   };
 }
-function defaultMix() { return { normalize: true, target: -16, denoise: false, bgm: null, sfx: [] }; }
+function defaultMix() { return { normalize: true, target: -16, denoise: false, preset: 'warm', breath: true, stereo: true, bgm: null, sfx: [] }; }
 function currentDraft() { return S.current ? S.drafts.get(S.current.id) : null; }
 
 // ---------------------------------------------------------------- tabs & script tools
@@ -523,11 +523,22 @@ async function audioFor(ref) {
   S.audioCache.set(ref, p);
   return p;
 }
+// two-channel version of a music bed (library tracks are mono, so they are duplicated)
+async function stereoFor(ref) {
+  const k = 'st:' + ref;
+  if (S.audioCache.has(k)) return S.audioCache.get(k);
+  let p;
+  if (ref.startsWith('lib:')) p = audioFor(ref).then((m) => (m ? [m, m] : null));
+  else p = db.getBlob(ref).then((b) => (b ? decodeToStereo(b) : null));
+  S.audioCache.set(k, p);
+  return p;
+}
 function refName(ref) { const l = LIBRARY.find((x) => 'lib:' + x.id === ref); return l ? l.name : ''; }
 
 function loadMixUi(d) {
   const m = (d && d.mix) || defaultMix();
   $('#optNormalize').checked = m.normalize; $('#optTarget').value = String(m.target); $('#optDenoise').checked = m.denoise;
+  $('#optPreset').value = m.preset || 'warm'; $('#optBreath').checked = m.breath !== false; $('#optStereo').checked = m.stereo !== false;
   const bgm = m.bgm;
   if (bgm && bgm.ref && !bgm.ref.startsWith('lib:') && !$(`#bgmSelect option[value="${bgm.ref}"]`)) {
     $('#bgmSelect').insertAdjacentHTML('beforeend', `<option value="${esc(bgm.ref)}">${esc(bgm.name || 'Uploaded music')}</option>`);
@@ -539,12 +550,18 @@ function loadMixUi(d) {
   renderSfx(); drawLane();
 }
 
-function mixOf() { const d = currentDraft(); if (!d) return null; d.mix = d.mix || defaultMix(); return d.mix; }
+function mixOf() {
+  const d = currentDraft(); if (!d) return null;
+  // older drafts: fill in settings added later (voice preset, breath, stereo)
+  d.mix = { ...defaultMix(), ...(d.mix || {}) };
+  return d.mix;
+}
 function saveMix() { const d = currentDraft(); if (d) { db.putDraft(d); drawLane(); } }
 
-['optNormalize', 'optTarget', 'optDenoise'].forEach((id) => ($('#' + id).onchange = () => {
+['optNormalize', 'optTarget', 'optDenoise', 'optPreset', 'optBreath', 'optStereo'].forEach((id) => ($('#' + id).onchange = () => {
   const m = mixOf(); if (!m) return;
-  m.normalize = $('#optNormalize').checked; m.target = Number($('#optTarget').value); m.denoise = $('#optDenoise').checked; saveMix();
+  m.normalize = $('#optNormalize').checked; m.target = Number($('#optTarget').value); m.denoise = $('#optDenoise').checked;
+  m.preset = $('#optPreset').value; m.breath = $('#optBreath').checked; m.stereo = $('#optStereo').checked; saveMix();
 }));
 function bgmChanged() {
   const m = mixOf(); if (!m) return;
@@ -619,6 +636,7 @@ async function buildMix(withProgress = true) {
   const pv = processVoice(voice, m);
   if (withProgress) busy('Mixing background…', 0.5);
   const bgm = m.bgm ? { samples: await audioFor(m.bgm.ref), volume: m.bgm.volume, duck: m.bgm.duck !== false } : null;
+  if (bgm && m.stereo !== false) bgm.stereo = await stereoFor(m.bgm.ref);
   const sfx = [];
   for (const s of m.sfx) sfx.push({ samples: await audioFor(s.ref), time: s.time, volume: s.volume });
   const mixed = await renderMix(pv.samples, bgm, sfx);
@@ -644,7 +662,7 @@ $('#btnPreview').onclick = () => guard(async () => {
   const { mixed } = await buildMix(); busy(false);
   const el = $('#previewAudio');
   if (el.src) URL.revokeObjectURL(el.src);
-  el.src = URL.createObjectURL(encodeWav(mixed));
+  el.src = URL.createObjectURL(mixed.stereo ? encodeWavStereo(mixed.stereo[0], mixed.stereo[1]) : encodeWav(mixed));
   // start at the cursor; with music there is an intro before the narration, so play it from the top
   const cur = S.ws ? S.ws.getCurrentTime() : 0;
   el.currentTime = cur > 0.05 ? cur + (mixed.voiceOffset || 0) : 0;
@@ -729,7 +747,7 @@ function toYaml(meta, order) {
   }
   return out;
 }
-async function websiteEntry(c, mp3Path) {
+async function websiteEntry(c, mp3Path, extra = {}) {
   const slug = bookSlug(c.book);
   const path = `content/audiobooks/${slug}.md`;
   let meta = {}, body = '';
@@ -748,8 +766,10 @@ async function websiteEntry(c, mp3Path) {
   meta.date = meta.date || new Date().toISOString().slice(0, 10);
   if (!meta.description && desc) meta.description = desc;
   meta.draft = false;
-  const list = Array.isArray(meta.chapters) ? meta.chapters.filter(Boolean).map((x) => ({ title: x.title || '', title_hi: x.title_hi || '', audio: x.audio || '', audio_url: x.audio_url || '' })) : [];
-  const entry = { title: (c.number != null ? c.number + '. ' : '') + c.title, title_hi: c.titleHi ? (c.number != null ? c.number + '. ' : '') + c.titleHi : '', audio: mp3Path, audio_url: '' };
+  const list = Array.isArray(meta.chapters) ? meta.chapters.filter(Boolean).map((x) => ({ title: x.title || '', title_hi: x.title_hi || '', audio: x.audio || '', audio_url: x.audio_url || '', script: x.script || '', duration: x.duration || '', intro: x.intro || '', date: x.date || '' })) : [];
+  // script + timing let the website show read-along text and list the chapter in the podcast feed
+  const entry = { title: (c.number != null ? c.number + '. ' : '') + c.title, title_hi: c.titleHi ? (c.number != null ? c.number + '. ' : '') + c.titleHi : '', audio: mp3Path, audio_url: '',
+    script: `chapters/${c.id}.md`, duration: extra.duration ? +extra.duration.toFixed(1) : '', intro: extra.intro || '', date: new Date().toISOString().slice(0, 10) };
   const numOf = (x) => { const m = /audiobook\/final\/.*?(\d+)\.mp3$/.exec(x.audio || ''); return m ? Number(m[1]) : null; };
   const at = list.findIndex((x) => x.audio === mp3Path);
   if (at >= 0) list[at] = entry;
@@ -793,14 +813,14 @@ async function makeReady() {
     const meta = {
       chapter: c.id, title: c.title, title_hi: c.titleHi, book: c.book, author: c.author, narrator: c.narrator,
       number: c.number, description: $('#expDesc').value.trim(), duration: +(mixed.length / SR).toFixed(2),
-      format: 'MP3 192 kbps CBR, 44.1 kHz, mono', loudness_lufs: +acx.lufs.toFixed(1),
+      format: 'MP3 192 kbps CBR, 44.1 kHz, ' + (mixed.stereo ? 'joint stereo' : 'mono'), loudness_lufs: +acx.lufs.toFixed(1),
       acx: { peak: +acx.peak.toFixed(1), rms: +acx.rms.toFixed(1), noise_floor: +acx.floor.toFixed(1), pass: acx.pass },
       created: new Date().toISOString(),
     };
     const files = [{ path, blob: tagged }, { path: `audiobook/final/${c.id}.json`, text: JSON.stringify(meta, null, 2) + '\n' }];
     if ($('#optPublish').checked) {
       setProgress(0.9, 'Adding the chapter to the website Audiobooks page…');
-      published = await websiteEntry(c, path);
+      published = await websiteEntry(c, path, { duration: mixed.length / SR, intro: mixed.voiceOffset || 0 });
       files.push({ path: published.path, text: published.text });
     }
     committed = await gh.commitFiles(files, `audiobook: final chapter ${chapterLabel(c)} ready`, (t) => setProgress(0.92, t));
@@ -967,6 +987,83 @@ $('#ytUpload').onclick = () => {
     } finally { $('#ytUpload').disabled = false; }
   }, 'YouTube upload');
 };
+
+// ---------------------------------------------------------------- Shorts / Reels
+const SH = { photo: null, blob: null, ext: 'mp4', url: '' };
+function plainScript(md) {
+  return String(md || '').replace(/^#+\s*/gm, '').replace(/[*_>`]/g, '').replace(/\[(.*?)\]\(.*?\)/g, '$1').replace(/\s+/g, ' ').trim();
+}
+// rough guess of which words are spoken between a and b (by position in the chapter)
+function guessCaption(a, b) {
+  const text = plainScript(S.current && S.current.body);
+  const dur = S.project ? S.project.duration : 0;
+  if (!text || !dur) return '';
+  let i = Math.floor(text.length * a / dur), j = Math.ceil(text.length * b / dur);
+  while (i > 0 && text[i - 1] !== ' ') i--;
+  while (j < text.length && text[j] !== ' ') j++;
+  return text.slice(i, j).trim();
+}
+function shRange() {
+  const a = parseTime($('#shStart').value), b = parseTime($('#shEnd').value);
+  return { a: Math.max(0, a || 0), b: Math.max(0, b || 0) };
+}
+function shUpdateLen() {
+  const { a, b } = shRange(), len = b - a;
+  $('#shLen').textContent = len > 0 ? `${len.toFixed(1)} s` + (len > 60 ? ' — keep it under 60 s for Reels' : len < 5 ? ' — too short' : '') : '';
+}
+function shFromSelection(fillText = true) {
+  const s = sel(), dur = S.project.duration;
+  const a = s ? Math.min(s.a, s.b) : cursor(), b = s ? Math.max(s.a, s.b) : Math.min(dur, cursor() + 45);
+  $('#shStart').value = formatTime(a, true); $('#shEnd').value = formatTime(b, true);
+  if (fillText) $('#shText').value = guessCaption(a, b);
+  shUpdateLen();
+}
+async function shClipAudio() {
+  const { a, b } = shRange();
+  if (!(b - a >= 3)) throw new Error('Choose a clip of at least 3 seconds.');
+  if (b - a > 180) throw new Error('Shorts can be at most 3 minutes. Choose a shorter clip.');
+  const { mixed } = await buildMix(false);
+  const off = (mixed.voiceOffset || 0) * SR;
+  const s0 = Math.max(0, Math.round(off + a * SR)), s1 = Math.min(mixed.length, Math.round(off + b * SR));
+  const clip = mixed.slice(s0, s1);
+  const f = Math.min(clip.length / 4, Math.round(0.25 * SR));
+  for (let i = 0; i < f; i++) { const g = i / f; clip[i] *= g; clip[clip.length - 1 - i] *= g; }
+  return clip;
+}
+$('#btnShort').onclick = () => guard(async () => {
+  if (!S.project || !S.project.duration) return toast('Record this chapter first.');
+  if (!yt.videoSupport()) return toast('Making videos needs Google Chrome or Microsoft Edge on a computer.');
+  shFromSelection(true);
+  $('#shFiles').classList.add('hidden'); $('#shPreview').classList.add('hidden'); $('#shStep').textContent = '';
+  $('#dlgShort').showModal();
+}, 'Shorts');
+$('#shUseSel').onclick = () => shFromSelection(true);
+$('#shStart').oninput = shUpdateLen; $('#shEnd').oninput = shUpdateLen;
+$('#shPlay').onclick = () => guard(async () => {
+  const clip = await shClipAudio(); busy(false);
+  const el = $('#shAudio'); if (el.src) URL.revokeObjectURL(el.src);
+  el.src = URL.createObjectURL(encodeWav(clip)); el.play();
+}, 'Listen');
+$('#shPhotoBtn').onclick = () => $('#shPhotoFile').click();
+$('#shPhotoFile').onchange = () => { const f = $('#shPhotoFile').files[0]; if (!f) return; SH.photo = f; $('#shPhotoName').textContent = f.name; };
+$('#shMake').onclick = () => guard(async () => {
+  const bar = $('#shProgress'); bar.classList.remove('hidden');
+  const prog = (f, t) => { bar.firstElementChild.style.width = Math.round(f * 100) + '%'; if (t) $('#shStep').textContent = t; };
+  prog(0.02, 'Mixing the clip…');
+  const clip = await shClipAudio();
+  const img = await yt.loadImage(SH.photo || YT.photo || DEFAULT_YT_PHOTO);
+  let logo = null; try { logo = await yt.loadImage('assets/img/favicon-192.png'); } catch (_) {}
+  const caps = yt.splitCaptions($('#shText').value, clip.length / SR);
+  prog(0.06, 'Drawing video frames…');
+  const res = await yt.makeShort(clip, img, logo, ytInfo(), caps, (f) => prog(0.06 + f * 0.94, `Making video… ${Math.round(f * 100)}%`));
+  SH.blob = res.blob; SH.ext = res.ext;
+  if (SH.url) URL.revokeObjectURL(SH.url);
+  SH.url = URL.createObjectURL(res.blob);
+  const v = $('#shPreview'); v.src = SH.url; v.classList.remove('hidden');
+  $('#shFiles').classList.remove('hidden');
+  prog(1, `Ready: ${(clip.length / SR).toFixed(0)} s vertical video, ${(res.blob.size / 1048576).toFixed(1)} MB.`);
+}, 'Make Short');
+$('#shDl').onclick = () => SH.blob && download(SH.blob, `${S.current.id}-short.${SH.ext}`);
 
 // ---------------------------------------------------------------- dashboard
 $('#btnDashboard').onclick = () => guard(openDashboard, 'Dashboard');
