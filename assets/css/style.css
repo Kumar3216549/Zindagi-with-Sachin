@@ -1616,3 +1616,47 @@ footer.site-footer h3::before{
 }
 /* Devanagari breaks apart with wide letter-spacing */
 html[lang="hi"] .eyebrow, html[lang="hi"] .motto-time, html[lang="hi"] .cine-kicker{ letter-spacing: .04em; }
+
+/* ---------- Audiobook player: bookmarks, share, read-along, follow ---------- */
+.ab-tools{ display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 8px; }
+.ab-tools .btn{ margin: 0; padding: 10px 18px; font-size: 15px; }
+.ab-marks{ list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.ab-marks li{ display: flex; align-items: center; border: 1px solid rgba(231,185,92,.35); border-radius: 999px; background: rgba(17,26,46,.85); }
+.ab-marks button{ background: none; border: 0; color: #F2CF76; font: 600 14px/1 var(--font-body); padding: 8px 12px; cursor: pointer; }
+.ab-marks .ab-mark-del{ color: #A99E88; padding-left: 4px; }
+.ab-read{ margin: 26px 0; padding: 22px 24px; border-radius: 18px; border: 1px solid rgba(231,185,92,.25);
+  background: linear-gradient(160deg, rgba(23,34,58,.9), rgba(10,16,30,.95)); }
+.ab-read-head{ display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ab-read-head h2{ margin: 0; font-size: 22px; }
+.ab-read-follow{ font-size: 14px; color: #CFC6B4; display: flex; align-items: center; gap: 6px; }
+.ab-read-note{ font-size: 13.5px; color: var(--color-text-muted); margin: 6px 0 14px; }
+.ab-read-body{ max-height: 55vh; overflow-y: auto; padding-right: 6px; scroll-behavior: smooth; }
+.ab-para{ font-size: 18px; line-height: 1.95; color: #B9AF9B; margin: 0 0 14px; padding: 6px 12px; border-radius: 10px; cursor: pointer;
+  transition: color .4s, background .4s; border-left: 3px solid transparent; }
+.ab-para:hover{ background: rgba(231,185,92,.05); }
+.ab-para-h{ font-family: var(--font-heading); font-weight: 700; color: #E7C98A; font-size: 20px; }
+.ab-para.active{ color: #FFF6DE; background: rgba(231,185,92,.10); border-left-color: #E7B95C; }
+.ab-follow{ margin: 30px 0 10px; padding: 22px; text-align: center; border-radius: 18px; border: 1px solid rgba(231,185,92,.3);
+  background: radial-gradient(ellipse at 50% 0%, rgba(231,185,92,.12), transparent 70%), rgba(12,19,36,.9); }
+.ab-follow h3{ margin: 0 0 14px; }
+.ab-follow-btns{ display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.ab-follow-btns .btn{ margin: 0; padding: 11px 18px; font-size: 15px; }
+@media (max-width: 640px){ .ab-read{ padding: 18px 14px; } .ab-para{ font-size: 17px; } .ab-tools .btn, .ab-follow-btns .btn{ flex: 1 1 100%; text-align: center; } }
+
+/* ---------- Studio guide: readable on the dark theme ---------- */
+.g-toc a{ background: rgba(17,26,46,.9) !important; color: #F2CF76 !important; border-color: rgba(231,185,92,.35) !important; }
+.g-toc a:hover{ background: rgba(231,185,92,.18) !important; }
+.g-step{ background: linear-gradient(160deg, rgba(23,34,58,.95), rgba(12,19,36,.97)) !important; border: 1px solid rgba(231,185,92,.25) !important; color: #ECE4D2; }
+.g-step h2{ color: #F6E7C1; }
+.g-step p, .g-step li, .g-step td{ color: #E4DCCA; }
+.g-step b, .g-step strong{ color: #FFF1C9; }
+.g-step a{ color: #F2CF76; }
+.g-num{ background: var(--gold-foil) !important; color: #1A1206 !important; }
+.g-tip{ background: rgba(231,185,92,.12) !important; border-left-color: #E7B95C !important; color: #F3E3BE !important; }
+.g-warn{ background: rgba(214,69,69,.14) !important; border-left-color: #E06A6A !important; color: #F6D5D5 !important; }
+.g-table th, .g-faq summary{ color: #F2CF76 !important; }
+.g-table td, .g-table th, .g-keys td, .g-faq details{ border-color: rgba(231,185,92,.18) !important; }
+kbd{ background: #0A1122 !important; color: #F6E7C1; border-color: rgba(231,185,92,.4) !important; }
+.g-flow span{ background: rgba(231,185,92,.14) !important; color: #F6E7C1 !important; border: 1px solid rgba(231,185,92,.35); }
+.g-check input:checked + span{ color: #8E8572 !important; }
+.g-new{ display: inline-block; font: 800 11px/1 var(--font-body); letter-spacing: .08em; padding: 4px 8px; border-radius: 999px; background: #E0784A; color: #fff; vertical-align: middle; margin-left: 6px; }
