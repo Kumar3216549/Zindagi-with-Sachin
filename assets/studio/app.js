@@ -985,7 +985,8 @@ async function openDashboard() {
         <button class="btn" data-a="play" data-id="${esc(id)}">▶ Play</button>
         <button class="btn" data-a="edit" data-id="${esc(id)}">Edit</button>
         <button class="btn" data-a="rerec" data-id="${esc(id)}">Re-record</button>
-        <button class="btn primary" data-a="final" data-id="${esc(id)}">Move to Final</button></td></tr>`;
+        <button class="btn primary" data-a="final" data-id="${esc(id)}">Move to Final</button>
+        ${d ? `<button class="btn danger" data-a="del" data-id="${esc(id)}" title="Delete this draft from this computer">🗑 Delete</button>` : ''}</td></tr>`;
   }).join('');
   $('#dashBody').innerHTML = rows || '<tr><td colspan="5" class="muted">No drafts yet. Pick a chapter and press Record.</td></tr>';
   const est = await db.estimate();
@@ -995,6 +996,15 @@ async function openDashboard() {
 }
 
 async function dashAction(a, id) {
+  if (a === 'del') {
+    const c = S.chapters.find((x) => x.id === id), d = S.drafts.get(id);
+    const name = c ? (c.number != null ? c.number + '. ' : '') + c.title : (d && d.title) || id;
+    if (!confirm(`Delete the draft “${name}” from this computer?\n\nThe recording and edits saved in this browser will be removed and cannot be recovered. Anything already uploaded to GitHub or published stays there.`)) return;
+    await db.deleteDraft(id); S.drafts.delete(id);
+    if (S.current && S.current.id === id) { S.project = null; await selectChapter(id); }
+    toast('Draft deleted.');
+    await openDashboard(); return;
+  }
   if (a === 'rerec') {
     if (!confirm('Start this chapter again from zero? The current local draft will be deleted (versions already on GitHub stay there).')) return;
     await db.deleteDraft(id); S.drafts.delete(id);
