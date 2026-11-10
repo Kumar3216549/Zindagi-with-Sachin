@@ -122,6 +122,9 @@
       <div class="row"><label><input type="checkbox" id="optNormalize" checked> Normalize loudness</label>
         <select id="optTarget" title="Target loudness"><option value="-16">−16 LUFS</option><option value="-18">−18 LUFS</option><option value="-20">−20 LUFS (ACX safe)</option></select></div>
       <div class="row"><label><input type="checkbox" id="optDenoise"> Noise reduction</label></div>
+      <div class="row"><span class="small">Voice sound</span><select id="optPreset" style="flex:1" title="EQ, de-esser and compressor tuned for narration">
+        <option value="warm">Warm narrator</option><option value="clear">Clear &amp; bright</option><option value="deep">Deep radio voice</option><option value="none">Natural (no change)</option></select></div>
+      <div class="row"><label><input type="checkbox" id="optBreath"> Soften breaths &amp; lip clicks</label></div>
       <div class="row"><button class="btn" id="btnMeasure">Measure</button><button class="btn" id="btnPreview">▶ Preview mix</button></div>
       <div class="stat" id="measureOut"></div>
       <audio id="previewAudio" controls class="hidden" style="width:100%;margin-top:8px"></audio>
@@ -133,6 +136,7 @@
       <div class="row"><button class="btn" id="bgmUpload">Upload music…</button><span class="muted small" id="bgmName"></span></div>
       <div class="row"><span class="small">Volume</span><input type="range" id="bgmVol" min="0" max="20" value="8"><b id="bgmVolOut" class="small">8%</b></div>
       <div class="row"><label class="small"><input type="checkbox" id="bgmDuck" checked> Auto-duck under the voice</label></div>
+      <div class="row"><label class="small"><input type="checkbox" id="optStereo" checked> Stereo music (final MP3 in stereo)</label></div>
       <p class="small muted">Music is matched to your voice level, loops smoothly, plays 3 s before you start speaking and fades out 4 s after you finish.</p>
       <input type="file" id="bgmFile" accept="audio/*" hidden>
     </div>
@@ -172,6 +176,12 @@
       <p class="muted small" style="margin:0 0 8px">Video with your photo, chapter title and moving sound bars + thumbnail + ready title &amp; description. Optional one-click upload.</p>
       <div class="row"><button class="btn primary" id="btnYT" style="flex:1">🎬 Prepare for YouTube</button></div>
       <div class="muted small" id="ytCardInfo"></div>
+    </div>
+
+    <div class="card">
+      <h3>📱 Shorts / Reels</h3>
+      <p class="muted small" style="margin:0 0 8px">Turn the best 15–60 seconds of this chapter into a vertical video with big captions — for YouTube Shorts, Instagram Reels and Facebook.</p>
+      <div class="row"><button class="btn primary" id="btnShort" style="flex:1">📱 Make a Short</button></div>
     </div>
   </aside>
 </div>
@@ -245,6 +255,33 @@
           <div class="row"><button class="btn primary" id="ytUpload" style="flex:1" disabled>⇪ Upload to YouTube</button></div>
           <div class="muted small" id="ytDirectInfo"></div>
         </div>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="dlgShort" style="width:min(900px,calc(100vw - 32px))">
+  <div class="dh"><h2>📱 Make a Short / Reel</h2><button class="btn icon" data-close>✕</button></div>
+  <div class="db">
+    <div class="yt-grid">
+      <div>
+        <p class="small muted" style="margin-top:0">Tip: in the ✂ Edit tab, drag on the waveform over your best lines, then open this window — the clip is taken from your selection.</p>
+        <div class="row"><b class="small">From</b><input type="text" id="shStart" style="width:80px"><b class="small">to</b><input type="text" id="shEnd" style="width:80px"><span class="muted small" id="shLen"></span></div>
+        <div class="row"><button class="btn" id="shUseSel">Use waveform selection</button><button class="btn" id="shPlay">▶ Listen to clip</button></div>
+        <label class="small muted" style="display:block;margin-top:8px">Captions — the words shown on screen (edit to match exactly what you say)</label>
+        <textarea id="shText" style="min-height:150px"></textarea>
+        <div class="row"><b class="small">Photo</b><button class="btn" id="shPhotoBtn">Choose photo…</button><span class="muted small" id="shPhotoName">Same as the YouTube photo</span></div>
+        <input type="file" id="shPhotoFile" accept="image/*" hidden>
+        <audio id="shAudio" class="hidden"></audio>
+      </div>
+      <div>
+        <video id="shPreview" class="hidden" controls playsinline style="width:100%;max-height:52vh;border-radius:12px;background:#000"></video>
+        <div class="row"><button class="btn primary" id="shMake" style="flex:1">🎬 Make vertical video</button></div>
+        <div class="progress hidden" id="shProgress"><i></i></div>
+        <div class="muted small" id="shStep"></div>
+        <div class="row hidden" id="shFiles"><button class="btn" id="shDl">⤓ Download video</button>
+          <a class="btn" href="https://studio.youtube.com/channel/UCkXUU2ufb_2EMQ3VynZqv6Q/videos/upload?d=ud" target="_blank" rel="noopener">YouTube ↗</a></div>
+        <p class="small muted">Upload the downloaded file as a YouTube Short (any video under 3 minutes in vertical format becomes a Short), an Instagram Reel or a Facebook Reel. Add <b>#Shorts</b> and the chapter link in the description.</p>
       </div>
     </div>
   </div>

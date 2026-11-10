@@ -264,6 +264,34 @@ content:
         label: Script — the text you will read
         type: text
 
+  - name: podcast
+    label: Podcast settings / पॉडकास्ट सेटिंग्स (Spotify, Apple)
+    type: file
+    path: content/podcast.json
+    format: json
+    fields:
+      - name: title
+        label: Show name
+        type: string
+      - name: author
+        label: Author / narrator
+        type: string
+      - name: description
+        label: Show description
+        type: text
+      - name: language
+        label: Language code (hi = Hindi, en = English)
+        type: string
+      - name: owner_email
+        label: Owner e-mail — Spotify / Apple send the verification code here
+        type: string
+      - name: cover
+        label: Cover image (square, 3000×3000)
+        type: string
+      - name: site
+        label: Website address
+        type: string
+
   - name: youtube
     label: YouTube playlists / यूट्यूब प्लेलिस्ट
     type: file
