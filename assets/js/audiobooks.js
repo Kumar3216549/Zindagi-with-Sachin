@@ -320,7 +320,30 @@ function yamlLite(src) {
           return '<li><button type="button" data-i="' + i + '"><span class="ab-ch-no">' + (i + 1) + '</span>' +
             bi('span', c.title || ('Chapter ' + (i + 1)), c.title_hi || c.title || ('अध्याय ' + (i + 1)), 'class="ab-ch-title"') +
             '<span class="ab-ch-dur" id="abDur' + i + '"></span></button></li>';
-        }).join('') + '</ol>';
+        }).join('') + '</ol>' +
+        // bookmarks + share
+        '<div class="ab-tools">' +
+          '<button type="button" class="btn" id="abMark">🔖 ' + bi('span', 'Bookmark this moment', 'यह पल सहेजें') + '</button>' +
+          '<button type="button" class="btn" id="abShare">🔗 ' + bi('span', 'Share from this moment', 'इस पल से शेयर करें') + '</button>' +
+        '</div>' +
+        '<ul class="ab-marks" id="abMarks"></ul>' +
+        // read-along text
+        '<section class="ab-read" id="abRead" hidden>' +
+          '<div class="ab-read-head">' + bi('h2', '📖 Read along', '📖 साथ-साथ पढ़ें') +
+            '<label class="ab-read-follow"><input type="checkbox" id="abFollow" checked> ' + bi('span', 'Follow the voice', 'आवाज़ के साथ चलें') + '</label></div>' +
+          bi('p', 'The highlighted paragraph follows the narration (approximately). Tap any paragraph to jump there.', 'हाइलाइट किया पैराग्राफ़ आवाज़ के साथ चलता है (लगभग)। किसी भी पैराग्राफ़ पर टैप करें — वहीं से सुनें।', 'class="ab-read-note"') +
+          '<div class="ab-read-body" id="abReadBody"></div>' +
+        '</section>' +
+        // follow
+        '<div class="ab-follow">' +
+          bi('h3', '🔔 Never miss a new chapter', '🔔 नया अध्याय कभी न छूटे') +
+          '<div class="ab-follow-btns">' +
+            '<a class="btn gold" href="https://www.youtube.com/@sachinjha8890?sub_confirmation=1" target="_blank" rel="noopener">▶ ' + bi('span', 'Subscribe on YouTube', 'YouTube पर सब्सक्राइब') + '</a>' +
+            '<a class="btn" href="https://www.facebook.com/profile.php?id=61595392176657" target="_blank" rel="noopener">f ' + bi('span', 'Follow on Facebook', 'Facebook पर फ़ॉलो') + '</a>' +
+            '<a class="btn" href="feed.xml" target="_blank" rel="noopener">🎙 ' + bi('span', 'Podcast feed', 'पॉडकास्ट फ़ीड') + '</a>' +
+            '<a class="btn" id="abWa" target="_blank" rel="noopener">💬 ' + bi('span', 'Share on WhatsApp', 'WhatsApp पर भेजें') + '</a>' +
+          '</div>' +
+        '</div>';
 
       var audio = new Audio();
       audio.preload = 'metadata';
@@ -402,6 +425,104 @@ function yamlLite(src) {
       b.chapters.forEach(function (c, i) {
         var a = new Audio(); a.preload = 'metadata'; a.src = audioSrc(c.src);
         a.addEventListener('loadedmetadata', function () { var d = $('abDur' + i); if (d && !d.textContent) d.textContent = fmtTime(a.duration); a.src = ''; });
+      });
+
+      // ---------- deep link: ?b=slug&c=2&t=95 ----------
+      var qs = new URLSearchParams(location.search), qc = Number(qs.get('c')), qt = Number(qs.get('t'));
+      if (qs.has('c') && qc >= 1 && qc <= b.chapters.length) { cur = qc - 1; saved = { c: cur, t: qt > 0 ? qt : 0, r: saved.r }; }
+
+      // ---------- structured data for Google ----------
+      try {
+        var ld = document.createElement('script'); ld.type = 'application/ld+json';
+        ld.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Audiobook', name: b.title, url: location.origin + location.pathname + '?b=' + encodeURIComponent(b.slug),
+          author: b.author ? { '@type': 'Person', name: b.author } : undefined, readBy: { '@type': 'Person', name: b.narrator || b.author || 'Sachin Kumar Jha' },
+          inLanguage: b.language === 'english' ? 'en' : 'hi', description: b.description || undefined, image: b.cover ? new URL(b.cover, location.href).href : undefined,
+          datePublished: b.date || undefined, publisher: { '@type': 'Organization', name: 'Zindagi with Sachin' },
+          hasPart: b.chapters.map(function (c, i) { return { '@type': 'AudioObject', name: c.title, position: i + 1, contentUrl: new URL(audioSrc(c.src), location.href).href, duration: c.duration ? 'PT' + Math.round(c.duration) + 'S' : undefined }; }) });
+        document.head.appendChild(ld);
+      } catch (e) {}
+
+      // ---------- bookmarks ----------
+      var MK = 'zws-ab-marks-' + b.slug;
+      function marks() { try { return JSON.parse(localStorage.getItem(MK) || '[]') || []; } catch (e) { return []; } }
+      function drawMarks() {
+        var list = marks(), ul = $('abMarks');
+        ul.innerHTML = list.map(function (m, k) {
+          var ct = b.chapters[m.c] ? (lang() === 'hi' && b.chapters[m.c].title_hi ? b.chapters[m.c].title_hi : b.chapters[m.c].title) : '';
+          return '<li><button type="button" class="ab-mark-go" data-k="' + k + '">🔖 ' + esc(ct) + ' · ' + fmtTime(m.t) + '</button>' +
+            '<button type="button" class="ab-mark-del" data-k="' + k + '" aria-label="Remove bookmark">✕</button></li>';
+        }).join('');
+      }
+      $('abMark').addEventListener('click', function () {
+        var list = marks(); list.push({ c: cur, t: Math.floor(audio.currentTime || 0) });
+        try { localStorage.setItem(MK, JSON.stringify(list.slice(-30))); } catch (e) {}
+        drawMarks();
+      });
+      $('abMarks').addEventListener('click', function (e) {
+        var go = e.target.closest('.ab-mark-go'), del = e.target.closest('.ab-mark-del'), list = marks();
+        if (go) { var m = list[Number(go.getAttribute('data-k'))]; if (m) { if (m.c !== cur) setChapter(m.c, true, m.t); else { audio.currentTime = m.t; audio.play().catch(function () {}); } } }
+        if (del) { list.splice(Number(del.getAttribute('data-k')), 1); try { localStorage.setItem(MK, JSON.stringify(list)); } catch (e2) {} drawMarks(); }
+      });
+      drawMarks();
+
+      // ---------- share from this moment ----------
+      function momentLink() { return location.origin + location.pathname + '?b=' + encodeURIComponent(b.slug) + '&c=' + (cur + 1) + '&t=' + Math.floor(audio.currentTime || 0); }
+      $('abShare').addEventListener('click', function () {
+        var url = momentLink(), btn = this;
+        if (navigator.share) { navigator.share({ title: b.title, url: url }).catch(function () {}); return; }
+        (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(function () {
+          var old = btn.innerHTML; btn.textContent = T('✓ Link copied', '✓ लिंक कॉपी हुआ'); setTimeout(function () { btn.innerHTML = old; }, 1800);
+        }).catch(function () { prompt(T('Copy this link:', 'यह लिंक कॉपी करें:'), url); });
+      });
+      function updateWa() { $('abWa').href = 'https://wa.me/?text=' + encodeURIComponent((b.title || '') + ' — ' + T('listen:', 'सुनिए:') + ' ' + momentLink()); }
+      $('abWa').addEventListener('mouseenter', updateWa); $('abWa').addEventListener('focus', updateWa); $('abWa').addEventListener('touchstart', updateWa, { passive: true }); updateWa();
+
+      // ---------- read-along ----------
+      var paras = [], cum = [], totalChars = 0, activeP = -1, readFor = -1;
+      function loadScript(i) {
+        var c = b.chapters[i]; readFor = i; activeP = -1;
+        var box = $('abRead'), body = $('abReadBody');
+        if (!c.script) { box.hidden = true; return; }
+        fetchText(c.script).then(function (raw) {
+          if (readFor !== i) return;
+          var md = raw.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '');
+          var blocks = md.split(/\r?\n/).map(function (x) { return x.trim(); }).filter(Boolean); // one line = one highlight step
+          paras = []; cum = []; totalChars = 0;
+          body.innerHTML = blocks.map(function (x, k) {
+            var head = /^#+\s*/.test(x), txt = x.replace(/^#+\s*/, '').replace(/\*\*(.+?)\*\*/g, '$1').replace(/[*_`>]/g, '');
+            cum.push(totalChars); totalChars += txt.length; paras.push(k);
+            return '<p class="ab-para' + (head ? ' ab-para-h' : '') + '" data-p="' + k + '">' + esc(txt).replace(/\n/g, '<br>') + '</p>';
+          }).join('');
+          box.hidden = !blocks.length;
+        }).catch(function () { box.hidden = true; });
+      }
+      function speechSpan(c) {
+        var intro = Number(c.intro) || 0, outro = intro ? 4 : 0, d = audio.duration || Number(c.duration) || 0;
+        return { s: intro, len: Math.max(1, d - intro - outro) };
+      }
+      function syncRead() {
+        if (readFor !== cur || !totalChars || $('abRead').hidden) return;
+        var sp = speechSpan(b.chapters[cur]), f = Math.min(0.9999, Math.max(0, (audio.currentTime - sp.s) / sp.len)), pos = f * totalChars, k = 0;
+        while (k + 1 < cum.length && cum[k + 1] <= pos) k++;
+        if (k === activeP) return;
+        var old = document.querySelector('.ab-para.active'); if (old) old.classList.remove('active');
+        var el = document.querySelector('.ab-para[data-p="' + k + '"]'); activeP = k;
+        if (el) { el.classList.add('active'); if ($('abFollow').checked && !audio.paused) el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+      }
+      $('abReadBody').addEventListener('click', function (e) {
+        var p = e.target.closest('.ab-para'); if (!p || !totalChars) return;
+        var k = Number(p.getAttribute('data-p')), sp = speechSpan(b.chapters[cur]);
+        audio.currentTime = sp.s + (cum[k] / totalChars) * sp.len; audio.play().catch(function () {});
+      });
+      audio.addEventListener('timeupdate', syncRead);
+      audio.addEventListener('loadedmetadata', function () { if (readFor !== cur) loadScript(cur); });
+      var _set = setChapter; setChapter = function (i, ap, st) { _set(i, ap, st); loadScript(i); updateWa(); };
+
+      // ---------- keyboard: space = play/pause, ← → = 15 s / 30 s ----------
+      document.addEventListener('keydown', function (e) {
+        if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+        if (e.code === 'Space') { e.preventDefault(); playBtn.click(); }
+        else if (e.key === 'ArrowLeft') skip(-15); else if (e.key === 'ArrowRight') skip(30);
       });
 
       setChapter(cur, false, saved.c === cur ? saved.t : 0);
